@@ -28,6 +28,7 @@ const Main = props => {
     <BrowserRouter>
       <Routes>
         <Route exact path="/signup" element={<Signup />} />
+        {!isLoggedIn && <Route exact path="/" element={<Login />} />}
         <Route exact path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
