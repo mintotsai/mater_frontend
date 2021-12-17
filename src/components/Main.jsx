@@ -6,6 +6,7 @@ import { initializeLogger } from '../common/logger';
 import { useAuthState, useAuthDispatch } from '../contexts/auth';
 import { setAuthHeaders, registerIntercepts } from '../apis/axios';
 
+import Signup from './Authentication/Signup';
 import Login from './Authentication/Login';
 
 const Main = props => {
@@ -26,6 +27,7 @@ const Main = props => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
