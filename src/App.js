@@ -1,10 +1,13 @@
-import './App.css';
+import React from 'react';
+import Main from './components/Main';
 
-function App() {
+import { AuthProvider } from './contexts/auth';
+
+function App(props) {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <AuthProvider>
+      <Main {...props} />
+    </AuthProvider>
   );
 }
 
