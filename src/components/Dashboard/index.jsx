@@ -1,10 +1,9 @@
 import React from "react";
-import { Routes, Route, Navigate, Redirect } from "react-router-dom";
 
-// import Navbar from "../Common/Navbar";
-import MainSection from "./MainSection";
-// import Profile from "./Account/Profile";
-// import AccountEdit from "./Account/AccountEdit";
+import authenticationApi from '../../apis/authentication';
+import { useAuthDispatch } from '../../contexts/auth';
+import { resetAuthTokens } from '../../apis/axios';
+
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -45,18 +44,35 @@ const navigation = [
   { name: 'Documents', href: '#', icon: InboxIcon, current: false },
   { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
 ]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 const Home = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [setLoading] = useState(false);
+  const authDispatch = useAuthDispatch();
+
+  const handleLogout = async () => {
+    try {
+      await authenticationApi.logout();
+      authDispatch({ type: 'LOGOUT' });
+      resetAuthTokens();
+      window.location.href = '/';
+    } catch (error) {
+
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const userNavigation = [
+    { name: 'Your Profile', href: '#' },
+    { name: 'Settings', href: '#' },
+    { name: 'Sign out', href: '#' },
+  ]
 
   return (
     <>
@@ -258,6 +274,8 @@ const Home = () => {
                                   active ? 'bg-gray-100' : '',
                                   'block py-2 px-4 text-sm text-gray-700'
                                 )}
+                                // TODO: Better way to do this?
+                                onClick={item.name === 'Sign out' ? handleLogout : ''}
                               >
                                 {item.name}
                               </a>
