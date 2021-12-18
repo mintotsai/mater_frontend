@@ -45,6 +45,11 @@ const navigation = [
   { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
 ]
 
+const userNavigation = [
+  { name: 'Your Profile', href: '#' },
+  { name: 'Settings', href: '#' },
+  { name: 'Sign out', href: '#' },
+]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -68,11 +73,11 @@ const Home = () => {
     }
   }
 
-  const userNavigation = [
-    { name: 'Your Profile', href: '#' },
-    { name: 'Settings', href: '#' },
-    { name: 'Sign out', href: '#' },
-  ]
+  const onClick = e => {
+    if (e.target.text === 'Sign out') {
+      handleLogout();
+    }
+  };
 
   return (
     <>
@@ -274,8 +279,7 @@ const Home = () => {
                                   active ? 'bg-gray-100' : '',
                                   'block py-2 px-4 text-sm text-gray-700'
                                 )}
-                                // TODO: Better way to do this?
-                                onClick={item.name === 'Sign out' ? handleLogout : ''}
+                                onClick={onClick}
                               >
                                 {item.name}
                               </a>
