@@ -24,7 +24,7 @@ const PrivateRoute = ({
   // return (<Routes>
   //   <Route path={path} element={Component} {...props} />
   // </Routes>);
-  // console.log(">>>Outlet");
+  // https://jsshowcase.com/question/error-privateroute-is-not-a-route-component-all-component-children-of-routes-must-be-a-route-or-react-fragment
   return <Outlet />
 };
 
