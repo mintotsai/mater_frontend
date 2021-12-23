@@ -34,21 +34,8 @@ const Main = props => {
         {!isLoggedIn && <Route exact path="/" element={<Login />} />}
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/" element={<PrivateRoute path="/" redirectRoute="/login" condition={isLoggedIn} element={<Home />} />} >
-          {/* <Route exact path="/" element={<Home />} /> */}
-          <Route exact path="/home" element={<Home />} />
-          <Route path="/" element={<Navigate to="/home" />} />
+          <Route exact path="/*" element={<Home />} />
         </Route>
-        {/* <Route exact path="/" element={<PrivateRoute />} >
-          <Route exact path="/" element={<Home />} />
-        </Route> */}
-        {/* <Route exact path="/home" element={<Home />} /> */}
-
-        {/* <PrivateRoute
-          path="/"
-          redirectRoute="/login"
-          condition={isLoggedIn}
-          component={<Home />}
-        /> */}
       </Routes>
     </BrowserRouter>
   );
