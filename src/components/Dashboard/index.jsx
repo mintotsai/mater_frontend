@@ -296,7 +296,6 @@ const Home = () => {
             <Routes>
               <Route exact path="/home" element={<MainSection />} />
               <Route exact path="/profile" element={<Profile />} />
-              <Route path="/" element={<Navigate to="/home" />} />
             </Routes>
           </div>
         </div>

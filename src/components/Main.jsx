@@ -35,6 +35,7 @@ const Main = props => {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/" element={<PrivateRoute path="/" redirectRoute="/login" condition={isLoggedIn} element={<Home />} />} >
           <Route exact path="/*" element={<Home />} />
+          <Route path="/" element={<Navigate to="/home" />} />
         </Route>
       </Routes>
     </BrowserRouter>
