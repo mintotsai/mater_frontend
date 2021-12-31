@@ -9,10 +9,16 @@ const logout = payload => axios.delete(`${baseUrl}api/v1/logout`);
 
 const signup = payload => axios.post(`${baseUrl}api/v1/users`, payload)
 
+const forgot = payload => axios.post(`${baseUrl}api/v1/password/forgot`, payload)
+
+const reset = payload => axios.put(`${baseUrl}api/v1/password/reset`, payload)
+
 const authenticationApi = {
   login,
   logout,
   signup,
+  forgot,
+  reset
 }
 
 export default authenticationApi;
