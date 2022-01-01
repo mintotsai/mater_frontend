@@ -1,135 +1,136 @@
-/*
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import React, { useState } from 'react';
+import React from 'react';
 import { useSearchParams } from "react-router-dom";
-import { LockClosedIcon } from '@heroicons/react/solid'
 import authenticationApi from '../../apis/authentication';
-import { useAuthDispatch } from '../../contexts/auth';
-import { setAuthHeaders, resetAuthTokens } from '../../apis/axios';
+
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 const Login = () => {
-  const [initialValues, setInitialValues] = useState({
-    email: '',
-    password: '',
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [passwordConfirmation, setConfirmationPassword] = useState('');
-  const [password, setPassword] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const handleSubmitExternally = async e => {
-    e.preventDefault()
-    // console.log('>>>');
-    // const { email, password } = values;
-    // console.log(">>>" + email + " " + password);
-    try {
-      setLoading(true);
-      const resetPasswordToken = searchParams.get("reset_password_token");
-      console.log(">>>reset_password_token: " + resetPasswordToken);
-      const response = await authenticationApi.reset({ user: { reset_password_token: resetPasswordToken, password: password, password_confirmation: passwordConfirmation } });
-      console.log(">>>");
-      console.log(response);
-
-      if (response.data.error != null) {
-        // TODO: Show errors
-        console.log("errors");
-        console.log(response.data.error);
-      } else {
-        window.location.href = '/login';
-      }
-    } catch (error) {
-      console.log(">>>error=" + error);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <>
-      {/*
-        This example requires updating your template:
+      <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <img
+            className="mx-auto h-12 w-auto"
+            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+            alt="Workflow"
+          />
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Reset your password</h2>
+        </div>
 
-        ```
-        <html class="h-full bg-gray-50">
-        <body class="h-full">
-        ```
-      */}
-      {/* <div>
-        Hello
-      </div> */}
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <img
-              className="mx-auto h-12 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-              alt="Workflow"
-            />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Reset your password</h2>
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <Formik
+              initialValues={{
+                password: '',
+                passwordConfirmation: '',
+              }}
+              validationSchema={Yup.object().shape({
+                password: Yup.string()
+                  .min(2, 'Too Short!')
+                  .max(50, 'Too Long!')
+                  .required('Required'),
+                passwordConfirmation: Yup.string()
+                  .min(2, 'Too Short!')
+                  .max(50, 'Too Long!')
+                  .required('Required')
+                  .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+              })}
+              onSubmit={async (values, { setStatus, resetForm }) => {
+                // same shape as initial values
+                // console.log(values);
+                try {
+                  const resetPasswordToken = searchParams.get("reset_password_token");
+                  // console.log(">>>reset_password_token: " + resetPasswordToken);
+                  const response = await authenticationApi.reset({ user: { reset_password_token: resetPasswordToken, password: values["password"], password_confirmation: values["passwordConfirmation"] } });
+                  // console.log(">>>");
+                  // console.log(response);
+
+                  if (response.data.error != null) {
+                    // TODO: Show errors
+                    // TODO: Display array of errors?
+                    // console.log("errors");
+                    // console.log(response.data.error);
+                    setStatus({
+                      success: false,
+                      // msg: response.data.error.toString()
+                      msg: "Please choose another password."
+                    })
+                  } else {
+                    window.location.href = '/login';
+                  }
+                } catch (error) {
+                  // console.log(">>>error=" + error);
+                  // TODO: Display array of errors?
+                  setStatus({
+                    success: false,
+                    msg: "Please choose another password."
+                  })
+                } finally {
+                }
+              }}
+            >
+              {({ errors, touched, isSubmitting, status }) => (
+                <Form className="space-y-6" action="#" method="POST">
+                  {status && status.msg && (
+                    <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
+                      <div className="flex">
+                        <div className="ml-3">
+                          <h3 className={`text-sm font-medium ${!status.success ? "text-red-800" : "text-green-800"}`}>{status.msg}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                      Password
+                    </label>
+                    <div className="mt-1">
+                      <Field
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="password"
+                        required
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      />
+                    </div>
+                    <ErrorMessage component="p" name="password" className="mt-2 text-sm text-red-600" />
+                  </div>
+
+                  <div>
+                    <label htmlFor="passwordConfirmation" className="block text-sm font-medium text-gray-700">
+                      Password Confirmation
+                    </label>
+                    <div className="mt-1">
+                      <Field
+                        id="passwordConfirmation"
+                        name="passwordConfirmation"
+                        type="password"
+                        autoComplete="passwordConfirmation"
+                        required
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      />
+                    </div>
+                    <ErrorMessage component="p" name="passwordConfirmation" className="mt-2 text-sm text-red-600" />
+                  </div>
+
+                  <div>
+                    <button
+                      type="submit"
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      disabled={isSubmitting}
+                    >
+                      Reset Password
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
-          <form className="mt-8 space-y-6" >
-            <input type="hidden" name="remember" defaultValue="true" />
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div>
-                <label htmlFor="password" className="sr-only">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="password-confirmation" className="sr-only">
-                  Password Confirmation
-                </label>
-                <input
-                  id="password-confirmation"
-                  name="password-confirmation"
-                  type="password"
-                  autoComplete="password-confirmation"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Password Confirmation"
-                  onChange={(e) => setConfirmationPassword(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={handleSubmitExternally}
-              >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
-                </span>
-                Reset Password
-              </button>
-            </div>
-          </form>
         </div>
       </div>
     </>
