@@ -13,12 +13,15 @@ const forgot = payload => axios.post(`${baseUrl}api/v1/password/forgot`, payload
 
 const reset = payload => axios.put(`${baseUrl}api/v1/password/reset`, payload)
 
+const confirmation = payload => axios.get(`${baseUrl}api/v1/users/confirmation`, payload)
+
 const authenticationApi = {
   login,
   logout,
   signup,
   forgot,
-  reset
+  reset,
+  confirmation
 }
 
 export default authenticationApi;

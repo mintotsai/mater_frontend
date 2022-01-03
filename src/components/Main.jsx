@@ -7,6 +7,7 @@ import { useAuthState, useAuthDispatch } from '../contexts/auth';
 import { setAuthHeaders, registerIntercepts } from '../apis/axios';
 
 import Signup from './Authentication/Signup';
+import Confirmation from './Authentication/Confirmation';
 import PasswordForgot from './Authentication/PasswordForgot'
 import PasswordReset from './Authentication/PasswordReset'
 import Login from './Authentication/Login';
@@ -33,6 +34,7 @@ const Main = props => {
     <BrowserRouter>
       <Routes>
         <Route exact path="/signup" element={<Signup />} />
+        <Route exact path="/users/confirmation" element={<Confirmation />} />
         <Route exact path="/forgot" element={<PasswordForgot />} />
         <Route exact path="/reset" element={<PasswordReset />} />
         {!isLoggedIn && <Route exact path="/" element={<Login />} />}
