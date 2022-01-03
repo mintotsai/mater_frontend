@@ -47,7 +47,7 @@ const PasswordForgot = () => {
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
-                <Form className="space-y-6" action="#" method="POST">
+                <Form className="space-y-6">
                   {status && status.msg && (
                     <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
                       <div className="flex">
