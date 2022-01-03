@@ -5,7 +5,7 @@ import authenticationApi from '../../apis/authentication';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const Login = () => {
+const PasswordReset = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
@@ -137,4 +137,4 @@ const Login = () => {
   )
 }
 
-export default Login;
+export default PasswordReset;
