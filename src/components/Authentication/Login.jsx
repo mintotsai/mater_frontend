@@ -118,8 +118,8 @@ const Login = () => {
                     <ErrorMessage component="p" name="password" className="mt-2 text-sm text-red-600" />
                   </div>
 
-                  {/* <div className="flex items-center justify-between">
-                    <div className="flex items-center">
+                  <div className="flex items-center justify-between">
+                    {/* <div className="flex items-center">
                       <input
                         id="remember-me"
                         name="remember-me"
@@ -129,14 +129,14 @@ const Login = () => {
                       <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                         Remember me
                       </label>
-                    </div>
+                    </div> */}
 
                     <div className="text-sm">
-                      <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                      <a href="/forgot" className="font-medium text-indigo-600 hover:text-indigo-500">
                         Forgot your password?
                       </a>
                     </div>
-                  </div> */}
+                  </div>
 
                   <div>
                     <button
