@@ -3,11 +3,16 @@ import Main from './components/Main';
 
 import { AuthProvider } from './contexts/auth';
 
+import { Provider } from 'react-redux'
+import store from './redux/store'
+
 function App(props) {
   return (
-    <AuthProvider>
-      <Main {...props} />
-    </AuthProvider>
+    <Provider store={store}>
+      <AuthProvider>
+        <Main {...props} />
+      </AuthProvider>
+    </Provider>
   );
 }
 

@@ -5,6 +5,7 @@ import { useAuthDispatch } from '../../contexts/auth';
 import { resetAuthTokens } from '../../apis/axios';
 import MainSection from './MainSection';
 import Profile from './Account/Profile'
+import { useDispatch } from "react-redux";
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -36,6 +37,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline'
 import { SearchIcon } from '@heroicons/react/solid'
+import { LOGOUT_ACTION } from "../../redux/user/actions";
 
 const navigation = [
   { name: 'Dashboard', href: 'home', icon: HomeIcon, current: true },
@@ -60,6 +62,7 @@ const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [setLoading] = useState(false);
   const authDispatch = useAuthDispatch();
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
@@ -76,6 +79,7 @@ const Home = () => {
 
   const onClick = e => {
     if (e.target.text === 'Sign out') {
+      dispatch({ type: LOGOUT_ACTION });
       handleLogout();
     }
   };
