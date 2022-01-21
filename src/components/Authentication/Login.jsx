@@ -1,12 +1,15 @@
 import React from 'react';
-import authenticationApi from '../../apis/authentication';
-import { useAuthDispatch } from '../../contexts/auth';
-import { setAuthHeaders, resetAuthTokens } from '../../apis/axios';
+import { useSelector, useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+import { login } from "../../redux/auth/actions";
+
 const Login = () => {
-  const authDispatch = useAuthDispatch();
+
+  const dispatch = useDispatch();
+
+  const system = useSelector((state) => state.system);
 
   return (
     <>
@@ -41,35 +44,28 @@ const Login = () => {
                   .required('Required'),
               })}
               onSubmit={async (values, { setStatus, resetForm }) => {
-                // console.log(values);
                 resetForm();
-                // console.log('>>>');
-                // const { email, password } = values;
-                // console.log(">>>" + email + " " + password);
-                try {
-                  const response = await authenticationApi.login({ user: { email: values["email"], password: values["password"] } });
-                  // console.log(">>>");
-                  // console.log(response);
-                  let auth_token;
-                  if (response.headers.authorization && response.headers.authorization.split(' ')[0] === 'Bearer') {
-                    auth_token = response.headers.authorization.split(' ')[1];
-                  }
-                  authDispatch({ type: 'LOGIN', payload: { auth_token, email: values["email"] } });
-                  // userDispatch({ type: 'SET_USER', payload: { user } });
-                  resetAuthTokens();
-                  setAuthHeaders();
-                  // TODO: last location?
-                  window.location.href = '/home';
-                } catch (error) {
-                  // console.log(">>>");
-                  // console.log(error.response.data);
-                  // TODO: Is this the best?
-                  setStatus({
-                    success: false,
-                    msg: error.response.data.error
+                const username = values["email"];
+                const password = values["password"];
+                dispatch(login({ user: { email: values["email"], password: values["password"] } }))
+                  .then(() => {
+                    // TODO: Need this?
+                    // resetAuthTokens();
+                    // setAuthHeaders();
+
+                    // props.history.push("/profile");
+                    // window.location.reload();
+                    window.location.href = '/home';
                   })
-                } finally {
-                }
+                  .catch(() => {
+                    // TODO: Error message
+                    // setLoading(false);
+                    // TODO: Is this the best?
+                    setStatus({
+                      success: false,
+                      msg: "Incorrect username or password"
+                    });
+                  });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

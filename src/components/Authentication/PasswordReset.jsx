@@ -1,12 +1,16 @@
 import React from 'react';
 import { useSearchParams } from "react-router-dom";
-import authenticationApi from '../../apis/authentication';
+import { useSelector, useDispatch } from "react-redux";
+import { reset } from "../../redux/auth/actions";
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 const PasswordReset = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useDispatch();
+
+  const system = useSelector((state) => state.system);
 
   return (
     <>
@@ -41,35 +45,18 @@ const PasswordReset = () => {
               onSubmit={async (values, { setStatus, resetForm }) => {
                 // same shape as initial values
                 // console.log(values);
-                try {
-                  const resetPasswordToken = searchParams.get("reset_password_token");
-                  // console.log(">>>reset_password_token: " + resetPasswordToken);
-                  const response = await authenticationApi.reset({ user: { reset_password_token: resetPasswordToken, password: values["password"], password_confirmation: values["passwordConfirmation"] } });
-                  // console.log(">>>");
-                  // console.log(response);
-
-                  if (response.data.error != null) {
-                    // TODO: Show errors
+                const resetPasswordToken = searchParams.get("reset_password_token");
+                dispatch(reset({ user: { reset_password_token: resetPasswordToken, password: values["password"], password_confirmation: values["passwordConfirmation"] } }))
+                  .then(() => {
+                    window.location.href = '/login';
+                  })
+                  .catch(() => {
                     // TODO: Display array of errors?
-                    // console.log("errors");
-                    // console.log(response.data.error);
                     setStatus({
                       success: false,
-                      // msg: response.data.error.toString()
                       msg: "Please choose another password."
                     })
-                  } else {
-                    window.location.href = '/login';
-                  }
-                } catch (error) {
-                  // console.log(">>>error=" + error);
-                  // TODO: Display array of errors?
-                  setStatus({
-                    success: false,
-                    msg: "Please choose another password."
-                  })
-                } finally {
-                }
+                  });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

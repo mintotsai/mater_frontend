@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
-import authenticationApi from '../../apis/authentication';
-import { useAuthDispatch } from '../../contexts/auth';
-import { resetAuthTokens } from '../../apis/axios';
 import MainSection from './MainSection';
 import Profile from './Account/Profile'
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/auth/actions";
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -60,26 +58,25 @@ function classNames(...classes) {
 
 const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [setLoading] = useState(false);
-  const authDispatch = useAuthDispatch();
+
   const dispatch = useDispatch();
 
-  const handleLogout = async () => {
-    try {
-      await authenticationApi.logout();
-      authDispatch({ type: 'LOGOUT' });
-      resetAuthTokens();
-      window.location.href = '/';
-    } catch (error) {
+  useEffect(() => {
+  }, []);
 
-    } finally {
-      setLoading(false);
-    }
+  const handleLogout = async () => {
+    dispatch(logout())
+      .then(() => {
+        // TODO: resetAuthTokens(); ?
+        window.location.href = '/';
+      })
+      .catch(() => {
+        // TODO: Error message
+      });
   }
 
   const onClick = e => {
     if (e.target.text === 'Sign out') {
-      dispatch({ type: LOGOUT_ACTION });
       handleLogout();
     }
   };

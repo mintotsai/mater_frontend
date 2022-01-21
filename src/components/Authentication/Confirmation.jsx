@@ -1,35 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
-import authenticationApi from '../../apis/authentication';
+import { useSelector, useDispatch } from "react-redux";
+
+import { confirmation } from "../../redux/auth/actions";
 
 const Confirmation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  // const [isSuccess, setIsSuccess] = useState();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log("useEffect: mount");
     document.documentElement.classList.remove("bg-gray-50");
     const confirmationToken = searchParams.get("confirmation_token");
-    // console.log(">>>confirmation_token: " + confirmationToken);
     const fetchData = async () => {
       // get the data from the api
-      try {
-        const response = await authenticationApi.confirmation({ params: { confirmation_token: confirmationToken } });
-        // console.log(">>>response");
-        // console.log(response);
-        if (response.data.error != null) {
-
-          // TODO: Show error screen
-          // setIsSuccess(false);
-        } else {
-          // TODO: Successful confirmation Message?
+      dispatch(confirmation({ params: { confirmation_token: confirmationToken } }))
+        .then(() => {
           window.location.href = "/login";
-          // setIsSuccess(true);
-        }
-      } catch (error) {
-        console.log(">>>error2");
-        console.log(error);
-      }
+        })
+        .catch(() => {
+          // TODO: Error message
+        });
 
       return () => {
         console.log("useEffect: unmount");

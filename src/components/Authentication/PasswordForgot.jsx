@@ -1,9 +1,13 @@
 import React from 'react';
-import authenticationApi from '../../apis/authentication';
+import { useSelector, useDispatch } from "react-redux";
+import { forgot } from "../../redux/auth/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 const PasswordForgot = () => {
+  const dispatch = useDispatch();
+
+  const system = useSelector((state) => state.system);
 
   return (
     <>
@@ -27,23 +31,20 @@ const PasswordForgot = () => {
                 email: Yup.string().email('Invalid email').required('Required'),
               })}
               onSubmit={async (values, { setStatus, resetForm }) => {
-                // console.log(values);
                 resetForm();
-                try {
-                  const response = await authenticationApi.forgot({ user: { email: values["email"] } });
-                  // console.log(">>>");
-                  // console.log(response);
-                  setStatus({
-                    success: true,
-                    msg: "Password reset email has been sent."
+                dispatch(forgot({ user: { email: values["email"] } }))
+                  .then(() => {
+                    setStatus({
+                      success: true,
+                      msg: "Password reset email has been sent."
+                    })
                   })
-                } catch (error) {
-                  setStatus({
-                    success: false,
-                    msg: error
-                  })
-                } finally {
-                }
+                  .catch(() => {
+                    setStatus({
+                      success: false,
+                      msg: system.message
+                    })
+                  });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

@@ -1,13 +1,12 @@
 import React from 'react';
-import authenticationApi from '../../apis/authentication';
-import { useAuthDispatch } from '../../contexts/auth';
-import { setAuthHeaders, resetAuthTokens } from '../../apis/axios';
-
+import { useSelector, useDispatch } from "react-redux";
+import { signup } from "../../redux/auth/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 const Signup = () => {
-  const authDispatch = useAuthDispatch();
+  const dispatch = useDispatch();
+  const system = useSelector((state) => state.system);
 
   return (
     <>
@@ -44,23 +43,20 @@ const Signup = () => {
               onSubmit={async (values, { setStatus, resetForm }) => {
                 // console.log(values);
                 resetForm();
-                try {
-                  const response = await authenticationApi.signup({ user: { email: values["email"], password: values["password"], password_confirmation: values["passwordConfirmation"] } });
-                  setStatus({
-                    success: true,
-                    msg: "Check your email to confirm your account."
+                dispatch(signup({ user: { email: values["email"], password: values["password"], password_confirmation: values["passwordConfirmation"] } }))
+                  .then(() => {
+                    setStatus({
+                      success: true,
+                      msg: "Check your email to confirm your account."
+                    })
                   })
-                } catch (error) {
-                  console.log(">>>");
-                  console.log(error.response.data);
-                  // TODO: Is this the best? Test with existing email address in system"
-                  setStatus({
-                    success: false,
-                    msg: error.response.data.error
-                  })
-                } finally {
-
-                }
+                  .catch(() => {
+                    // TODO: Is this the best? Test with existing email address in system"
+                    setStatus({
+                      success: false,
+                      msg: system.message
+                    })
+                  });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
