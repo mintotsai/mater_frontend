@@ -1,12 +1,9 @@
-import { LOGIN_ACTION, LOGOUT_ACTION } from './actions'
+import { GET_USER_ACTION } from './actions'
 import initialState from './state'
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN_ACTION:
-      return { ...state, user: action.payload, loggedIn: true }
-    case LOGOUT_ACTION:
-      // TODO: firstState?
+    case GET_USER_ACTION:
       return {}
     default:
       return state
