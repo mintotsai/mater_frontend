@@ -5,6 +5,8 @@ import Profile from './Account/Profile'
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/actions";
 
+import Notifications from "../Common/Notifications";
+
 /*
   This example requires Tailwind CSS v2.0+
 
@@ -174,7 +176,7 @@ const Home = () => {
             </div>
           </Dialog>
         </Transition.Root>
-
+        <Notifications />
         {/* Static sidebar for desktop */}
         <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
           {/* Sidebar component, swap this element with another sidebar if you like */}
