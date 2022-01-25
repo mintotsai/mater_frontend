@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// TODO: Get from env variable?
 const BASE_URL = 'http://localhost:3001/';
 
 const login = async (payload) => {
