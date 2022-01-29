@@ -69,7 +69,6 @@ const Home = () => {
   const handleLogout = async () => {
     dispatch(logout())
       .then(() => {
-        // TODO: resetAuthTokens(); ?
         window.location.href = '/';
       })
       .catch(() => {
