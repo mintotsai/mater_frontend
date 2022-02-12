@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { signup } from "../../redux/auth/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -40,8 +40,7 @@ const Signup = () => {
                   .required('Required')
                   .oneOf([Yup.ref('password'), null], 'Passwords must match'),
               })}
-              onSubmit={async (values, { setStatus, resetForm }) => {
-                // console.log(values);
+              onSubmit={async (values, { setStatus, resetForm, setErrors }) => {
                 resetForm();
                 dispatch(signup({ user: { email: values["email"], password: values["password"], password_confirmation: values["passwordConfirmation"] } }))
                   .then(() => {
@@ -59,15 +58,28 @@ const Signup = () => {
                   });
               }}
             >
-              {({ errors, touched, isSubmitting, status }) => (
+              {({ values, errors, touched, isSubmitting, status }) => (
                 <Form className="space-y-6">
-                  {status && status.msg && (
+                  {status && status.success && (
                     <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
                       <div className="flex">
                         <div className="ml-3">
                           <h3 className={`text-sm font-medium ${!status.success ? "text-red-800" : "text-green-800"}`}>{status.msg}</h3>
                         </div>
                       </div>
+                    </div>
+                  )}
+                  {status && !status.success && (
+                    <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
+                      <ul role="list" className="list-disc pl-5 space-y-1">
+                        <div className="mt-2 text-sm text-red-700">
+                          {status.msg.map(function (name, index) {
+                            return (
+                              <li key={index}>{name.detail}</li>
+                            );
+                          })}
+                        </div>
+                      </ul>
                     </div>
                   )}
                   <div>

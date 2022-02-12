@@ -1,6 +1,6 @@
 const initialState = {
   isLoading: false,
-  message: ""
+  message: []
 }
 
 export default initialState;
