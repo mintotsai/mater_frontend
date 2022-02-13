@@ -75,7 +75,7 @@ const Signup = () => {
                         <div className="mt-2 text-sm text-red-700">
                           {status.msg.map(function (name, index) {
                             return (
-                              <li key={index}>{name.detail}</li>
+                              <li key={index}>{name.detail ? name.detail : name.title}</li>
                             );
                           })}
                         </div>
