@@ -40,10 +40,7 @@ const PasswordForgot = () => {
                     })
                   })
                   .catch(() => {
-                    setStatus({
-                      success: false,
-                      msg: system.message
-                    })
+                    // Not showing error here for security
                   });
               }}
             >
