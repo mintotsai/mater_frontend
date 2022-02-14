@@ -19,7 +19,7 @@ const Confirmation = () => {
           window.location.href = "/login";
         })
         .catch(() => {
-          // TODO: Error message
+          // TODO: Hide then show error page below?
         });
 
       return () => {
