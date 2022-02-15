@@ -33,12 +33,12 @@ const PasswordReset = () => {
               }}
               validationSchema={Yup.object().shape({
                 password: Yup.string()
-                  .min(2, 'Too Short!')
-                  .max(50, 'Too Long!')
-                  .required('Required'),
+                  .required('Required')
+                  .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{4,})/,
+                    "Must Contain One Uppercase, One Lowercase, One Number and One Special Case Character"
+                  ),
                 passwordConfirmation: Yup.string()
-                  .min(2, 'Too Short!')
-                  .max(50, 'Too Long!')
                   .required('Required')
                   .oneOf([Yup.ref('password'), null], 'Passwords must match'),
               })}
@@ -51,23 +51,35 @@ const PasswordReset = () => {
                     window.location.href = '/login';
                   })
                   .catch(() => {
-                    // TODO: Display array of errors?
                     setStatus({
                       success: false,
-                      msg: "Please choose another password."
+                      msg: system.message
                     })
                   });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
                 <Form className="space-y-6" action="#" method="POST">
-                  {status && status.msg && (
+                  {status && status.success && (
                     <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
                       <div className="flex">
                         <div className="ml-3">
                           <h3 className={`text-sm font-medium ${!status.success ? "text-red-800" : "text-green-800"}`}>{status.msg}</h3>
                         </div>
                       </div>
+                    </div>
+                  )}
+                  {status && !status.success && (
+                    <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
+                      <ul role="list" className="list-disc pl-5 space-y-1">
+                        <div className="mt-2 text-sm text-red-700">
+                          {status.msg.map(function (name, index) {
+                            return (
+                              <li key={index}>{name.detail ? name.detail : name.title}</li>
+                            );
+                          })}
+                        </div>
+                      </ul>
                     </div>
                   )}
 
