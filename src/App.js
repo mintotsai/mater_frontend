@@ -24,7 +24,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/signup" element={<Signup />} />
-        <Route exact path="/users/confirmation" element={<Confirmation />} />
+        <Route exact path="/confirmation" element={<Confirmation />} />
         <Route exact path="/forgot" element={<PasswordForgot />} />
         <Route exact path="/reset" element={<PasswordReset />} />
         {!auth.isLoggedIn && <Route exact path="/" element={<Login />} />}
