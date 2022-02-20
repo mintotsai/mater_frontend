@@ -1,4 +1,5 @@
 import { LOGIN_SUCCESS_ACTION, LOGIN_FAIL_ACTION, LOGOUT_ACTION } from "./actions";
+import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION } from "../auth/actions";
 import initialState from "./state"
 
 export default function (state = initialState, action) {
@@ -32,6 +33,11 @@ export default function (state = initialState, action) {
         ...state,
         isLoggedIn: false,
         user: null,
+      };
+    case UPDATE_USER_SUCCESS_ACTION:
+      return {
+        ...state,
+        user: payload,
       };
     default:
       return state;

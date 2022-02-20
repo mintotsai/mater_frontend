@@ -6,11 +6,6 @@ const userReducer = (state = initialState, action) => {
   switch (type) {
     case GET_USER_ACTION:
       return {}
-    case UPDATE_USER_SUCCESS_ACTION:
-      return {
-        ...state,
-        user: payload,
-      };
     default:
       return state
   }

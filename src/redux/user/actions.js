@@ -1,10 +1,8 @@
 import UserService from "../../services/user.service";
 import { SET_MESSAGE_ACTION } from "../system/actions";
+import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION } from "../auth/actions";
 
 export const GET_USER_ACTION = "GET_USER_ACTION"
-export const UPDATE_USER_ACTION = "UPDATE_USER_ACTION"
-export const UPDATE_USER_SUCCESS_ACTION = "UPDATE_USER_SUCCESS_ACTION"
-export const UPDATE_USER_FAIL_ACTION = "UPDATE_USER_FAIL_ACTION"
 
 export const getUser = (userId) => (dispatch) => {
   return UserService.getUser(userId).then(
