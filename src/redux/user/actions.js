@@ -59,7 +59,7 @@ export const updateUser = (userId, payload) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors,
+        payload: error.response.data.errors ? error.response.data.errors : [{ title: error.response.data.error }],
       });
 
       return Promise.reject();
