@@ -16,6 +16,7 @@ import PasswordReset from './components/Authentication/PasswordReset'
 import Login from './components/Authentication/Login';
 import PrivateRoute from './components/Common/PrivateRoute';
 import Home from './components/Dashboard/index';
+import Verify from './components/Authentication/Verify';
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -29,6 +30,8 @@ function App() {
         <Route exact path="/reset" element={<PasswordReset />} />
         {!auth.isLoggedIn && <Route exact path="/" element={<Login />} />}
         <Route exact path="/login" element={<Login />} />
+        {/* TODO: Back button from Verify page */}
+        {auth.showOTPScreen && <Route exact path="/verify" element={<Verify />} />}
         <Route exact path="/" element={<PrivateRoute path="/" redirectRoute="/login" condition={auth.isLoggedIn} element={<Home />} />} >
           <Route exact path="/*" element={<Home />} />
           <Route path="/" element={<Navigate to="/home" />} />

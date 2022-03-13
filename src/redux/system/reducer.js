@@ -6,7 +6,7 @@ export default function (state = initialState, action) {
   switch (type) {
     case SET_MESSAGE_ACTION:
       // https://stackoverflow.com/a/58852797
-      Object.assign(state.message, payload);
+      // Object.assign(state.message, payload);
       return {
         ...state,
         message: payload

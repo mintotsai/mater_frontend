@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 import { login } from "../../redux/auth/actions";
+import { SET_MESSAGE_ACTION } from "../../redux/system/actions"
+import SystemMessage from "../Common/SystemMessage"
 
 const Login = () => {
 
   const dispatch = useDispatch();
 
   const system = useSelector((state) => state.system);
+  const auth = useSelector((state) => state.auth);
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth.showOTPScreen) {
+      let path = '/verify';
+      navigate(path);
+    } if (auth.isLoggedIn && !auth.showOTPScreen) {
+      let path = '/home';
+      navigate(path);
+    }
+  }, [auth])
 
   return (
     <>
@@ -44,41 +59,18 @@ const Login = () => {
                   .required('Required'),
               })}
               onSubmit={async (values, { setStatus, resetForm }) => {
-                resetForm();
                 const username = values["email"];
                 const password = values["password"];
-                dispatch(login({ user: { email: values["email"], password: values["password"] } }))
-                  .then(() => {
-                    // TODO: Need this?
-                    // resetAuthTokens();
-                    // setAuthHeaders();
-
-                    // props.history.push("/profile");
-                    // window.location.reload();
-                    window.location.href = '/home';
-                  })
-                  .catch(() => {
-                    // TODO: Error message
-                    // setLoading(false);
-                    // TODO: Is this the best?
-                    setStatus({
-                      success: false,
-                      msg: "Incorrect username or password"
-                    });
-                  });
+                dispatch({
+                  type: SET_MESSAGE_ACTION,
+                  payload: null,
+                });
+                dispatch(login({ user: { email: values["email"], password: values["password"] } }));
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
                 <Form className="space-y-6">
-                  {status && status.msg && (
-                    <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
-                      <div className="flex">
-                        <div className="ml-3">
-                          <h3 className={`text-sm font-medium ${!status.success ? "text-red-800" : "text-green-800"}`}>{status.msg}</h3>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  <SystemMessage />
 
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">

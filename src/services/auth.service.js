@@ -5,7 +5,6 @@ import { authHeader } from "../helpers/auth.header";
 const BASE_URL = 'http://localhost:3001/';
 
 const login = async (payload) => {
-  console.log("login");
   return axios
     .post(`${BASE_URL}api/v1/login`, payload).then((response) => {
       if (response.headers.authorization) {

@@ -4,6 +4,8 @@ import { SET_MESSAGE_ACTION } from "../system/actions";
 export const LOGIN_ACTION = "LOGIN_ACTION"
 export const LOGIN_SUCCESS_ACTION = "LOGIN_SUCCESS_ACTION"
 export const LOGIN_FAIL_ACTION = "LOGIN_FAIL_ACTION"
+export const VERIFY_FAIL_ACTION = "VERIFY_FAIL_ACTION"
+export const SHOW_OTP_ACTION = "SHOW_OTP_ACTION"
 export const LOGOUT_ACTION = "LOGOUT_ACTION"
 export const LOGOUT_SUCCESS_ACTION = "LOGOUT_SUCCESS_ACTION"
 export const LOGOUT_FAIL_ACTION = "LOGOUT_FAIL_ACTION"
@@ -24,28 +26,51 @@ export const UPDATE_USER_FAIL_ACTION = "UPDATE_USER_FAIL_ACTION"
 export const login = (payload) => (dispatch) => {
   return AuthService.login(payload).then(
     (data) => {
+      if (data.data.attributes.otp_required_for_login) {
+        dispatch({
+          type: SHOW_OTP_ACTION,
+          payload: { user: data.data, showOTPScreen: true }
+        });
+      } else {
+        dispatch({
+          type: LOGIN_SUCCESS_ACTION,
+          payload: data.data,
+        });
+      }
+
+      return Promise.resolve();
+    },
+    (error) => {
+      dispatch({
+        type: LOGIN_FAIL_ACTION,
+      });
+      dispatch({
+        type: SET_MESSAGE_ACTION,
+        payload: error.response.data.errors ? error.response.data.errors : [{ title: error.response.data.error }],
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const verify = (payload) => (dispatch) => {
+  return AuthService.login(payload).then(
+    (data) => {
       dispatch({
         type: LOGIN_SUCCESS_ACTION,
-        payload: data,
+        payload: data.data,
       });
 
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-
       dispatch({
-        type: LOGIN_FAIL_ACTION,
+        type: VERIFY_FAIL_ACTION,
       });
-
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: message,
+        payload: error.response.data.errors ? error.response.data.errors : [{ title: error.response.data.error }],
       });
 
       return Promise.reject();

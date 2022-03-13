@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS_ACTION, LOGIN_FAIL_ACTION, LOGOUT_ACTION } from "./actions";
+import { LOGIN_SUCCESS_ACTION, LOGIN_FAIL_ACTION, LOGOUT_ACTION, SHOW_OTP_ACTION, VERIFY_FAIL_ACTION } from "./actions";
 import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION } from "../auth/actions";
 import initialState from "./state"
 
@@ -20,7 +20,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         isLoggedIn: true,
-        user: payload.user,
+        user: payload,
       };
     case LOGIN_FAIL_ACTION:
       return {
@@ -33,6 +33,17 @@ export default function (state = initialState, action) {
         ...state,
         isLoggedIn: false,
         user: null,
+      };
+    case VERIFY_FAIL_ACTION:
+      return {
+        ...state,
+        isLoggedIn: false,
+      };
+    case SHOW_OTP_ACTION:
+      return {
+        ...state,
+        showOTPScreen: payload.showOTPScreen,
+        user: payload.user
       };
     case UPDATE_USER_SUCCESS_ACTION:
       return {
