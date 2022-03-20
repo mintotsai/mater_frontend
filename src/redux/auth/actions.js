@@ -46,7 +46,7 @@ export const login = (payload) => (dispatch) => {
       });
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors ? error.response.data.errors : [{ title: error.response.data.error }],
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
       return Promise.reject();
@@ -70,7 +70,7 @@ export const verify = (payload) => (dispatch) => {
       });
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors ? error.response.data.errors : [{ title: error.response.data.error }],
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
       return Promise.reject();
@@ -100,10 +100,15 @@ export const logout = () => (dispatch) => {
       //   type: LOGOUT_FAIL_ACTION,
       // });
 
+      // TODO: Fix this?
       dispatch({
         type: SET_MESSAGE_ACTION,
         payload: message,
       });
+      // dispatch({
+      //   type: SET_MESSAGE_ACTION,
+      //   payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
+      // });
 
       return Promise.reject();
     }
@@ -127,7 +132,7 @@ export const signup = (payload) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
       return Promise.reject();
@@ -152,7 +157,7 @@ export const forgot = (payload) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
       return Promise.reject();
@@ -177,7 +182,7 @@ export const reset = (payload) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
       return Promise.reject();
