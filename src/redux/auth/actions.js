@@ -1,5 +1,5 @@
 import AuthService from "../../services/auth.service";
-import { SET_MESSAGE_ACTION } from "../system/actions";
+import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../system/actions";
 
 export const LOGIN_ACTION = "LOGIN_ACTION"
 export const LOGIN_SUCCESS_ACTION = "LOGIN_SUCCESS_ACTION"
@@ -7,8 +7,6 @@ export const LOGIN_FAIL_ACTION = "LOGIN_FAIL_ACTION"
 export const VERIFY_FAIL_ACTION = "VERIFY_FAIL_ACTION"
 export const SHOW_OTP_ACTION = "SHOW_OTP_ACTION"
 export const LOGOUT_ACTION = "LOGOUT_ACTION"
-export const LOGOUT_SUCCESS_ACTION = "LOGOUT_SUCCESS_ACTION"
-export const LOGOUT_FAIL_ACTION = "LOGOUT_FAIL_ACTION"
 export const SIGNUP_SUCCESS_ACTION = "SIGNUP_SUCCESS_ACTION"
 export const SIGNUP_FAIL_ACTION = "SIGNUP_FAIL_ACTION"
 export const FORGOT_PASSWORD_SUCCESS_ACTION = "FORGOT_PASSWORD_SUCCESS_ACTION"
@@ -79,36 +77,32 @@ export const verify = (payload) => (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+  dispatch({
+    type: SET_MESSAGE_ACTION,
+    payload: { message: null, messageState: "" },
+  });
+  dispatch({
+    type: SET_GOTO_URL_ACTION,
+    payload: ""
+  });
   return AuthService.logout().then(
     (data) => {
-      // dispatch({
-      //   type: LOGOUT_SUCCESS_ACTION,
-      //   payload: data,
-      // });
+      dispatch({
+        type: LOGOUT_ACTION,
+      })
+
+      dispatch({
+        type: SET_GOTO_URL_ACTION,
+        payload: "/"
+      });
 
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-
-      // dispatch({
-      //   type: LOGOUT_FAIL_ACTION,
-      // });
-
-      // TODO: Fix this?
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: message,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
-      // dispatch({
-      //   type: SET_MESSAGE_ACTION,
-      //   payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
-      // });
 
       return Promise.reject();
     }

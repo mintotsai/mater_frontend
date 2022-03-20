@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
-import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { useNavigate, Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
 import MainSection from './MainSection';
 import Profile from './Account/Profile'
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/actions";
 
 import Notifications from "../Common/Notifications";
+import toast, { Toaster } from "react-hot-toast";
 import TwoFactorSetup from "./Account/TwoFactorSetup"
+import { SET_GOTO_URL_ACTION } from "../../redux/system/actions";
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -63,23 +65,42 @@ const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const dispatch = useDispatch();
+  const system = useSelector((state) => state.system);
+  let navigate = useNavigate();
 
   useEffect(() => {
-  }, []);
-
-  const handleLogout = async () => {
-    dispatch(logout())
-      .then(() => {
-        window.location.href = '/';
-      })
-      .catch(() => {
-        // TODO: Error message
+    if (system.gotoUrl) {
+      let path = system.gotoUrl;
+      navigate(path);
+      dispatch({
+        type: SET_GOTO_URL_ACTION,
+        payload: ""
       });
-  }
+    }
+
+    if (system.message && system.message != '' && system.message.length == 1) {
+      if (system.messageStatus == "success") {
+        toast.success(system.message[0].title);
+      } else {
+        toast.error(system.message[0].title);
+      }
+
+    }
+
+    if (system.message && system.message != '' && system.message.length > 1) {
+      system.message.map(function (name, index) {
+        if (system.messageStatus == "success") {
+          toast.success(name.title);
+        } else {
+          toast.error(name.title);
+        }
+      });
+    }
+  }, [system]);
 
   const onClick = e => {
     if (e.target.text === 'Sign out') {
-      handleLogout();
+      dispatch(logout());
     }
   };
 
