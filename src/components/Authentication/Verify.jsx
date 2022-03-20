@@ -47,7 +47,7 @@ const Verify = () => {
                 const verificationCode = values["verificationCode"];
                 dispatch({
                   type: SET_MESSAGE_ACTION,
-                  payload: null,
+                  payload: { message: null, messageState: "" },
                 });
                 dispatch(verify({ user: { otp_user_id: auth.user.id, otp_attempt: values["verificationCode"] } }));
               }}

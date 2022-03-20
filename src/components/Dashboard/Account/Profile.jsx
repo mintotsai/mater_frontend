@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
 import { getUser, updateUser } from "../../../redux/user/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -10,32 +11,12 @@ import toast, { Toaster } from "react-hot-toast";
 import NameChange from './NameChange'
 import EmailChange from './EmailChange'
 import PasswordChange from './PasswordChange'
+import TwoFactorEnable from './TwoFactorEnable'
 
 export default function Profile() {
   const dispatch = useDispatch();
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
-
-  // Unnecessary atm
-  // useEffect(() => {
-  //   console.log("useEffect: mount");
-  //   const fetchData = async () => {
-  //     // get the data from the api
-  //     dispatch(getUser(auth.user.userId))
-  //      .then(() => {
-  //      })
-  //      .catch(() => {
-  //        // TODO: Error message
-  //      });
-
-  //     return () => {
-  //       console.log("useEffect: unmount");
-  //     }
-  //   }
-
-  //   fetchData();
-
-  // }, [])
 
   return (
     <main className="flex-1">
@@ -47,8 +28,10 @@ export default function Profile() {
           <NameChange />
           <EmailChange />
           <PasswordChange />
+          <TwoFactorEnable />
         </div>
       </div>
+
     </main>
   );
 }

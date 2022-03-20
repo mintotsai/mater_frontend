@@ -63,7 +63,7 @@ const Login = () => {
                 const password = values["password"];
                 dispatch({
                   type: SET_MESSAGE_ACTION,
-                  payload: null,
+                  payload: { message: null, messageState: "" },
                 });
                 dispatch(login({ user: { email: values["email"], password: values["password"] } }));
               }}

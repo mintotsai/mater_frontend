@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/actions";
 
 import Notifications from "../Common/Notifications";
+import TwoFactorSetup from "./Account/TwoFactorSetup"
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -49,7 +50,7 @@ const navigation = [
 ]
 
 const userNavigation = [
-  { name: 'Your Profile', href: 'profile' },
+  { name: 'Your Profile', href: '/profile' },
   { name: 'Settings', href: '#' },
   { name: 'Sign out', href: '#' },
 ]
@@ -299,6 +300,7 @@ const Home = () => {
           <Routes>
             <Route exact path="/home" element={<MainSection />} />
             <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/profile/2fasetup" element={<TwoFactorSetup />} />
           </Routes>
 
         </div>

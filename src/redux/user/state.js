@@ -1,9 +1,7 @@
 const initialState = {
   loggedIn: false,
-  user: {
-    id: 0,
-    username: ""
-  }
+  qrCodeUri: "",
+  qrSecret: "",
 }
 
 export default initialState;

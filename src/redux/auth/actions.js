@@ -202,7 +202,7 @@ export const confirmation = (payload) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
       return Promise.reject();
@@ -226,7 +226,7 @@ export const updatePassword = (payload) => (dispatch) => {
 
       dispatch({
         type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
       return Promise.reject();

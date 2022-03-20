@@ -1,6 +1,8 @@
 const initialState = {
   isLoading: false,
-  message: []
+  message: [],
+  messageStatus: "",
+  gotoUrl: ""
 }
 
 export default initialState;
