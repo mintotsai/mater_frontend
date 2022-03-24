@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/actions";
 
 import Notifications from "../Common/Notifications";
+import BellNotification from "../Common/BellNotification"
 import toast, { Toaster } from "react-hot-toast";
 import TwoFactorSetup from "./Account/TwoFactorSetup"
 import { SET_GOTO_URL_ACTION } from "../../redux/system/actions";
@@ -265,13 +266,7 @@ const Home = () => {
                 </form>
               </div>
               <div className="ml-4 flex items-center md:ml-6">
-                <button
-                  type="button"
-                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                <BellNotification />
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
