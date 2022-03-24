@@ -25,3 +25,7 @@ https://www.truemark.dev/blog/reset-password-in-react-and-rails
   * https://stackoverflow.com/a/52477703
   * https://dev.to/akanstein/protected-routes-with-react-router-and-redux-3e62
   * https://blog.logrocket.com/react-router-with-redux-navigation-state/
+
+* Redux Persist
+  * https://github.com/rt2zz/redux-persist
+  * https://blog.reactnativecoach.com/the-definitive-guide-to-redux-persist-84738167975
