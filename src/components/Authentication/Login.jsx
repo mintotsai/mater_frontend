@@ -17,6 +17,13 @@ const Login = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
+    dispatch({
+      type: SET_MESSAGE_ACTION,
+      payload: { message: null, messageState: "" },
+    });
+  }, []);
+
+  useEffect(() => {
     if (auth.showOTPScreen) {
       let path = '/verify';
       navigate(path);
@@ -61,10 +68,7 @@ const Login = () => {
               onSubmit={async (values, { setStatus, resetForm }) => {
                 const username = values["email"];
                 const password = values["password"];
-                dispatch({
-                  type: SET_MESSAGE_ACTION,
-                  payload: { message: null, messageState: "" },
-                });
+
                 dispatch(login({ user: { email: values["email"], password: values["password"] } }));
               }}
             >
