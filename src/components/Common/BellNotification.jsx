@@ -11,8 +11,7 @@ import {
 
 import actionCable from "actioncable";
 const CableApp = {}
-// TODO: use env for url
-CableApp.cable = actionCable.createConsumer("ws://localhost:3001/cable")
+CableApp.cable = actionCable.createConsumer(`${process.env.REACT_APP_BACKEND_ACTIONCABLE_URL}`)
 
 export default function BellNotification() {
   const [show, setShow] = useState(false)

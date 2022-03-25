@@ -2,8 +2,7 @@ import { keyboard } from '@testing-library/user-event/dist/keyboard';
 import axios from 'axios';
 import { authHeader } from "../helpers/auth.header";
 
-// TODO: Get from env variable?
-const BASE_URL = 'http://localhost:3001/';
+const BASE_URL = `${process.env.REACT_APP_BACKEND_API_URL}`
 
 const getUser = async (userId) => {
   return axios.get(`${BASE_URL}api/v1/users/${userId}`, { headers: authHeader() });
