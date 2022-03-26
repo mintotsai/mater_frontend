@@ -94,7 +94,7 @@ export const enableMFA = () => (dispatch) => {
 
       dispatch({
         type: SET_GOTO_URL_ACTION,
-        payload: "/profile/2fasetup"
+        payload: "/settings/account/2fasetup"
       });
 
       return Promise.resolve();
@@ -150,7 +150,7 @@ export const confirmMFA = (payload) => (dispatch) => {
 
       dispatch({
         type: SET_GOTO_URL_ACTION,
-        payload: "/profile"
+        payload: "/settings/account"
       });
 
       dispatch({
@@ -163,7 +163,7 @@ export const confirmMFA = (payload) => (dispatch) => {
     (error) => {
       dispatch({
         type: SET_GOTO_URL_ACTION,
-        payload: "/profile"
+        payload: "/settings/account"
       });
 
       dispatch({

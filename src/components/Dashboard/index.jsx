@@ -53,8 +53,7 @@ const navigation = [
 ]
 
 const userNavigation = [
-  { name: 'Your Profile', href: '/profile' },
-  { name: 'Settings', href: '#' },
+  { name: 'Account & Preferences', href: '/settings/account' },
   { name: 'Sign out', href: '#' },
 ]
 
@@ -315,8 +314,8 @@ const Home = () => {
 
           <Routes>
             <Route exact path="/home" element={<MainSection />} />
-            <Route exact path="/profile" element={<Profile />} />
-            <Route exact path="/profile/2fasetup" element={<TwoFactorSetup />} />
+            <Route exact path="/settings/account" element={<Profile />} />
+            <Route exact path="/settings/account/2fasetup" element={<TwoFactorSetup />} />
           </Routes>
 
         </div>
