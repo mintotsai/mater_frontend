@@ -93,7 +93,7 @@ export const logout = () => (dispatch) => {
 
       dispatch({
         type: SET_GOTO_URL_ACTION,
-        payload: "/"
+        payload: "/login"
       });
 
       return Promise.resolve();

@@ -44,7 +44,7 @@ import { SearchIcon } from '@heroicons/react/solid'
 import { LOGOUT_ACTION } from "../../redux/user/actions";
 
 const navigation = [
-  { name: 'Dashboard', href: 'home', icon: HomeIcon, current: true },
+  { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
   { name: 'Team', href: '#', icon: UsersIcon, current: false },
   { name: 'Projects', href: '#', icon: FolderIcon, current: false },
   { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
@@ -54,7 +54,7 @@ const navigation = [
 
 const userNavigation = [
   { name: 'Account & Preferences', href: '/settings/account' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Sign out', href: '/login' },
 ]
 
 function classNames(...classes) {
