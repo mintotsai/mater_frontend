@@ -29,11 +29,24 @@ const disableMFA = async (userId) => {
   return axios.delete(`${BASE_URL}api/v1/two_factor_authentication/${userId}`, { headers: authHeader() });
 };
 
+const createPresignedUrl = async (payload) => {
+  return axios.post(`${BASE_URL}api/v1/presigned_url`, payload, { headers: authHeader() });
+};
+
+const directUpload = async (directUploadUrl, payload) => {
+  const headers = authHeader();
+  headers["Content-Type"] = "image/png";
+
+  return axios.put(`${directUploadUrl}`, payload, { headers: headers });
+};
+
 export default {
   getUser,
   updateUser,
   enableMFA,
   getQRCodeUri,
   confirmMFA,
-  disableMFA
+  disableMFA,
+  createPresignedUrl,
+  directUpload
 };

@@ -5,6 +5,7 @@ import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION
 export const GET_USER_ACTION = "GET_USER_ACTION"
 export const GET_QR_CODE_URI_SUCCESS_ACTION = "GET_QR_CODE_URI_SUCCESS_ACTION"
 export const GET_QR_CODE_URI_FAIL_ACTION = "GET_QR_CODE_URI_FAIL_ACTION"
+export const GET_PRESIGNED_URL_SUCCESS_ACTION = "GET_PRESIGNED_URL_SUCCESS_ACTION"
 
 export const getUser = (userId) => (dispatch) => {
   return UserService.getUser(userId).then(
@@ -197,6 +198,49 @@ export const disableMFA = (userId) => (dispatch) => {
     },
     (error) => {
 
+      dispatch({
+        type: SET_MESSAGE_ACTION,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
+  return UserService.createPresignedUrl(payload).then(
+    (data) => {
+      dispatch({
+        type: GET_PRESIGNED_URL_SUCCESS_ACTION,
+        payload: data.data,
+      });
+
+      const { auth, user } = getState();
+
+      return Promise.resolve(dispatch(directUpload(user.directUploadUrl, file)))
+        .then(
+          () => dispatch(updateUser(auth.user.id, { user: { png: user.blobSignedId } }))
+        );
+    },
+    (error) => {
+      dispatch({
+        type: SET_MESSAGE_ACTION,
+        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
+      });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const directUpload = (directUploadUrl, payload) => (dispatch) => {
+  return UserService.directUpload(directUploadUrl, payload).then(
+    (data) => {
+
+      return Promise.resolve();
+    },
+    (error) => {
       dispatch({
         type: SET_MESSAGE_ACTION,
         payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },

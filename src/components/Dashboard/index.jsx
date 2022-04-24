@@ -41,7 +41,6 @@ import {
   XIcon,
 } from '@heroicons/react/outline'
 import { SearchIcon } from '@heroicons/react/solid'
-import { LOGOUT_ACTION } from "../../redux/user/actions";
 
 const navigation = [
   { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
@@ -66,6 +65,7 @@ const Home = () => {
 
   const dispatch = useDispatch();
   const system = useSelector((state) => state.system);
+  const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -274,7 +274,7 @@ const Home = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={`${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}`}
                         alt=""
                       />
                     </Menu.Button>

@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import Notifications from '../../Common/Notifications';
 import toast, { Toaster } from "react-hot-toast";
 
+import ProfilePictureChange from './ProfilePictureChange'
 import NameChange from './NameChange'
 import EmailChange from './EmailChange'
 import PasswordChange from './PasswordChange'
@@ -120,6 +121,7 @@ export default function Profile() {
           <div>
             {activeTab == "#" &&
               <>
+                <ProfilePictureChange />
                 <NameChange />
                 <EmailChange />
               </>}
