@@ -24,7 +24,7 @@ export const UPDATE_USER_FAIL_ACTION = "UPDATE_USER_FAIL_ACTION"
 export const login = (payload) => (dispatch) => {
   return AuthService.login(payload).then(
     (data) => {
-      if (data.data.attributes.otp_required_for_login) {
+      if (data && data.data && data.data.attributes.otp_required_for_login) {
         dispatch({
           type: SHOW_OTP_ACTION,
           payload: { user: data.data, showOTPScreen: true }
