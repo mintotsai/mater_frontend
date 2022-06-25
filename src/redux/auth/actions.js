@@ -29,10 +29,22 @@ export const login = (payload) => (dispatch) => {
           type: SHOW_OTP_ACTION,
           payload: { user: data.data, showOTPScreen: true }
         });
+        dispatch({
+          type: SET_GOTO_URL_ACTION,
+          payload: "/verify",
+        });
       } else {
         dispatch({
           type: LOGIN_SUCCESS_ACTION,
           payload: data.data,
+        });
+        dispatch({
+          type: SET_MESSAGE_ACTION,
+          payload: { message: null, messageState: "" },
+        });
+        dispatch({
+          type: SET_GOTO_URL_ACTION,
+          payload: "/home",
         });
       }
 

@@ -4,8 +4,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
-import { login } from "../../redux/auth/actions";
-import { SET_MESSAGE_ACTION } from "../../redux/system/actions"
+import { login, logout } from "../../redux/auth/actions";
+import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions"
 import SystemMessage from "../Common/SystemMessage"
 
 const Login = () => {
@@ -17,21 +17,14 @@ const Login = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    dispatch({
-      type: SET_MESSAGE_ACTION,
-      payload: { message: null, messageState: "" },
-    });
-  }, []);
-
-  useEffect(() => {
-    if (auth.showOTPScreen) {
-      let path = '/verify';
-      navigate(path);
-    } if (auth.isLoggedIn && !auth.showOTPScreen) {
-      let path = '/home';
-      navigate(path);
+    if (system.gotoUrl) {
+      navigate(system.gotoUrl);
+      dispatch({
+        type: SET_GOTO_URL_ACTION,
+        payload: ""
+      })
     }
-  }, [auth])
+  }, [system.gotoUrl])
 
   return (
     <>
