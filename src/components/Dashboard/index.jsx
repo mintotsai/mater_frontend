@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate, Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { useIdleTimer } from 'react-idle-timer';
+import IdleTimeOutModal from '../Common/IdleTimeOutModal'
 import MainSection from './MainSection';
 import Profile from './Account/Profile'
 import { useSelector, useDispatch } from "react-redux";
@@ -60,6 +62,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+// https://www.codementor.io/@jamesugbanu/how-to-develop-a-session-based-timeout-on-react-js-1b7cyl5z2p
+const IDLE_TIMEOUT = `${process.env.REACT_APP_IDLE_TIMEOUT}`;
+const IDLE_COUNTDOWN = `${process.env.REACT_APP_IDLE_COUNTDOWN}`;
+let countdownInterval;
+let timeout;
+
 const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -103,6 +111,94 @@ const Home = () => {
       dispatch(logout());
     }
   };
+
+  const [timeoutModalOpen, setTimeoutModalOpen] = useState(false);
+  const [timeoutCountdown, setTimeoutCountdown] = useState(0);
+
+  const clearSessionTimeout = () => {
+    clearTimeout(timeout);
+  };
+
+  const clearSessionInterval = () => {
+    clearInterval(countdownInterval);
+  };
+
+  const handleLogout = async (isTimedOut = false) => {
+    try {
+      setTimeoutModalOpen(false);
+      clearSessionInterval();
+      clearSessionTimeout();
+      dispatch(logout());
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleClose = () => {
+    setTimeoutModalOpen(false);
+    clearSessionInterval();
+    clearSessionTimeout();
+  };
+
+  const onIdle = () => {
+    // Close Modal Prompt
+    // Do some idle action like log out your user
+    // Start the countdown
+    const delay = 1000 * 1;
+    if (!timeoutModalOpen) {
+      timeout = setTimeout(() => {
+        let countDown = IDLE_COUNTDOWN;
+        setTimeoutModalOpen(true);
+        countdownInterval = setInterval(() => {
+          if (countDown > 0) {
+            --countDown;
+          } else {
+            handleLogout(true);
+          }
+        }, 1000);
+      }, delay);
+    }
+  }
+
+  const onActive = (event) => {
+    if (!timeoutModalOpen) {
+      clearSessionInterval();
+      clearSessionTimeout();
+    }
+  }
+
+  const {
+  } = useIdleTimer({
+    onIdle,
+    onActive,
+    timeout: IDLE_TIMEOUT,
+    promptTimeout: 0,
+    events: [
+      'mousemove',
+      'keydown',
+      'wheel',
+      'DOMMouseScroll',
+      'mousewheel',
+      'mousedown',
+      'touchstart',
+      'touchmove',
+      'MSPointerDown',
+      'MSPointerMove',
+      'visibilitychange'
+    ],
+    immediateEvents: [],
+    debounce: 0,
+    throttle: 0,
+    eventsThrottle: 200,
+    element: document,
+    startOnMount: true,
+    startManually: false,
+    stopOnIdle: false,
+    crossTab: false,
+    name: 'idle-timer',
+    syncTimers: 0,
+    leaderElection: false
+  });
 
   return (
     <>
@@ -311,6 +407,11 @@ const Home = () => {
               </div>
             </div>
           </div>
+          <IdleTimeOutModal
+            open={timeoutModalOpen}
+            handleLogout={() => handleLogout()}
+            handleClose={() => handleClose()}
+          />
 
           <Routes>
             <Route exact path="/home" element={<MainSection />} />

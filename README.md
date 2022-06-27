@@ -29,3 +29,8 @@ https://www.truemark.dev/blog/reset-password-in-react-and-rails
 * Redux Persist
   * https://github.com/rt2zz/redux-persist
   * https://blog.reactnativecoach.com/the-definitive-guide-to-redux-persist-84738167975
+
+* Idle Timeout
+  * https://blog.bitsrc.io/how-to-implement-idle-timeout-in-react-830d21c32942
+  * https://javascript.plainenglish.io/building-an-auto-logout-session-timeout-with-react-using-hooks-e7804ef973ec
+  * https://www.codementor.io/@jamesugbanu/how-to-develop-a-session-based-timeout-on-react-js-1b7cyl5z2p
