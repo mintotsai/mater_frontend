@@ -4,6 +4,7 @@ import { useIdleTimer } from 'react-idle-timer';
 import IdleTimeOutModal from '../Common/IdleTimeOutModal'
 import MainSection from './MainSection';
 import Profile from './Account/Profile'
+import Checkout from './Account/Billing/Checkout';
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/actions";
 
@@ -413,10 +414,12 @@ const Home = () => {
             handleClose={() => handleClose()}
           />
 
+          {/* We put this here so it's contained in the dashboard. */}
           <Routes>
             <Route exact path="/home" element={<MainSection />} />
             <Route exact path="/settings/account" element={<Profile />} />
             <Route exact path="/settings/account/2fasetup" element={<TwoFactorSetup />} />
+            <Route exact path="/settings/account/checkout" element={<Checkout />} />
           </Routes>
 
         </div>
