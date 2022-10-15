@@ -18,6 +18,8 @@ export default function TwoFactorSetup() {
   const user = useSelector((state) => state.user);
   let navigate = useNavigate();
 
+  // Might be an issue calling asyc in useEffect
+  // https://dev.to/elijahtrillionz/cleaning-up-async-functions-in-reacts-useeffect-hook-unsubscribing-3dkk
   useEffect(() => {
     console.log("useEffect: mount");
 

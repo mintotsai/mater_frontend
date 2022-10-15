@@ -8,6 +8,8 @@ const Confirmation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
 
+  // Might be an issue calling asyc in useEffect
+  // https://dev.to/elijahtrillionz/cleaning-up-async-functions-in-reacts-useeffect-hook-unsubscribing-3dkk
   useEffect(() => {
     console.log("useEffect: mount");
     document.documentElement.classList.remove("bg-gray-50");
