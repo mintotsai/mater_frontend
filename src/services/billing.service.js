@@ -7,6 +7,11 @@ const createSubscription = async (payload) => {
   return axios.post(`${BASE_URL}api/v1/billings/create-subscription`, payload, { headers: authHeader() });
 };
 
+const getCreditCardInfo = async (payload) => {
+  return axios.get(`${BASE_URL}api/v1/billings/get-credit-card-info`, { headers: authHeader() });
+};
+
 export default {
-  createSubscription
+  createSubscription,
+  getCreditCardInfo
 };
