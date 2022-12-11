@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Route, Routes, BrowserRouter, useNavigate, useLocation, useSearchParams, UNSAFE_NavigationContext } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { getUser, updateUser } from "../../../redux/user/actions";
+import { setDefaultPaymentMethod, getSetupSecret } from "../../../redux/billing/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -38,12 +39,17 @@ export default function Profile() {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   const history = createBrowserHistory();
+  const setupSecret = useSelector((state) => state.billing.setupSecret);
 
   const [activeTab, setActiveTab] = useState("#");
   useEffect(() => {
+    if (!setupSecret)
+      dispatch(getSetupSecret());
     // console.log(">>>1searchParams=" + searchParams);
     // console.log(">>>1success=" + searchParams.get("success"));
     // navigate("#");
+    const stripeRedirectStatus = searchParams.get("redirect_status");
+    // console.log(">>>stripeRedirectStatus=" + stripeRedirectStatus);
     const href = location.hash;
     if (href) {
       // console.log(">>>1location.hash=" + location.hash);
@@ -55,6 +61,29 @@ export default function Profile() {
         }
       });
       setActiveTab(href);
+    }
+
+    // https://stripe.com/docs/payments/save-and-reuse#confirm-the-setupintent
+    switch (stripeRedirectStatus) {
+      case 'succeeded':
+        toast.success("Success! Your payment method has been saved.");
+        const setupIntentId = searchParams.get("setup_intent");
+        dispatch(setDefaultPaymentMethod({ setup_intent_id: setupIntentId }));
+        // https://stackoverflow.com/questions/22753052/remove-url-parameters-without-refreshing-page
+        window.history.pushState({}, document.title, "/" + "settings/account#billing");
+        break;
+
+      case 'processing':
+        toast.success("Processing payment details. We'll update you when processing is complete.");
+        window.history.pushState({}, document.title, "/" + "settings/account#billing");
+        break;
+
+      case 'requires_payment_method':
+        // Redirect your user back to your payment page to attempt collecting
+        // payment again
+        toast.success("Failed to process payment details. Please try another payment method.");
+        window.history.pushState({}, document.title, "/" + "settings/account#billing");
+        break;
     }
   }, []);
 

@@ -11,7 +11,22 @@ const getCreditCardInfo = async (payload) => {
   return axios.get(`${BASE_URL}api/v1/billings/get-credit-card-info`, { headers: authHeader() });
 };
 
+const getSetupSecret = async (payload) => {
+  return axios.get(`${BASE_URL}api/v1/billings/setup-secret`, { headers: authHeader() });
+};
+
+// const updateCreditCardInfo = async (payload) => {
+//   return axios.post(`${BASE_URL}api/v1/billings/update-credit-card-info`, payload, { headers: authHeader() });
+// };
+
+const setDefaultPaymentMethod = async (payload) => {
+  return axios.post(`${BASE_URL}api/v1/billings/set-default-payment-method`, payload, { headers: authHeader() });
+};
+
 export default {
   createSubscription,
-  getCreditCardInfo
+  getCreditCardInfo,
+  getSetupSecret,
+  // updateCreditCardInfo,
+  setDefaultPaymentMethod
 };

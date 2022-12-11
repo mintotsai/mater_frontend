@@ -1,4 +1,4 @@
-import { SET_CARD_INFO_ACTION } from "./actions";
+import { SET_CARD_INFO_ACTION, SET_SETUP_SECRET } from "./actions";
 import initialState from "./state"
 
 export default function (state = initialState, action) {
@@ -8,6 +8,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         cardInfo: payload
+      };
+    case SET_SETUP_SECRET:
+      return {
+        ...state,
+        setupSecret: payload
       };
     default:
       return state;

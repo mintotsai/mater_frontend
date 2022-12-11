@@ -1,16 +1,28 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux";
-// import PaymentMethodModal from './PaymentMethodModal'
-// import { loadStripe } from "@stripe/stripe-js";
-// import { Elements, CardElement, CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { getCreditCardInfo } from "../../../../redux/billing/actions";
+import PaymentMethodModal from './PaymentMethodModal'
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, CardElement, CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { getCreditCardInfo, getSetupSecret } from "../../../../redux/billing/actions";
 
-// const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUB_KEY}`);
+const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUB_KEY}`);
 
 export default function PaymentMethods() {
   const dispatch = useDispatch();
   const [paymentMethodModalOpen, setPaymentMethodModalOpen] = useState(false);
   const cardInfo = useSelector((state) => state.billing.cardInfo);
+  const setupSecret = useSelector((state) => state.billing.setupSecret);
+
+  const options = {
+    // passing the client secret obtained in step 3
+    clientSecret: setupSecret,
+    // Fully customizable with appearance API.
+    appearance: {
+      theme: "stripe",
+
+    },
+  };
+
   var last4 = "••••";
   if (cardInfo.card) {
     last4 = cardInfo.card.last4;
@@ -26,6 +38,7 @@ export default function PaymentMethods() {
     const fetchData = async () => {
       // get the data from the api
       dispatch(getCreditCardInfo());
+      // dispatch(getSetupSecret());
 
       return () => {
         console.log("useEffect: unmount");
@@ -54,6 +67,8 @@ export default function PaymentMethods() {
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder="•••• •••• •••• 1234"
                     value={"•••• •••• •••• " + last4}
+                    disabled="disabled"
+                    readOnly
                   />
                 </div>
               </div>
@@ -72,10 +87,9 @@ export default function PaymentMethods() {
           </div>
         </div>
       </div>
-      {/* <Elements stripe={stripePromise}>
+      <Elements stripe={stripePromise} options={options}>
         <PaymentMethodModal open={paymentMethodModalOpen} handleClose={() => handleClose()} />
-      </Elements> */}
-
+      </Elements>
     </>
   )
 }
