@@ -17,7 +17,7 @@ import PasswordChange from './PasswordChange'
 import TwoFactorEnable from './TwoFactorEnable'
 import Plans from './Billing/Plans'
 import PaymentMethods from './Billing/PaymentMethods'
-// import BillingHistory from './Billing/BillingHistory'
+import BillingHistory from './Billing/BillingHistory'
 import Checkout from './Billing/Checkout';
 import { CreditCardIcon, OfficeBuildingIcon, UserIcon, UsersIcon, ShieldCheckIcon } from '@heroicons/react/solid'
 
@@ -220,7 +220,7 @@ export default function Profile() {
                 <>
                   <Plans />
                   <PaymentMethods />
-                  {/* <BillingHistory /> */}
+                  <BillingHistory />
                 </>}
             </div>
           </div>

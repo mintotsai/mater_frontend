@@ -23,10 +23,16 @@ const setDefaultPaymentMethod = async (payload) => {
   return axios.post(`${BASE_URL}api/v1/billings/set-default-payment-method`, payload, { headers: authHeader() });
 };
 
+const getBillingHistory = async (payload) => {
+  return axios.get(`${BASE_URL}api/v1/billings/get-billing-history`, { headers: authHeader() });
+}
+
+
 export default {
   createSubscription,
   getCreditCardInfo,
   getSetupSecret,
   // updateCreditCardInfo,
-  setDefaultPaymentMethod
+  setDefaultPaymentMethod,
+  getBillingHistory
 };

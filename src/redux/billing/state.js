@@ -1,5 +1,6 @@
 const initialState = {
-  cardInfo: {}
+  cardInfo: {},
+  billingHistory: { data: [] }
 }
 
 export default initialState;

@@ -4,6 +4,7 @@ import { logout } from "../../redux/auth/actions";
 export const CREATE_CHECKOUT_SESSION = "CREATE_CHECKOUT_SESSION"
 export const SET_CARD_INFO_ACTION = "SET_CARD_INFO_ACTION"
 export const SET_SETUP_SECRET = "SET_SETUP_SECRET"
+export const SET_BILLING_HISTORY = "SET_BILLING_HISTORY"
 
 export const createSubscription = (payload) => (dispatch) => {
   return BillingService.createSubscription(payload).then(
@@ -195,6 +196,39 @@ export const setDefaultPaymentMethod = (payload) => (dispatch) => {
       //   type: SET_MESSAGE_ACTION,
       //   payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       // });
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const getBillingHistory = (payload) => (dispatch) => {
+  return BillingService.getBillingHistory(payload).then(
+
+    (data) => {
+      // console.log(data);
+
+      dispatch({
+        type: SET_BILLING_HISTORY,
+        payload: data.data,
+      })
+
+      return Promise.resolve();
+    },
+    (error) => {
+      if (error.response.status == 401) dispatch(logout());
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      // TODO: Fix this?
+      dispatch({
+        type: SET_MESSAGE_ACTION,
+        payload: message,
+      });
 
       return Promise.reject();
     }
