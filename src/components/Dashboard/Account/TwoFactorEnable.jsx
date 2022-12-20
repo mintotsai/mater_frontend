@@ -18,32 +18,6 @@ export default function TwoFactorEnable() {
   const user = useSelector((state) => state.user);
   let navigate = useNavigate();
 
-  useEffect(() => {
-    if (system.gotoUrl) {
-      let path = system.gotoUrl;
-      navigate(path);
-    }
-
-    if (system.message && system.message != '' && system.message.length == 1) {
-      if (system.messageStatus == "success") {
-        toast.success(system.message[0].title);
-      } else {
-        toast.error(system.message[0].title);
-      }
-
-    }
-
-    if (system.message && system.message != '' && system.message.length > 1) {
-      system.message.map(function (name, index) {
-        if (system.messageStatus == "success") {
-          toast.success(name.title);
-        } else {
-          toast.error(name.title);
-        }
-      });
-    }
-  }, [system]);
-
   const goto2FASetup = () => {
     dispatch(enableMFA());
   }

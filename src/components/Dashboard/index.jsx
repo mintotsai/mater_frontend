@@ -12,7 +12,7 @@ import Notifications from "../Common/Notifications";
 import BellNotification from "../Common/BellNotification"
 import toast, { Toaster } from "react-hot-toast";
 import TwoFactorSetup from "./Account/TwoFactorSetup"
-import { SET_GOTO_URL_ACTION } from "../../redux/system/actions";
+import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions";
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -87,23 +87,27 @@ const Home = () => {
       });
     }
 
-    if (system.message && system.message != '' && system.message.length == 1) {
-      if (system.messageStatus == "success") {
-        toast.success(system.message[0].title);
-      } else {
-        toast.error(system.message[0].title);
-      }
-
-    }
-
-    if (system.message && system.message != '' && system.message.length > 1) {
-      system.message.map(function (name, index) {
+    if (system.message && system.message != '') {
+      if (!Array.isArray(system.message)) {
         if (system.messageStatus == "success") {
-          toast.success(name.title);
+          toast.success(system.message.title);
         } else {
-          toast.error(name.title);
+          // toast.error(system.message[0].title + ": " + system.message[0].detail);
+          toast.error(system.message.detail);
         }
-      });
+      } else {
+        system.message.map(function (name, index) {
+          if (system.messageStatus == "success") {
+            toast.success(name.title);
+          } else {
+            toast.error(name.detail);
+          }
+        });
+      }
+      dispatch({
+        type: SET_MESSAGE_ACTION,
+        payload: {}
+      })
     }
   }, [system]);
 

@@ -92,6 +92,7 @@ export default function Plans() {
     return () => (mounted = false);
   }, []);
 
+  // TODO: Should this be in index.jsx
   useEffect(() => {
     if (system.gotoUrl) {
       // navigate(system.gotoUrl, { replace: true });

@@ -228,6 +228,11 @@ export const updatePassword = (payload) => (dispatch) => {
       //   type: UPDATE_PASSWORD_SUCCESS_ACTION,
       // });
 
+      dispatch({
+        type: SET_MESSAGE_ACTION,
+        payload: { message: { title: "Successfully, changed your password.", detail: "" }, messageStatus: "success" },
+      });
+
       return Promise.resolve();
     },
     (error) => {
@@ -240,7 +245,9 @@ export const updatePassword = (payload) => (dispatch) => {
         payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
       });
 
-      return Promise.reject();
+      // TODO: Whats the right thing to do here?
+      // return Promise.reject();
+      return Promise.resolve();
     }
   );
 };

@@ -44,15 +44,7 @@ export default function Profile() {
           const newPassword = values["newPassword"];
           const confirmNewPassword = values["confirmNewPassword"];
 
-          dispatch(updatePassword({ user: { email: auth.user.attributes.email, current_password: currentPassword, password: newPassword, password_confirmation: confirmNewPassword } }))
-            .then(() => {
-              toast.success("Successfully, changed your password.");
-            })
-            .catch(() => {
-              system.message.map(function (name, index) {
-                toast.error(name.detail);
-              });
-            });
+          dispatch(updatePassword({ user: { email: auth.user.attributes.email, current_password: currentPassword, password: newPassword, password_confirmation: confirmNewPassword } }));
         }}
       >
         {({ values, errors, touched, isSubmitting, status, resetForm }) => (
