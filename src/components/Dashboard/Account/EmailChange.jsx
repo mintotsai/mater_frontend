@@ -25,15 +25,13 @@ export default function Profile() {
           resetForm();
           const email = values["email"];
 
-          dispatch(updateUser(auth.user.id, { user: { email: email } }))
-            .then(() => {
-              toast.success("Check email to confirm email change");
-            })
-            .catch(() => {
-              system.message.map(function (name, index) {
-                toast.error(name.title);
-              });
-            });
+          // TODO: Should we put this in the updateUser dispatch
+          if (email == auth.user.attributes.email) {
+            toast.error("The email is the same.");
+            return;
+          }
+
+          dispatch(updateUser(auth.user.id, { user: { email: email } }));
         }}
       >
         {({ values, errors, touched, isSubmitting, status, resetForm }) => (

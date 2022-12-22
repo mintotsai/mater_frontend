@@ -1,6 +1,7 @@
 import UserService from "../../services/user.service";
 import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../system/actions";
 import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION } from "../auth/actions";
+import { setMessage } from "../../helpers/messages";
 
 export const GET_USER_ACTION = "GET_USER_ACTION"
 export const GET_QR_CODE_URI_SUCCESS_ACTION = "GET_QR_CODE_URI_SUCCESS_ACTION"
@@ -49,14 +50,17 @@ export const getUser = (userId) => (dispatch) => {
 
 export const updateUser = (userId, payload) => (dispatch) => {
   return UserService.updateUser(userId, payload).then(
-
     (data) => {
       dispatch({
         type: UPDATE_USER_SUCCESS_ACTION,
         payload: data.data.data,
       });
+
       // TODO: Do we need this?
       // localStorage.setItem("user", JSON.stringify(data.data));
+
+      var messages = [{ title: "Check email to confirm email change", detail: "Check email to confirm email change" }];
+      setMessage(dispatch, "success", messages);
 
       return Promise.resolve();
     },
@@ -65,10 +69,8 @@ export const updateUser = (userId, payload) => (dispatch) => {
         type: UPDATE_USER_FAIL_ACTION,
       });
 
-      dispatch({
-        type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
-      });
+      var messages = error.response.data;
+      setMessage(dispatch, "error", messages);
 
       return Promise.reject();
     }
