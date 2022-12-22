@@ -375,7 +375,7 @@ const Home = () => {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={`${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}`}
+                        src={auth.user.attributes.profile_image_url.includes("active_storage") ? `${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}` : `${auth.user.attributes.profile_image_url}`}
                         alt=""
                       />
                     </Menu.Button>

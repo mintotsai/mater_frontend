@@ -92,7 +92,7 @@ export default function ProfilePictureChange() {
                 <div className="mt-1 flex items-center">
                   {auth.user.attributes.profile_image_url != '' && (
                     <span className="h-24 w-24 rounded-full overflow-hidden bg-gray-100">
-                      <img alt='user' src={`${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}`} />
+                      <img alt='user' src={auth.user.attributes.profile_image_url.includes("active_storage") ? `${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}` : `${auth.user.attributes.profile_image_url}`} />
                     </span>
                   )}
                   {auth.user.attributes.profile_image_url == '' && (
