@@ -59,7 +59,14 @@ export const updateUser = (userId, payload) => (dispatch) => {
       // TODO: Do we need this?
       // localStorage.setItem("user", JSON.stringify(data.data));
 
-      var messages = [{ title: "Check email to confirm email change", detail: "Check email to confirm email change" }];
+      var messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
+      if ("png" in payload["user"]) {
+        messages = [{ title: "Successfully updated profile image", detail: "Successfully updated profile image" }];
+      } else if ("email" in payload["user"]) {
+        messages = [{ title: "Check email to confirm email change", detail: "Check email to confirm email change" }];
+      } else if ("first_name" in payload["user"]) {
+        messages = [{ title: "Successfully changed your name", detail: "Successfully changed your name" }];
+      }
       setMessage(dispatch, "success", messages);
 
       return Promise.resolve();
@@ -223,13 +230,13 @@ export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
       return Promise.resolve(dispatch(directUpload(user.directUploadUrl, file)))
         .then(
           () => dispatch(updateUser(auth.user.id, { user: { png: user.blobSignedId } }))
-        );
+        ).catch((error) => {
+          setMessage(dispatch, "error", error);
+        });
     },
     (error) => {
-      dispatch({
-        type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
-      });
+      var messages = error.response.data;
+      setMessage(dispatch, "error", messages);
 
       return Promise.reject();
     }
@@ -243,12 +250,10 @@ export const directUpload = (directUploadUrl, payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      dispatch({
-        type: SET_MESSAGE_ACTION,
-        payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
-      });
+      var messages = error.response.data;
+      setMessage(dispatch, "error", messages);
 
-      return Promise.reject();
+      return Promise.reject(messages);
     }
   );
 };

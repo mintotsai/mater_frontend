@@ -73,15 +73,7 @@ export default function ProfilePictureChange() {
                 }
               };
 
-              dispatch(createPresignedUrl(file, payload))
-                .then(() => {
-                  window.location.reload(false);
-                })
-                .catch(() => {
-                  system.message.map(function (name, index) {
-                    toast.error(name.title);
-                  });
-                });
+              dispatch(createPresignedUrl(file, payload));
             }
           }}
         >

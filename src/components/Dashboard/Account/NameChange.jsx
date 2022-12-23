@@ -26,15 +26,7 @@ export default function Profile() {
           const firstName = values["firstName"];
           const lastName = values["lastName"];
 
-          dispatch(updateUser(auth.user.id, { user: { first_name: firstName, last_name: lastName } }))
-            .then(() => {
-              toast.success("Successfully, changed your name.");
-            })
-            .catch(() => {
-              system.message.map(function (name, index) {
-                toast.error(name.title);
-              });
-            });
+          dispatch(updateUser(auth.user.id, { user: { first_name: firstName, last_name: lastName } }));
         }}
       >
         {({ values, errors, touched, isSubmitting, status, resetForm }) => (
