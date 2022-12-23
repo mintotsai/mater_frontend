@@ -8,8 +8,7 @@ import * as Yup from 'yup';
 import Notifications from '../../Common/Notifications';
 import toast, { Toaster } from "react-hot-toast";
 
-import { enableMFA } from "../../../redux/user/actions";
-import { disableMFA } from '../../../redux/user/actions';
+import { enableMFA, disableMFA } from "../../../redux/user/actions";
 
 export default function TwoFactorEnable() {
   const dispatch = useDispatch();
