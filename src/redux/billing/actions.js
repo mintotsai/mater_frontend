@@ -83,10 +83,7 @@ export const getCreditCardInfo = (payload) => (dispatch) => {
 
 export const getSetupSecret = (payload) => (dispatch) => {
   return BillingService.getSetupSecret(payload).then(
-
     (data) => {
-      console.log(data);
-
       dispatch({
         type: SET_SETUP_SECRET,
         payload: data.data.client_secret,
