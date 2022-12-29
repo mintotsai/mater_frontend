@@ -45,11 +45,12 @@ const Verify = () => {
               })}
               onSubmit={async (values, { setStatus, resetForm }) => {
                 const verificationCode = values["verificationCode"];
+
+                dispatch(verify({ user: { otp_user_id: auth.user.id, otp_attempt: values["verificationCode"] } }));
                 dispatch({
                   type: SET_MESSAGE_ACTION,
                   payload: { message: null, messageState: "" },
                 });
-                dispatch(verify({ user: { otp_user_id: auth.user.id, otp_attempt: values["verificationCode"] } }));
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

@@ -63,6 +63,10 @@ const Login = () => {
                 const password = values["password"];
 
                 dispatch(login({ user: { email: values["email"], password: values["password"] } }));
+                dispatch({
+                  type: SET_MESSAGE_ACTION,
+                  payload: { message: null, messageState: "" },
+                });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
