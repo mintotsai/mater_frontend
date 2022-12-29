@@ -10,7 +10,6 @@ export const GET_PRESIGNED_URL_SUCCESS_ACTION = "GET_PRESIGNED_URL_SUCCESS_ACTIO
 
 export const getUser = (userId) => (dispatch) => {
   return UserService.getUser(userId).then(
-
     (data) => {
       console.log(data);
       // dispatch({
@@ -96,7 +95,6 @@ export const enableMFA = () => (dispatch) => {
 
   return UserService.enableMFA().then(
     (data) => {
-
       dispatch({
         type: UPDATE_USER_SUCCESS_ACTION,
         payload: data.data.data,
@@ -126,7 +124,7 @@ export const getQRCodeUri = () => (dispatch) => {
     (data) => {
       dispatch({
         type: GET_QR_CODE_URI_SUCCESS_ACTION,
-        payload: data.data,
+        payload: data.data.data.attributes.data,
       });
 
       return Promise.resolve();
@@ -222,7 +220,7 @@ export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
     (data) => {
       dispatch({
         type: GET_PRESIGNED_URL_SUCCESS_ACTION,
-        payload: data.data,
+        payload: data.data.data.attributes.data,
       });
 
       const { auth, user } = getState();
