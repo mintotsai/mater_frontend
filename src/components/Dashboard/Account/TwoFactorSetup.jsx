@@ -50,7 +50,7 @@ export default function TwoFactorSetup() {
         onSubmit={async (values, { setStatus, resetForm }) => {
           const mfaCode = values["mfaCode"];
 
-          dispatch(confirmMFA({ mfa: { code: mfaCode } }));
+          dispatch(confirmMFA({ mfa: { code: mfaCode } }, navigate));
         }}
       >
         {({ values, errors, touched, isSubmitting, status, resetForm }) => (

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 import { confirmation } from "../../redux/auth/actions";
 
 const Confirmation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   // Might be an issue calling asyc in useEffect
   // https://dev.to/elijahtrillionz/cleaning-up-async-functions-in-reacts-useeffect-hook-unsubscribing-3dkk
@@ -16,13 +18,7 @@ const Confirmation = () => {
     const confirmationToken = searchParams.get("confirmation_token");
     const fetchData = async () => {
       // get the data from the api
-      dispatch(confirmation({ params: { confirmation_token: confirmationToken } }))
-        .then(() => {
-          window.location.href = "/login";
-        })
-        .catch(() => {
-          // TODO: Hide then show error page below?
-        });
+      dispatch(confirmation(navigate, { params: { confirmation_token: confirmationToken } }));
 
       return () => {
         console.log("useEffect: unmount");

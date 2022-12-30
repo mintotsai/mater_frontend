@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+
 import { verify } from "../../redux/auth/actions";
 import { SET_MESSAGE_ACTION } from "../../redux/system/actions"
 import SystemMessage from "../Common/SystemMessage"
+import { clearMessage } from '../../helpers/messages';
 
 const Verify = () => {
 
@@ -16,11 +18,20 @@ const Verify = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (auth.isLoggedIn) {
-      let path = '/home';
-      navigate(path);
-    }
-  }, [auth])
+    // We do this because of async callout
+    let mounted = true;
+
+    clearMessage(dispatch);
+
+    return () => (mounted = false);
+  }, []);
+
+  // useEffect(() => {
+  //   if (auth.isLoggedIn) {
+  //     let path = '/home';
+  //     navigate(path);
+  //   }
+  // }, [auth])
 
   return (
     <>
@@ -46,11 +57,7 @@ const Verify = () => {
               onSubmit={async (values, { setStatus, resetForm }) => {
                 const verificationCode = values["verificationCode"];
 
-                dispatch(verify({ user: { otp_user_id: auth.user.id, otp_attempt: values["verificationCode"] } }));
-                dispatch({
-                  type: SET_MESSAGE_ACTION,
-                  payload: { message: null, messageState: "" },
-                });
+                dispatch(verify({ user: { otp_user_id: auth.user.id, otp_attempt: values["verificationCode"] } }, navigate));
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

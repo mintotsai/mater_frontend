@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { login, logout } from "../../redux/auth/actions";
 import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions"
 import SystemMessage from "../Common/SystemMessage"
+import { clearMessage } from '../../helpers/messages';
 
 const Login = () => {
 
@@ -16,15 +17,20 @@ const Login = () => {
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
 
+  // useEffect(() => {
+  //   if (system.gotoUrl) {
+  //     navigate(system.gotoUrl);
+  //   }
+  // }, [system.gotoUrl])
+
   useEffect(() => {
-    if (system.gotoUrl) {
-      navigate(system.gotoUrl);
-      dispatch({
-        type: SET_GOTO_URL_ACTION,
-        payload: ""
-      })
-    }
-  }, [system.gotoUrl])
+    // We do this because of async callout
+    let mounted = true;
+
+    clearMessage(dispatch);
+
+    return () => (mounted = false);
+  }, []);
 
   return (
     <>
@@ -62,11 +68,7 @@ const Login = () => {
                 const username = values["email"];
                 const password = values["password"];
 
-                dispatch(login({ user: { email: values["email"], password: values["password"] } }));
-                dispatch({
-                  type: SET_MESSAGE_ACTION,
-                  payload: { message: null, messageState: "" },
-                });
+                dispatch(login({ user: { email: values["email"], password: values["password"] } }, navigate));
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

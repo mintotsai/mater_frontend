@@ -13,3 +13,10 @@ export function setMessage(dispatch, type, messages) {
     });
   }
 }
+
+export function clearMessage(dispatch) {
+  dispatch({
+    type: SET_MESSAGE_ACTION,
+    payload: { message: null, messageState: "" },
+  });
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch, batch } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { createPresignedUrl } from "../../../redux/user/actions";
 import { Formik, useFormikContext, Form, Field, ErrorMessage } from 'formik';
 import CryptoJS from 'crypto-js'
@@ -10,6 +11,7 @@ export default function ProfilePictureChange() {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   const user = useSelector((state) => state.user);
+  let navigate = useNavigate();
 
   const inputFile = useRef(null);
 
@@ -73,7 +75,7 @@ export default function ProfilePictureChange() {
                 }
               };
 
-              dispatch(createPresignedUrl(file, payload));
+              dispatch(createPresignedUrl(file, payload, navigate));
             }
           }}
         >

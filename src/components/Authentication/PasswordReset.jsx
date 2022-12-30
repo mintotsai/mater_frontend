@@ -1,16 +1,27 @@
-import React from 'react';
-import { useSearchParams } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { reset } from "../../redux/auth/actions";
-
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+
+import { reset } from "../../redux/auth/actions";
+import SystemMessage from "../Common/SystemMessage"
+import { clearMessage } from '../../helpers/messages';
 
 const PasswordReset = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
-
+  let navigate = useNavigate();
   const system = useSelector((state) => state.system);
+
+  useEffect(() => {
+    // We do this because of async callout
+    let mounted = true;
+
+    clearMessage(dispatch);
+
+    return () => (mounted = false);
+  }, []);
 
   return (
     <>
@@ -46,42 +57,12 @@ const PasswordReset = () => {
                 // same shape as initial values
                 // console.log(values);
                 const resetPasswordToken = searchParams.get("reset_password_token");
-                dispatch(reset({ user: { reset_password_token: resetPasswordToken, password: values["password"], password_confirmation: values["passwordConfirmation"] } }))
-                  .then(() => {
-                    window.location.href = '/login';
-                  })
-                  .catch(() => {
-                    setStatus({
-                      success: false,
-                      msg: system.message
-                    })
-                  });
+                dispatch(reset(navigate, { user: { reset_password_token: resetPasswordToken, password: values["password"], password_confirmation: values["passwordConfirmation"] } }));
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
                 <Form className="space-y-6" action="#" method="POST">
-                  {status && status.success && (
-                    <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
-                      <div className="flex">
-                        <div className="ml-3">
-                          <h3 className={`text-sm font-medium ${!status.success ? "text-red-800" : "text-green-800"}`}>{status.msg}</h3>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {status && !status.success && (
-                    <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
-                      <ul role="list" className="list-disc pl-5 space-y-1">
-                        <div className="mt-2 text-sm text-red-700">
-                          {status.msg.map(function (name, index) {
-                            return (
-                              <li key={index}>{name.detail ? name.detail : name.title}</li>
-                            );
-                          })}
-                        </div>
-                      </ul>
-                    </div>
-                  )}
+                  <SystemMessage />
 
                   <div>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-700">

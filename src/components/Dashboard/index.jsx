@@ -78,14 +78,14 @@ const Home = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (system.gotoUrl) {
-      let path = system.gotoUrl;
-      navigate(path);
-      dispatch({
-        type: SET_GOTO_URL_ACTION,
-        payload: ""
-      });
-    }
+    // if (system.gotoUrl) {
+    //   let path = system.gotoUrl;
+    //   navigate(path);
+    //   dispatch({
+    //     type: SET_GOTO_URL_ACTION,
+    //     payload: ""
+    //   });
+    // }
 
     if (system.message && system.message != '') {
       if (!Array.isArray(system.message)) {
@@ -93,14 +93,14 @@ const Home = () => {
           toast.success(system.message.title);
         } else {
           // toast.error(system.message[0].title + ": " + system.message[0].detail);
-          toast.error(system.message.detail);
+          toast.error(system.message.title);
         }
       } else {
         system.message.map(function (name, index) {
           if (system.messageStatus == "success") {
             toast.success(name.title);
           } else {
-            toast.error(name.detail);
+            toast.error(name.title);
           }
         });
       }
@@ -113,7 +113,7 @@ const Home = () => {
 
   const onClick = e => {
     if (e.target.text === 'Sign out') {
-      dispatch(logout());
+      dispatch(logout(navigate));
     }
   };
 
@@ -133,7 +133,7 @@ const Home = () => {
       setTimeoutModalOpen(false);
       clearSessionInterval();
       clearSessionTimeout();
-      dispatch(logout());
+      dispatch(logout(navigate));
     } catch (err) {
       console.error(err);
     }

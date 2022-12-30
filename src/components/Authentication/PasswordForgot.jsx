@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { forgot } from "../../redux/auth/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+
+import { forgot } from "../../redux/auth/actions";
+import SystemMessage from "../Common/SystemMessage"
+import { clearMessage } from '../../helpers/messages';
 
 const PasswordForgot = () => {
   const dispatch = useDispatch();
 
   const system = useSelector((state) => state.system);
+
+  useEffect(() => {
+    // We do this because of async callout
+    let mounted = true;
+
+    clearMessage(dispatch);
+
+    return () => (mounted = false);
+  }, []);
 
   return (
     <>
@@ -32,29 +44,12 @@ const PasswordForgot = () => {
               })}
               onSubmit={async (values, { setStatus, resetForm }) => {
                 resetForm();
-                dispatch(forgot({ user: { email: values["email"] } }))
-                  .then(() => {
-                    setStatus({
-                      success: true,
-                      msg: "Password reset email has been sent."
-                    })
-                  })
-                  .catch(() => {
-                    // Not showing error here for security
-                  });
+                dispatch(forgot({ user: { email: values["email"] } }));
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
                 <Form className="space-y-6">
-                  {status && status.msg && (
-                    <div className={`rounded-md ${!status.success ? "bg-red-50" : "bg-green-50"} p-4`}>
-                      <div className="flex">
-                        <div className="ml-3">
-                          <h3 className={`text-sm font-medium ${!status.success ? "text-red-800" : "text-green-800"}`}>{status.msg}</h3>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  <SystemMessage />
 
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">

@@ -18,7 +18,7 @@ export default function TwoFactorEnable() {
   let navigate = useNavigate();
 
   const goto2FASetup = () => {
-    dispatch(enableMFA());
+    dispatch(enableMFA(navigate));
   }
 
   const disableMFAOnClick = () => {
