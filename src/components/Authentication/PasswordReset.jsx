@@ -20,6 +20,9 @@ const PasswordReset = () => {
 
     clearMessage(dispatch);
 
+    const resetPasswordToken = searchParams.get("reset_password_token");
+    if (!resetPasswordToken) navigate("/login");
+
     return () => (mounted = false);
   }, []);
 
