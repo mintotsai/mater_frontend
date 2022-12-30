@@ -25,6 +25,14 @@ export const UPDATE_USER_FAIL_ACTION = "UPDATE_USER_FAIL_ACTION"
 export const login = (payload, navigate) => (dispatch) => {
   return AuthService.login(payload).then(
     (data) => {
+      // console.log(">>>data");
+      // console.log({ data });
+
+      if (data && data.data && data.data.attributes && data.data.attributes.data && data.data.attributes.data.reset_token) {
+        navigate("/reset?reset_password_token=" + data.data.attributes.data.reset_token);
+        return Promise.resolve();
+      }
+
       if (data && data.data && data.data.attributes.otp_required_for_login) {
         Promise.all([
           dispatch({
@@ -48,6 +56,9 @@ export const login = (payload, navigate) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
+      // console.log(">>>error");
+      // console.log({ error });
+
       var messages = error.response.data;
       Promise.all([
         dispatch({
@@ -64,6 +75,14 @@ export const login = (payload, navigate) => (dispatch) => {
 export const verify = (payload, navigate) => (dispatch) => {
   return AuthService.login(payload).then(
     (data) => {
+      // console.log(">>>data");
+      // console.log({ data });
+
+      if (data && data.data && data.data.attributes && data.data.attributes.data && data.data.attributes.data.reset_token) {
+        navigate("/reset?reset_password_token=" + data.data.attributes.data.reset_token);
+        return Promise.resolve();
+      }
+
       Promise.all([
         dispatch({
           type: LOGIN_SUCCESS_ACTION,
@@ -75,6 +94,9 @@ export const verify = (payload, navigate) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
+      // console.log(">>>error");
+      // console.log({ error });
+
       var messages = error.response.data;
       Promise.all([
         dispatch({
