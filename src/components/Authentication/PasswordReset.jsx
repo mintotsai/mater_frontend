@@ -18,7 +18,7 @@ const PasswordReset = () => {
     // We do this because of async callout
     let mounted = true;
 
-    clearMessage(dispatch);
+    // clearMessage(dispatch);
 
     const resetPasswordToken = searchParams.get("reset_password_token");
     if (!resetPasswordToken) navigate("/login");
@@ -60,7 +60,13 @@ const PasswordReset = () => {
                 // same shape as initial values
                 // console.log(values);
                 const resetPasswordToken = searchParams.get("reset_password_token");
-                dispatch(reset(navigate, { user: { reset_password_token: resetPasswordToken, password: values["password"], password_confirmation: values["passwordConfirmation"] } }));
+                dispatch(reset({ user: { reset_password_token: resetPasswordToken, password: values["password"], password_confirmation: values["passwordConfirmation"] } }))
+                  .then((response) => {
+                    navigate(response.navigateTo);
+                  }).catch((error) => {
+                    console.log(">>>error");
+                    console.log({ error });
+                  });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

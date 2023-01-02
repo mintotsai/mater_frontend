@@ -69,7 +69,7 @@ export const updateUser = (userId, payload) => (dispatch) => {
   );
 };
 
-export const enableMFA = (navigate) => (dispatch) => {
+export const enableMFA = () => (dispatch) => {
   // dispatch({
   //   type: SET_GOTO_URL_ACTION,
   //   payload: ""
@@ -81,15 +81,19 @@ export const enableMFA = (navigate) => (dispatch) => {
 
   return UserService.enableMFA().then(
     (data) => {
+      var response = {};
       Promise.all([
         dispatch({
           type: UPDATE_USER_SUCCESS_ACTION,
           payload: data.data.data,
         }),
-        navigate("/settings/account/2fasetup")
+        // navigate("/settings/account/2fasetup")
       ]);
 
-      return Promise.resolve();
+      // return Promise.resolve();
+      response["navigateTo"] = "/settings/account/2fasetup";
+      Promise.resolve();
+      return response;
     },
     (error) => {
       var messages = error.response.data;
@@ -126,13 +130,14 @@ export const getQRCodeUri = () => (dispatch) => {
   );
 };
 
-export const confirmMFA = (payload, navigate) => (dispatch) => {
+export const confirmMFA = (payload) => (dispatch) => {
   // dispatch({
   //   type: SET_MESSAGE_ACTION,
   //   payload: { message: null, messageState: "" },
   // });
   return UserService.confirmMFA(payload).then(
     (data) => {
+      var response = {};
       var messages = [{ title: "Successfully, setup MFA." }];
       Promise.all([
         dispatch({
@@ -140,10 +145,13 @@ export const confirmMFA = (payload, navigate) => (dispatch) => {
           payload: data.data.data,
         }),
         setMessage(dispatch, "success", messages),
-        navigate("/settings/account")
+        // navigate("/settings/account")
       ]);
 
-      return Promise.resolve();
+      // return Promise.resolve();
+      response["navigateTo"] = "/settings/account";
+      Promise.resolve();
+      return response;
     },
     (error) => {
       var messages = error.response.data;
@@ -185,7 +193,7 @@ export const disableMFA = (userId) => (dispatch) => {
   );
 };
 
-export const createPresignedUrl = (file, payload, navigate) => (dispatch, getState) => {
+export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
   return UserService.createPresignedUrl(payload).then(
     (data) => {
       dispatch({
@@ -195,7 +203,7 @@ export const createPresignedUrl = (file, payload, navigate) => (dispatch, getSta
 
       const { auth, user } = getState();
 
-      return Promise.resolve(dispatch(directUpload(user.directUploadUrl, file, navigate)))
+      return Promise.resolve(dispatch(directUpload(user.directUploadUrl, file)))
         .then(
           () => dispatch(updateUser(auth.user.id, { user: { png: user.blobSignedId } }))
         ).catch((error) => {
@@ -203,7 +211,7 @@ export const createPresignedUrl = (file, payload, navigate) => (dispatch, getSta
         });
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout(navigate));
+      if (error.response.status == 401) dispatch(logout());
 
       var messages = error.response.data;
       setMessage(dispatch, "error", messages);
@@ -213,14 +221,14 @@ export const createPresignedUrl = (file, payload, navigate) => (dispatch, getSta
   );
 };
 
-export const directUpload = (directUploadUrl, payload, navigate) => (dispatch) => {
+export const directUpload = (directUploadUrl, payload) => (dispatch) => {
   return UserService.directUpload(directUploadUrl, payload).then(
     (data) => {
 
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout(navigate));
+      if (error.response.status == 401) dispatch(logout());
 
       var messages = error.response.data;
       setMessage(dispatch, "error", messages);

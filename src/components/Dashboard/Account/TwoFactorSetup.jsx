@@ -6,9 +6,6 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import QRCode from 'qrcode.react';
 
-import Notifications from '../../Common/Notifications';
-import toast, { Toaster } from "react-hot-toast";
-
 import { getQRCodeUri } from "../../../redux/user/actions";
 
 export default function TwoFactorSetup() {
@@ -50,7 +47,13 @@ export default function TwoFactorSetup() {
         onSubmit={async (values, { setStatus, resetForm }) => {
           const mfaCode = values["mfaCode"];
 
-          dispatch(confirmMFA({ mfa: { code: mfaCode } }, navigate));
+          dispatch(confirmMFA({ mfa: { code: mfaCode } }, navigate))
+            .then((response) => {
+              navigate(response.navigateTo);
+            })
+            .catch((error) => {
+
+            });
         }}
       >
         {({ values, errors, touched, isSubmitting, status, resetForm }) => (

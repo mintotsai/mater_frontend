@@ -17,22 +17,6 @@ const Verify = () => {
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
 
-  useEffect(() => {
-    // We do this because of async callout
-    let mounted = true;
-
-    clearMessage(dispatch);
-
-    return () => (mounted = false);
-  }, []);
-
-  // useEffect(() => {
-  //   if (auth.isLoggedIn) {
-  //     let path = '/home';
-  //     navigate(path);
-  //   }
-  // }, [auth])
-
   return (
     <>
       <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -57,7 +41,13 @@ const Verify = () => {
               onSubmit={async (values, { setStatus, resetForm }) => {
                 const verificationCode = values["verificationCode"];
 
-                dispatch(verify({ user: { otp_user_id: auth.user.id, otp_attempt: values["verificationCode"] } }, navigate));
+                await dispatch(verify({ user: { otp_user_id: auth.user.id, otp_attempt: values["verificationCode"] } }))
+                  .then((response) => {
+                    navigate(response.navigateTo);
+                  }).catch((error) => {
+                    console.log(">>>error");
+                    console.log({ error });
+                  });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (

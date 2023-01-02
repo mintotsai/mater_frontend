@@ -68,13 +68,7 @@ export default function Checkout({ tierChosen, plan, handleClose }) {
   // TODO: Should this be in index.jsx
   useEffect(() => {
     if (system.gotoUrl) {
-      // navigate(system.gotoUrl, { replace: true });
-      // window.location.href = system.gotoUrl;
       handleClose();
-      dispatch({
-        type: SET_GOTO_URL_ACTION,
-        payload: ""
-      })
     }
   }, [system.gotoUrl]);
 

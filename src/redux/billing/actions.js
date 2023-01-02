@@ -8,7 +8,7 @@ export const SET_CARD_INFO_ACTION = "SET_CARD_INFO_ACTION"
 export const SET_SETUP_SECRET = "SET_SETUP_SECRET"
 export const SET_BILLING_HISTORY = "SET_BILLING_HISTORY"
 
-export const createSubscription = (payload, navigate) => (dispatch) => {
+export const createSubscription = (payload) => (dispatch) => {
   return BillingService.createSubscription(payload).then(
     (data) => {
       var messages = [{ title: "Successfully, subscribed." }];
@@ -35,7 +35,7 @@ export const createSubscription = (payload, navigate) => (dispatch) => {
   );
 };
 
-export const getCreditCardInfo = (payload, navigate) => (dispatch) => {
+export const getCreditCardInfo = (payload) => (dispatch) => {
   return BillingService.getCreditCardInfo(payload).then(
     (data) => {
       dispatch({
@@ -58,7 +58,7 @@ export const getCreditCardInfo = (payload, navigate) => (dispatch) => {
   );
 };
 
-export const getSetupSecret = (payload, navigate) => (dispatch) => {
+export const getSetupSecret = (payload) => (dispatch) => {
   return BillingService.getSetupSecret(payload).then(
     (data) => {
       dispatch({
@@ -123,7 +123,7 @@ export const getSetupSecret = (payload, navigate) => (dispatch) => {
 //   );
 // };
 
-export const setDefaultPaymentMethod = (payload, navigate) => (dispatch) => {
+export const setDefaultPaymentMethod = (payload) => (dispatch) => {
   return BillingService.setDefaultPaymentMethod(payload).then(
     (data) => {
 
@@ -142,7 +142,7 @@ export const setDefaultPaymentMethod = (payload, navigate) => (dispatch) => {
   );
 };
 
-export const getBillingHistory = (payload, navigate) => (dispatch) => {
+export const getBillingHistory = (payload) => (dispatch) => {
   return BillingService.getBillingHistory(payload).then(
     (data) => {
       dispatch({

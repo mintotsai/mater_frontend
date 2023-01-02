@@ -21,16 +21,31 @@ export const UPDATE_PASSWORD_FAIL_ACTION = "UPDATE_PASSWORD_FAIL_ACTION"
 export const UPDATE_USER_ACTION = "UPDATE_USER_ACTION"
 export const UPDATE_USER_SUCCESS_ACTION = "UPDATE_USER_SUCCESS_ACTION"
 export const UPDATE_USER_FAIL_ACTION = "UPDATE_USER_FAIL_ACTION"
+export const SHOW_RESET_PASSWORD_ACTION = "SHOW_RESET_PASSWORD_ACTION"
 
-export const login = (payload, navigate) => (dispatch) => {
+export const login = (payload) => (dispatch) => {
   return AuthService.login(payload).then(
     (data) => {
       // console.log(">>>data");
       // console.log({ data });
 
+      var response = {}
       if (data && data.data && data.data.attributes && data.data.attributes.data && data.data.attributes.data.reset_token) {
-        navigate("/reset?reset_password_token=" + data.data.attributes.data.reset_token);
-        return Promise.resolve();
+        Promise.all([
+          dispatch({
+            type: SHOW_RESET_PASSWORD_ACTION,
+            payload: { resetToken: data.data.attributes.data.reset_token, showResetPasswordScreen: true }
+          }),
+          dispatch({
+            type: SET_GOTO_URL_ACTION,
+            payload: "/reset?reset_password_token=" + data.data.attributes.data.reset_token
+          })
+        ]);
+
+        response["navigateTo"] = "/reset?reset_password_token=" + data.data.attributes.data.reset_token;
+        Promise.resolve();
+        return response;
+        // return Promise.resolve();
       }
 
       if (data && data.data && data.data.attributes.otp_required_for_login) {
@@ -39,21 +54,31 @@ export const login = (payload, navigate) => (dispatch) => {
             type: SHOW_OTP_ACTION,
             payload: { user: data.data, showOTPScreen: true }
           }),
+          dispatch({
+            type: SET_GOTO_URL_ACTION,
+            payload: "/verify"
+          }),
           clearMessage(dispatch),
-          navigate("/verify")
         ]);
+        response["navigateTo"] = "/verify";
       } else {
         Promise.all([
           dispatch({
             type: LOGIN_SUCCESS_ACTION,
             payload: data.data,
           }),
+          dispatch({
+            type: SET_GOTO_URL_ACTION,
+            payload: "/home"
+          }),
           clearMessage(dispatch),
-          navigate("/home")
         ]);
+        response["navigateTo"] = "/home";
       }
 
-      return Promise.resolve();
+      // return Promise.resolve();
+      Promise.resolve();
+      return response;
     },
     (error) => {
       // console.log(">>>error");
@@ -72,15 +97,28 @@ export const login = (payload, navigate) => (dispatch) => {
   );
 };
 
-export const verify = (payload, navigate) => (dispatch) => {
+export const verify = (payload) => (dispatch) => {
   return AuthService.login(payload).then(
     (data) => {
       // console.log(">>>data");
       // console.log({ data });
-
+      var response = {};
       if (data && data.data && data.data.attributes && data.data.attributes.data && data.data.attributes.data.reset_token) {
-        navigate("/reset?reset_password_token=" + data.data.attributes.data.reset_token);
-        return Promise.resolve();
+        Promise.all([
+          dispatch({
+            type: SHOW_RESET_PASSWORD_ACTION,
+            payload: { resetToken: data.data.attributes.data.reset_token, showResetPasswordScreen: true }
+          }),
+          dispatch({
+            type: SET_GOTO_URL_ACTION,
+            payload: "/reset?reset_password_token=" + data.data.attributes.data.reset_token
+          })
+        ]);
+
+        // return Promise.resolve();
+        response["navigateTo"] = "/reset?reset_password_token=" + data.data.attributes.data.reset_token;
+        Promise.resolve();
+        return response;
       }
 
       Promise.all([
@@ -88,10 +126,15 @@ export const verify = (payload, navigate) => (dispatch) => {
           type: LOGIN_SUCCESS_ACTION,
           payload: data.data,
         }),
-        navigate("/home")
+        dispatch({
+          type: SET_GOTO_URL_ACTION,
+          payload: "/home"
+        }),
       ]);
 
-      return Promise.resolve();
+      // return Promise.resolve();
+      response["navigateTo"] = "/home";
+      return response;
     },
     (error) => {
       // console.log(">>>error");
@@ -110,17 +153,23 @@ export const verify = (payload, navigate) => (dispatch) => {
   );
 };
 
-export const logout = (navigate) => (dispatch) => {
+export const logout = () => (dispatch) => {
   return AuthService.logout().then(
     (data) => {
+      var response = {};
       Promise.all([
         dispatch({
           type: LOGOUT_ACTION,
         }),
-        navigate("/login")
+        dispatch({
+          type: SET_GOTO_URL_ACTION,
+          payload: "/login"
+        }),
       ]);
 
-      return Promise.resolve();
+      // return Promise.resolve();
+      response["navigateTo"] = "/login";
+      return response;
     },
     (error) => {
       var messages = error.response.data;
@@ -189,19 +238,22 @@ export const forgot = (payload) => (dispatch) => {
   );
 };
 
-export const reset = (navigate, payload) => (dispatch) => {
+export const reset = (payload) => (dispatch) => {
   // clearMessage(dispatch);
   return AuthService.reset(payload).then(
     (data) => {
+      var response = {};
       Promise.all([
         dispatch({
           type: RESET_PASSWORD_SUCCESS_ACTION,
           payload: { user: data },
         }),
-        navigate("/login")
       ]);
 
-      return Promise.resolve();
+      // return Promise.resolve();
+      response["navigateTo"] = "/home";
+      Promise.resolve();
+      return response;
     },
     (error) => {
       var messages = error.response.data;
@@ -217,18 +269,22 @@ export const reset = (navigate, payload) => (dispatch) => {
   );
 };
 
-export const confirmation = (navigate, payload) => (dispatch) => {
+export const confirmation = (payload) => (dispatch) => {
   return AuthService.confirmation(payload).then(
     (data) => {
+      var response = {};
       Promise.all([
         dispatch({
           type: CONFIRMATION_SUCCESS_ACTION,
           payload: { user: data },
         }),
-        navigate("/login")
+        // navigate("/login")
       ]);
 
-      return Promise.resolve();
+      // return Promise.resolve();
+      response["navigateTo"] = "/login";
+      Promise.resolve();
+      return response;
     },
     (error) => {
       // TODO: Maybe we don't need this error message

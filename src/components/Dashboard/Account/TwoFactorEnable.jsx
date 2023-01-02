@@ -5,9 +5,6 @@ import { getUser, updateUser } from "../../../redux/user/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-import Notifications from '../../Common/Notifications';
-import toast, { Toaster } from "react-hot-toast";
-
 import { enableMFA, disableMFA } from "../../../redux/user/actions";
 
 export default function TwoFactorEnable() {
@@ -18,7 +15,12 @@ export default function TwoFactorEnable() {
   let navigate = useNavigate();
 
   const goto2FASetup = () => {
-    dispatch(enableMFA(navigate));
+    dispatch(enableMFA(navigate))
+      .then((response) => {
+        navigate(response.navigateTo);
+      }).catch((error) => {
+
+      });
   }
 
   const disableMFAOnClick = () => {

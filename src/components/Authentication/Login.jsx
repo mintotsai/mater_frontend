@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -10,26 +10,19 @@ import SystemMessage from "../Common/SystemMessage"
 import { clearMessage } from '../../helpers/messages';
 
 const Login = () => {
-
   const dispatch = useDispatch();
 
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (system.gotoUrl) {
-  //     navigate(system.gotoUrl);
-  //   }
-  // }, [system.gotoUrl])
-
   useEffect(() => {
-    // We do this because of async callout
-    let mounted = true;
-
-    clearMessage(dispatch);
-
-    return () => (mounted = false);
+    dispatch(logout())
+      .then(() => {
+        navigate("/login");
+      })
+      .catch(() => {
+      });
   }, []);
 
   return (
@@ -68,7 +61,13 @@ const Login = () => {
                 const username = values["email"];
                 const password = values["password"];
 
-                dispatch(login({ user: { email: values["email"], password: values["password"] } }, navigate));
+                await dispatch(login({ user: { email: values["email"], password: values["password"] } }))
+                  .then((response) => {
+                    navigate(response.navigateTo);
+                  }).catch((error) => {
+                    console.log(">>>error");
+                    console.log({ error });
+                  });
               }}
             >
               {({ errors, touched, isSubmitting, status }) => (
