@@ -1,5 +1,4 @@
 export default function MainSection() {
-  console.log(">>>MainSection");
   return (
     <main className="flex-1">
       <div className="py-6">
