@@ -21,8 +21,12 @@ export default function BellNotification() {
   const [open, setOpen] = useState(true)
   let [isOpen, setIsOpen] = useState(true)
 
+  const authToken = localStorage.getItem('authToken');
+
   useEffect(() => {
-    CableApp.cable = actionCable.createConsumer(`${process.env.REACT_APP_BACKEND_ACTIONCABLE_URL}`);
+    // https://stackoverflow.com/a/36534210/1391412
+    // https://itnext.io/actioncable-authentication-in-a-token-based-rails-api-f9cc4b8bf560
+    CableApp.cable = actionCable.createConsumer(`${process.env.REACT_APP_BACKEND_ACTIONCABLE_URL}?token=` + authToken);
     // console.log("MONITOR", actionCable.startDebugging());
     CableApp.user = CableApp.cable.subscriptions.create({
       channel: "NotificationsChannel",

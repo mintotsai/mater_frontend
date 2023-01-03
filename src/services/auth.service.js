@@ -11,7 +11,8 @@ const login = async (payload) => {
         if (response.headers.authorization && response.headers.authorization.split(' ')[0] === 'Bearer') {
           authToken = response.headers.authorization.split(' ')[1];
         }
-        localStorage.setItem('authToken', JSON.stringify(authToken));
+        // localStorage.setItem('authToken', JSON.stringify(authToken));
+        localStorage.setItem('authToken', authToken);
         localStorage.setItem("user", JSON.stringify(response.data.data));
       }
       return response.data;
