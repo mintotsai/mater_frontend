@@ -24,7 +24,13 @@ const Confirmation = () => {
 
     const fetchData = async () => {
       // get the data from the api
-      dispatch(confirmation(navigate, { params: { confirmation_token: confirmationToken } }));
+      dispatch(confirmation(navigate, { params: { confirmation_token: confirmationToken } }))
+        .then((response) => {
+          navigate(response.navigateTo);
+        })
+        .catch((error) => {
+
+        });
 
       return () => {
         console.log("useEffect: unmount");
