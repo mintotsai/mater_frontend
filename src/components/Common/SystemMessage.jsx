@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
-export default function Notifications() {
+export default function SystemMessage() {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
 

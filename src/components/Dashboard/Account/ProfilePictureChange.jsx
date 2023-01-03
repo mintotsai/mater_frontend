@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { createPresignedUrl } from "../../../redux/user/actions";
 import { Formik, useFormikContext, Form, Field, ErrorMessage } from 'formik';
 import CryptoJS from 'crypto-js'
-import toast, { Toaster } from "react-hot-toast";
 
 export default function ProfilePictureChange() {
   const dispatch = useDispatch();

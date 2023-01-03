@@ -5,7 +5,7 @@ import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline
 import { XIcon } from '@heroicons/react/solid'
 import toast, { Toaster, resolveValue } from "react-hot-toast";
 
-export default function Notifications() {
+export default function ToastNotifications() {
   const [show, setShow] = useState(true)
 
   return (

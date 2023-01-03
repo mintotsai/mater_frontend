@@ -4,9 +4,6 @@ import { getUser, updateUser } from "../../../redux/user/actions";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-import Notifications from '../../Common/Notifications';
-import toast, { Toaster } from "react-hot-toast";
-
 export default function Profile() {
   const dispatch = useDispatch();
   const system = useSelector((state) => state.system);

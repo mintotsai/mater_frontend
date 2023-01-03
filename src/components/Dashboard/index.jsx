@@ -8,11 +8,12 @@ import Checkout from './Account/Billing/Checkout';
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/actions";
 
-import Notifications from "../Common/Notifications";
+import ToastNotifications from "../Common/ToastNotifications";
 import BellNotification from "../Common/BellNotification"
 import toast, { Toaster } from "react-hot-toast";
 import TwoFactorSetup from "./Account/TwoFactorSetup"
 import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions";
+import NotificationList from "./NotificationList"
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -78,15 +79,6 @@ const Home = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    // if (system.gotoUrl) {
-    //   let path = system.gotoUrl;
-    //   navigate(path);
-    //   dispatch({
-    //     type: SET_GOTO_URL_ACTION,
-    //     payload: ""
-    //   });
-    // }
-
     if (system.message && system.message != '') {
       if (!Array.isArray(system.message)) {
         if (system.messageStatus == "success") {
@@ -113,7 +105,10 @@ const Home = () => {
 
   const onClick = e => {
     if (e.target.text === 'Sign out') {
-      dispatch(logout(navigate));
+      // dispatch(logout()).then((response) => {
+      //   navigate("/login");
+      // });
+      handleLogout();
     }
   };
 
@@ -133,7 +128,9 @@ const Home = () => {
       setTimeoutModalOpen(false);
       clearSessionInterval();
       clearSessionTimeout();
-      dispatch(logout(navigate));
+      await dispatch(logout()).then((response) => {
+        navigate("/login", { replace: true });
+      });
     } catch (err) {
       console.error(err);
     }
@@ -298,7 +295,7 @@ const Home = () => {
             </div>
           </Dialog>
         </Transition.Root>
-        <Notifications />
+        <ToastNotifications />
         {/* Static sidebar for desktop */}
         <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
           {/* Sidebar component, swap this element with another sidebar if you like */}
@@ -424,6 +421,7 @@ const Home = () => {
             <Route exact path="/settings/account" element={<Profile />} />
             <Route exact path="/settings/account/2fasetup" element={<TwoFactorSetup />} />
             <Route exact path="/settings/account/checkout" element={<Checkout />} />
+            <Route exact path="/notifications" element={<NotificationList />} />
           </Routes>
 
         </div>

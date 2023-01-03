@@ -40,6 +40,10 @@ const directUpload = async (directUploadUrl, payload) => {
   return axios.put(`${directUploadUrl}`, payload, { headers: headers });
 };
 
+const getNotifications = async () => {
+  return axios.get(`${BASE_URL}api/v1/notifications`, { headers: authHeader() });
+}
+
 export default {
   getUser,
   updateUser,
@@ -48,5 +52,6 @@ export default {
   confirmMFA,
   disableMFA,
   createPresignedUrl,
-  directUpload
+  directUpload,
+  getNotifications
 };

@@ -8,6 +8,8 @@ export const GET_USER_ACTION = "GET_USER_ACTION"
 export const GET_QR_CODE_URI_SUCCESS_ACTION = "GET_QR_CODE_URI_SUCCESS_ACTION"
 export const GET_QR_CODE_URI_FAIL_ACTION = "GET_QR_CODE_URI_FAIL_ACTION"
 export const GET_PRESIGNED_URL_SUCCESS_ACTION = "GET_PRESIGNED_URL_SUCCESS_ACTION"
+export const GET_NOTIFICATIONS_SUCCESS_ACTION = "GET_NOTIFICATIONS_SUCCESS_ACTION"
+export const GET_NOTIFICATIONS_FAIL_ACTION = "GET_NOTIFICATIONS_FAIL_ACTION"
 
 export const getUser = (userId) => (dispatch) => {
   return UserService.getUser(userId).then(
@@ -234,6 +236,30 @@ export const directUpload = (directUploadUrl, payload) => (dispatch) => {
       setMessage(dispatch, "error", messages);
 
       return Promise.reject(messages);
+    }
+  );
+};
+
+export const getNotifications = () => (dispatch) => {
+  return UserService.getNotifications().then(
+    (data) => {
+      dispatch({
+        type: GET_NOTIFICATIONS_SUCCESS_ACTION,
+        payload: data.data.data,
+      });
+
+      return Promise.resolve();
+    },
+    (error) => {
+      var messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: GET_NOTIFICATIONS_FAIL_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
     }
   );
 };

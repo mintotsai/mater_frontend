@@ -1,4 +1,4 @@
-import { GET_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, GET_QR_CODE_URI_SUCCESS_ACTION, GET_PRESIGNED_URL_SUCCESS_ACTION } from './actions'
+import { GET_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, GET_QR_CODE_URI_SUCCESS_ACTION, GET_PRESIGNED_URL_SUCCESS_ACTION, GET_NOTIFICATIONS_SUCCESS_ACTION } from './actions'
 import initialState from './state'
 
 const userReducer = (state = initialState, action) => {
@@ -19,6 +19,11 @@ const userReducer = (state = initialState, action) => {
         directUploadUrl: payload.direct_upload.url,
         directUploadHeaders: payload.direct_upload.headers
       };
+    case GET_NOTIFICATIONS_SUCCESS_ACTION:
+      return {
+        ...state,
+        notifications: payload
+      }
     default:
       return state
   }

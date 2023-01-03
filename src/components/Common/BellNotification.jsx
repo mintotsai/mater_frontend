@@ -1,9 +1,10 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { useSelector, useDispatch } from "react-redux";
+import { Navigate, Route, Routes, BrowserRouter, useNavigate, useLocation, useSearchParams, UNSAFE_NavigationContext } from 'react-router-dom';
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon, CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/outline'
 // import { XIcon } from '@heroicons/react/solid'
-import toast, { Toaster, resolveValue } from "react-hot-toast";
 import {
   BellIcon,
   XIcon,
@@ -11,35 +12,48 @@ import {
 
 import actionCable from "actioncable";
 const CableApp = {}
-CableApp.cable = actionCable.createConsumer(`${process.env.REACT_APP_BACKEND_ACTIONCABLE_URL}`)
 
 export default function BellNotification() {
+  const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
+
   const [show, setShow] = useState(false)
   const [open, setOpen] = useState(true)
   let [isOpen, setIsOpen] = useState(true)
 
-  // TODO: Put this in redux?
-  CableApp.user = CableApp.cable.subscriptions.create({
-    channel: "NotificationsChannel",
-    id: 35
-  }, {
-    received: (x) => {
-      console.log("useChannel - INFO: Received from actioncable");
-      // console.log(x);
-      if (x.show) {
-        setShow(true);
+  useEffect(() => {
+    CableApp.cable = actionCable.createConsumer(`${process.env.REACT_APP_BACKEND_ACTIONCABLE_URL}`);
+    // console.log("MONITOR", actionCable.startDebugging());
+    CableApp.user = CableApp.cable.subscriptions.create({
+      channel: "NotificationsChannel",
+      id: auth.user.id
+    }, {
+      initialized: () => {
+        console.log('useChannel - INFO: Init actioncable');
+      },
+      connected: () => {
+        console.log('useChannel - INFO: Connected to actioncable');
+      },
+      received: (data) => {
+        console.log("useChannel - INFO: Received from actioncable");
+        // console.log(data);
+        if (data.show) {
+          setShow(true);
+        }
+      },
+      disconnected: () => {
+        console.log('useChannel - INFO: Disconnected');
       }
-    },
-    initialized: () => {
-      console.log('useChannel - INFO: Init actioncable');
-    },
-    connected: () => {
-      console.log('useChannel - INFO: Connected to actioncable');
-    },
-    disconnected: () => {
-      console.log('useChannel - INFO: Disconnected');
-    }
-  });
+    });
+    // These work
+    // CableApp.user.perform('appear', { data: "test" });
+    // CableApp.user.send({ message: "hello?" });
+
+    return function cleanup() {
+      console.log("cleanup");
+      CableApp.user.unsubscribe();
+    };
+  }, []);
 
   return (
     <>
@@ -55,7 +69,7 @@ export default function BellNotification() {
         <span className="sr-only">View notifications</span>
         <BellIcon className="h-6 w-6" aria-hidden="true" />
       </button> */}
-      <button className="inline-block relative" onClick={() => { setShow(false); }}>
+      <button className="inline-block relative" onClick={() => { navigate("/notifications"); setShow(false); }}>
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
