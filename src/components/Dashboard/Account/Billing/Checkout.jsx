@@ -65,13 +65,6 @@ export default function Checkout({ tierChosen, plan, handleClose }) {
     return () => (mounted = false);
   }, []);
 
-  // TODO: Should this be in index.jsx
-  useEffect(() => {
-    if (system.gotoUrl) {
-      handleClose();
-    }
-  }, [system.gotoUrl]);
-
   const appearance = {
     theme: 'stripe',
 
@@ -220,7 +213,7 @@ export default function Checkout({ tierChosen, plan, handleClose }) {
                       Pay Now
                     </button>
                     <a href="#" className="mt-5 block text-center text-base text-sm font-medium text-indigo-200 hover:text-white"
-                      onClick={() => { handleClose() }}
+                      onClick={(e) => { e.preventDefault(); handleClose(); }}
                     >
                       Cancel
                     </a>
