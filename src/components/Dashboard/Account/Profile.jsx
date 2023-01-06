@@ -19,6 +19,7 @@ import PaymentMethods from './Billing/PaymentMethods'
 import BillingHistory from './Billing/BillingHistory'
 import Checkout from './Billing/Checkout';
 import { CreditCardIcon, OfficeBuildingIcon, UserIcon, UsersIcon, ShieldCheckIcon } from '@heroicons/react/solid'
+import SubscribedPlan from './Billing/SubscribedPlan';
 
 const tabs = [
   { name: 'My Account', href: '#', icon: UserIcon, current: true },
@@ -217,6 +218,7 @@ export default function Profile() {
                 </>}
               {activeTab == "#billing" &&
                 <>
+                  <SubscribedPlan />
                   <Plans />
                   <PaymentMethods />
                   <BillingHistory />

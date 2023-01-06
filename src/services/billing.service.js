@@ -27,6 +27,14 @@ const getBillingHistory = async (payload) => {
   return axios.get(`${BASE_URL}api/v1/billings/get-billing-history`, { headers: authHeader() });
 }
 
+const getSubscription = async (payload) => {
+  return axios.get(`${BASE_URL}api/v1/billings/get-subscription`, { headers: authHeader() });
+}
+
+const cancelSubscription = async (payload) => {
+  return axios.put(`${BASE_URL}api/v1/billings/cancel-subscription`, { headers: authHeader() });
+}
+
 
 export default {
   createSubscription,
@@ -34,5 +42,7 @@ export default {
   getSetupSecret,
   // updateCreditCardInfo,
   setDefaultPaymentMethod,
-  getBillingHistory
+  getBillingHistory,
+  getSubscription,
+  cancelSubscription
 };

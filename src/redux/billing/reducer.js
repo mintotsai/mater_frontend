@@ -1,4 +1,4 @@
-import { SET_CARD_INFO_ACTION, SET_SETUP_SECRET, SET_BILLING_HISTORY } from "./actions";
+import { SET_CARD_INFO_ACTION, SET_SETUP_SECRET, SET_BILLING_HISTORY, SET_SUBSCRIPTION } from "./actions";
 import initialState from "./state"
 
 export default function (state = initialState, action) {
@@ -19,6 +19,11 @@ export default function (state = initialState, action) {
         ...state,
         billingHistory: payload
       };
+    case SET_SUBSCRIPTION:
+      return {
+        ...state,
+        subscription: payload
+      }
     default:
       return state;
   }

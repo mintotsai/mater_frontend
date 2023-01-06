@@ -7,6 +7,7 @@ export const CREATE_CHECKOUT_SESSION = "CREATE_CHECKOUT_SESSION"
 export const SET_CARD_INFO_ACTION = "SET_CARD_INFO_ACTION"
 export const SET_SETUP_SECRET = "SET_SETUP_SECRET"
 export const SET_BILLING_HISTORY = "SET_BILLING_HISTORY"
+export const SET_SUBSCRIPTION = "SET_SUBSCRIPTION"
 
 export const createSubscription = (payload) => (dispatch) => {
   return BillingService.createSubscription(payload).then(
@@ -149,6 +150,58 @@ export const getBillingHistory = (payload) => (dispatch) => {
         type: SET_BILLING_HISTORY,
         payload: data.data.data.attributes.data,
       })
+
+      return Promise.resolve();
+    },
+    (error) => {
+      if (error.response.status == 401) dispatch(logout());
+
+      var messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const getSubscription = (payload) => (dispatch) => {
+  return BillingService.getSubscription(payload).then(
+    (data) => {
+      Promise.all([
+        dispatch({
+          type: SET_SUBSCRIPTION,
+          payload: data.data.data.attributes,
+        }),
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      if (error.response.status == 401) dispatch(logout());
+
+      var messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const cancelSubscription = (payload) => (dispatch) => {
+  return BillingService.cancelSubscription(payload).then(
+    (data) => {
+      var messages = [{ title: "Successfully, cancelled subscrfiption." }];
+      Promise.all([
+        dispatch({
+          type: SET_SUBSCRIPTION,
+          payload: data.data.data.attributes,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
 
       return Promise.resolve();
     },
