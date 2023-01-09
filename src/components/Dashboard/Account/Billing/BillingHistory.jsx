@@ -21,7 +21,7 @@ export default function BillingHistory() {
   return (
     <>
       {/* Billing history */}
-      <section aria-labelledby="billing-history-heading">
+      <section aria-labelledby="billing-history-heading" className="mt-5">
         <div className="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-md">
           <div className="px-4 sm:px-6">
             <h2 id="billing-history-heading" className="text-lg font-medium leading-6 text-gray-900">
