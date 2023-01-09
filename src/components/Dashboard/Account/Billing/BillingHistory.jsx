@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState, useContext } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { date } from 'yup';
 import { getBillingHistory } from "../../../../redux/billing/actions";
 
 export default function BillingHistory() {
@@ -19,32 +20,57 @@ export default function BillingHistory() {
 
   return (
     <>
-      <div className="py-4">
-        <div className="space-y-8 divide-y divide-gray-200">
-          <div>
-            <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">Billing History</h3>
-            </div>
-            <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-              <div className="sm:col-span-6">
-                <div className="mt-1">
-                  {billingHistory.length > 0 ?
-                    <table>
-                      <tbody className="divide-y divide-gray-200 bg-white">
-                        {billingHistory.data.map((data) => (
+      {/* Billing history */}
+      <section aria-labelledby="billing-history-heading">
+        <div className="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-md">
+          <div className="px-4 sm:px-6">
+            <h2 id="billing-history-heading" className="text-lg font-medium leading-6 text-gray-900">
+              Billing history
+            </h2>
+          </div>
+          <div className="mt-6 flex flex-col">
+            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div className="overflow-hidden border-t border-gray-200">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                          Date
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                          Description
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                          Amount
+                        </th>
+                        {/*
+                                  `relative` is added here due to a weird bug in Safari that causes `sr-only` headings to introduce overflow on the body on mobile.
+                                */}
+                        <th
+                          scope="col"
+                          className="relative px-6 py-3 text-left text-sm font-medium text-gray-500"
+                        >
+                          <span className="sr-only">View receipt</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                      {billingHistory.length > 0 ?
+                        billingHistory.data.map((data) => (
                           <tr key={data.id}>
-                            <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
-                              {new Intl.DateTimeFormat("en-US", {
+                            <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                              <time dateTime={date.date}>{new Intl.DateTimeFormat("en-US", {
                                 year: "numeric",
                                 month: "numeric",
                                 day: "2-digit",
                                 timeZone: "America/Chicago"
-                              }).format(data.date * 1000)}
+                              }).format(data.date * 1000)}</time>
                             </td>
-                            <td className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                               Invoice for Jasmine
                             </td>
-                            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+                            <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                               {new Intl.NumberFormat("en-US", {
                                 style: "currency",
                                 currency: "USD",
@@ -52,23 +78,23 @@ export default function BillingHistory() {
                                 maximumFractionDigits: 2
                               }).format(data.amount_paid / 100)}
                             </td>
-                            <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                            <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                               <a href={data.invoice_pdf} className="text-indigo-600 hover:text-indigo-900">
-                                Download Invoice<span className="sr-only"> </span>
+                                View receipt
                               </a>
                             </td>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    : <div>No invoices</div>
-                  }
+                        ))
+                        : <tr><td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">No invoices</td></tr>
+                      }
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </>
   )
 }
