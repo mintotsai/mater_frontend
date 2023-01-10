@@ -83,17 +83,19 @@ export default function Plans() {
   const [tierChosen, setTierChosen] = useState("");
   const [billingCycle, setBillingCycle] = useState("Monthly");
 
-  useEffect(() => {
-    // We do this because of async callout
-    let mounted = true;
+  // useEffect(() => {
+  //   // We do this because of async callout
+  //   let mounted = true;
 
-    // Put something here...
+  //   // Put something here...
 
-    return () => (mounted = false);
-  }, []);
+  //   return () => (mounted = false);
+  // }, []);
 
   const handleClose = () => {
     setShowCheckout(false);
+    // navigate("/settings/account#billing");
+    // window.history.pushState("object or string", "Title", "/settings/account#billing");
   };
 
   if (showCheckout) {
@@ -135,12 +137,8 @@ export default function Plans() {
         >
           {({ values, errors, touched, isSubmitting, status, resetForm, handleSubmit }) => (
             <Form className="space-y-8 divide-y divide-gray-200">
-              <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-7xl  sm:px-6 lg:px-8">
                 <div className="sm:flex sm:flex-col sm:align-center">
-                  <h1 className="text-5xl font-extrabold text-gray-900 sm:text-center">Pricing Plans</h1>
-                  <p className="mt-5 text-xl text-gray-500 sm:text-center">
-                    Start building for free, then add a site plan to go live. Account plans unlock additional features.
-                  </p>
                   <div className="relative self-center mt-6 bg-gray-100 rounded-lg p-0.5 flex sm:mt-8">
                     <button
                       type="button"
@@ -158,7 +156,7 @@ export default function Plans() {
                     </button>
                   </div>
                 </div>
-                <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-4">
+                <div className="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:mx-0 xl:grid-cols-3">
                   {tiers.map((tier) => {
                     if (tier.billingCycle == billingCycle || tier.billingCycle == "MonthlyYearly") {
                       return (<div key={tier.name} className="border border-gray-200 rounded-lg shadow-sm divide-y divide-gray-200">
@@ -181,7 +179,7 @@ export default function Plans() {
                             {tier.price != -1 ? "Buy " + tier.name : "Call"}
                           </button>
                         </div>
-                        <div className="pt-6 pb-8 px-6">
+                        {/* <div className="pt-6 pb-8 px-6">
                           <h3 className="text-xs font-medium text-gray-900 tracking-wide uppercase">What's included</h3>
                           <ul role="list" className="mt-6 space-y-4">
                             {tier.includedFeatures.map((feature) => (
@@ -191,7 +189,7 @@ export default function Plans() {
                               </li>
                             ))}
                           </ul>
-                        </div>
+                        </div> */}
                       </div>);
                     }
                   })}

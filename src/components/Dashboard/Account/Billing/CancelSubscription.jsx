@@ -8,7 +8,7 @@ export default function CancelSubscription() {
 
   return (
     <>
-      <div className="py-4">
+      <div className="lg:px-8 py-4">
         <div className="space-y-8 divide-y divide-gray-200">
           <div>
             <div>
@@ -21,7 +21,7 @@ export default function CancelSubscription() {
                   <a href="#" className="ml-1 font-medium text-indigo-600 hover:text-indigo-500"
                     onClick={(e) => {
                       e.preventDefault();
-                      console.log(">>>onClick");
+                      // TODO: What to do here?
                     }}>Contact us
                   </a>.
                 </div>

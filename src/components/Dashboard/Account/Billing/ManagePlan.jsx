@@ -4,19 +4,20 @@ import { CheckIcon, XIcon } from '@heroicons/react/outline'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { cancelSubscription, getSubscription } from '../../../../redux/billing/actions';
 import CancelSubscription from './CancelSubscription';
+import Plans from './Plans'
 
 export default function Checkout({ handleClose }) {
   const dispatch = useDispatch();
   const subscription = useSelector((state) => state.billing.subscription);
 
-  useEffect(() => {
-    // We do this because of async callout
-    let mounted = true;
+  // useEffect(() => {
+  //   // We do this because of async callout
+  //   let mounted = true;
 
-    dispatch(getSubscription());
+  //   dispatch(getSubscription());
 
-    return () => (mounted = false);
-  }, []);
+  //   return () => (mounted = false);
+  // }, []);
 
   return (
     <>
@@ -26,7 +27,7 @@ export default function Checkout({ handleClose }) {
             <div className="max-w-lg mx-auto lg:mx-0">
               <h2 className="text-base font-semibold tracking-wide text-white uppercase">Put logo here</h2>
               <p className="mt-2 text-2xl font-extrabold text-white sm:text-3xl">
-                Manage your Jasmine subscription
+                Manage your subscription
               </p>
               <dl className="mt-12 space-y-10">
 
@@ -35,7 +36,7 @@ export default function Checkout({ handleClose }) {
           </div>
         </div>
         <div className="flex flex-1 justify-center bg-white">
-          <div className="max-w-lg py-16 px-2 mx-auto lg:px-1 m-auto">
+          <div className="py-1 px-2 mx-auto lg:px-1 ">
             <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
               <button
                 type="button"
@@ -87,6 +88,7 @@ export default function Checkout({ handleClose }) {
                 </Form>
               )}
             </Formik>
+            <Plans />
             <CancelSubscription />
           </div>
         </div>
