@@ -31,6 +31,10 @@ const getSubscription = async (payload) => {
   return axios.get(`${BASE_URL}api/v1/billings/get-subscription`, { headers: authHeader() });
 }
 
+const updateSubscription = async (payload) => {
+  return axios.put(`${BASE_URL}api/v1/billings/update-subscription`, payload, { headers: authHeader() });
+}
+
 const cancelSubscription = async (payload) => {
   return axios.put(`${BASE_URL}api/v1/billings/cancel-subscription`, { headers: authHeader() });
 }
@@ -44,5 +48,6 @@ export default {
   setDefaultPaymentMethod,
   getBillingHistory,
   getSubscription,
-  cancelSubscription
+  cancelSubscription,
+  updateSubscription
 };

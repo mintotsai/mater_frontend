@@ -217,3 +217,30 @@ export const cancelSubscription = (payload) => (dispatch) => {
     }
   );
 };
+
+export const updateSubscription = (payload) => (dispatch) => {
+  return BillingService.updateSubscription(payload).then(
+    (data) => {
+      var messages = [{ title: "Successfully, updated subscrfiption." }];
+      Promise.all([
+        dispatch({
+          type: SET_SUBSCRIPTION,
+          payload: data.data.data.attributes,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      if (error.response.status == 401) dispatch(logout());
+
+      var messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
