@@ -24,8 +24,6 @@ export const createSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
@@ -47,8 +45,6 @@ export const getCreditCardInfo = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
@@ -70,8 +66,6 @@ export const getSetupSecret = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
@@ -101,7 +95,6 @@ export const getSetupSecret = (payload) => (dispatch) => {
 //       return Promise.resolve();
 //     },
 //     (error) => {
-//       if (error.response.status == 401) dispatch(logout());
 //       const message =
 //         (error.response &&
 //           error.response.data &&
@@ -131,8 +124,6 @@ export const setDefaultPaymentMethod = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
@@ -154,8 +145,6 @@ export const getBillingHistory = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
@@ -179,8 +168,6 @@ export const getSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
@@ -206,8 +193,6 @@ export const cancelSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
@@ -233,8 +218,6 @@ export const updateSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),

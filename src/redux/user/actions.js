@@ -213,8 +213,6 @@ export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
         });
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       setMessage(dispatch, "error", messages);
 
@@ -230,8 +228,6 @@ export const directUpload = (directUploadUrl, payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      if (error.response.status == 401) dispatch(logout());
-
       var messages = error.response.data;
       setMessage(dispatch, "error", messages);
 
