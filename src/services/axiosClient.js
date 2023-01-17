@@ -6,8 +6,15 @@ import { login, logout } from "../redux/auth/actions";
 const BASE_URL = `${process.env.REACT_APP_BACKEND_API_URL}`
 
 async function callLogout() {
-  const { dispatch } = store;
-  dispatch(logout());
+  const { dispatch, navigate } = store;
+  dispatch(logout())
+    .then((response) => {
+      // Is this kosher?
+      window.location.href = "/login";
+    })
+    .catch((error) => {
+
+    });
 }
 
 export const client = createAxiosClient({
@@ -73,7 +80,8 @@ export function createAxiosClient({
       if (
         error.response?.status === 401 &&
         (error.response?.data?.error === "Signature has expired" ||
-          error.response?.data?.error === "You need to sign in or sign up before continuing.")
+          error.response?.data?.error === "You need to sign in or sign up before continuing." ||
+          error.response?.data?.error === "revoked token")
       ) {
         return handleError(error);
       }
