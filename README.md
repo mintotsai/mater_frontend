@@ -42,3 +42,8 @@ https://www.truemark.dev/blog/reset-password-in-react-and-rails
 
 * Navigate
   * https://medium.com/@dariaruckaolszaska/navigate-from-your-redux-actions-with-react-navigation-in-your-react-native-app-d3bf1fbd4c08
+
+* Axios
+  * https://dev.to/mihaiandrei97/jwt-authentication-using-axios-interceptors-55be
+  * https://blog.logrocket.com/understanding-axios-create/
+  * https://stackoverflow.com/questions/47216452/how-to-handle-401-authentication-error-in-axios-and-react
