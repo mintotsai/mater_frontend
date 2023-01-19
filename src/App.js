@@ -17,6 +17,11 @@ import Login from './components/Authentication/Login';
 import PrivateRoute from './components/Common/PrivateRoute';
 import Home from './components/Dashboard/index';
 import Verify from './components/Authentication/Verify';
+import MainSection from './components/Dashboard/MainSection';
+import Profile from './components/Dashboard/Account/Profile'
+import Checkout from './components/Dashboard/Account/Billing/Checkout';
+import TwoFactorSetup from "./components/Dashboard/Account/TwoFactorSetup"
+import NotificationList from "./components/Dashboard/NotificationList"
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -33,8 +38,17 @@ function App() {
         {/* TODO: Back button from Verify page */}
         {auth.showOTPScreen && <Route exact path="/verify" element={<Verify />} />}
         <Route exact path="/" element={<PrivateRoute path="/" redirectRoute="/login" condition={auth.isLoggedIn} element={<Home />} />} >
-          <Route exact path="/*" element={<Home />} />
-          <Route path="/" element={<Navigate to="/home" />} />
+
+          <Route path="/" element={<Home />}>
+            <Route path="home" element={<MainSection />} />
+            <Route path="settings/account" element={<Profile />} />
+            <Route path="settings/account/2fasetup" element={<TwoFactorSetup />} />
+            <Route path="settings/account/checkout" element={<Checkout />} />
+            <Route path="notifications" element={<NotificationList />} />
+          </Route>
+          {/* TODO: Do we need this? */}
+          {/* <Route exact path="/*" element={<Home />} />
+          <Route path="/" element={<Navigate to="/home" />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
