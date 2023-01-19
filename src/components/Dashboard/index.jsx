@@ -1,19 +1,16 @@
 import React, { useEffect } from "react";
-import { useNavigate, Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { useNavigate, Navigate, Route, Routes, BrowserRouter, Outlet } from 'react-router-dom';
 import { useIdleTimer } from 'react-idle-timer';
 import IdleTimeOutModal from '../Common/IdleTimeOutModal'
-import MainSection from './MainSection';
-import Profile from './Account/Profile'
-import Checkout from './Account/Billing/Checkout';
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/actions";
 
 import ToastNotifications from "../Common/ToastNotifications";
 import BellNotification from "../Common/BellNotification"
 import toast, { Toaster } from "react-hot-toast";
-import TwoFactorSetup from "./Account/TwoFactorSetup"
+
 import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions";
-import NotificationList from "./NotificationList"
+
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -415,14 +412,7 @@ const Home = () => {
             handleClose={() => handleClose()}
           />
 
-          {/* We put this here so it's contained in the dashboard. */}
-          <Routes>
-            <Route exact path="/home" element={<MainSection />} />
-            <Route exact path="/settings/account" element={<Profile />} />
-            <Route exact path="/settings/account/2fasetup" element={<TwoFactorSetup />} />
-            <Route exact path="/settings/account/checkout" element={<Checkout />} />
-            <Route exact path="/notifications" element={<NotificationList />} />
-          </Routes>
+          <Outlet />
 
         </div>
       </div>
