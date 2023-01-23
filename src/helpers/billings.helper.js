@@ -12,8 +12,8 @@ export const plans = [
 ];
 
 export function getPlanFromStripePriceId(stripePriceId) {
-  var name = "";
-  var interval = "";
+  let name = "";
+  let interval = "";
 
   if (starterMonthly == stripePriceId) {
     name = "Starter";
@@ -39,7 +39,7 @@ export function getPlanFromStripePriceId(stripePriceId) {
 }
 
 export function getStripePriceIdFromPlan(selectedPlan, annualBillingEnabled) {
-  var stripePriceId = "";
+  let stripePriceId = "";
   if (selectedPlan == "Starter" && !annualBillingEnabled) {
     stripePriceId = starterMonthly;
   } else if (selectedPlan == "Starter" && annualBillingEnabled) {

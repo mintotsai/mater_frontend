@@ -99,10 +99,10 @@ export default function Plans() {
   };
 
   if (showCheckout) {
-    var result = tiers.filter(tier => { return tier.name === tierChosen });
+    let result = tiers.filter(tier => { return tier.name === tierChosen });
     // console.log(">>>result=");
     // console.log(result);
-    var stripePriceId = result[0].stripePriceId;
+    let stripePriceId = result[0].stripePriceId;
     // console.log("stripePriceId=" + stripePriceId);
     return (
       <Elements stripe={stripePromise}>
@@ -128,10 +128,10 @@ export default function Plans() {
             // console.log(">>>tierChosen=" + tierChosen);
             // console.log(">>>values=");
             // console.log(values);
-            var result = tiers.filter(tier => { return tier.name === tierChosen });
+            let result = tiers.filter(tier => { return tier.name === tierChosen });
             // console.log(">>>result=");
             // console.log(result);
-            var stripePriceId = result[0].stripePriceId;
+            let stripePriceId = result[0].stripePriceId;
             // console.log("stripePriceId=" + stripePriceId);
           }}
         >

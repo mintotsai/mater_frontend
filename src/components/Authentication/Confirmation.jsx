@@ -11,8 +11,8 @@ const Confirmation = () => {
   let navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
 
-  var confirmationToken;
-  var emailConfirmed;
+  let confirmationToken;
+  let emailConfirmed;
 
   // Might be an issue calling asyc in useEffect
   // https://dev.to/elijahtrillionz/cleaning-up-async-functions-in-reacts-useeffect-hook-unsubscribing-3dkk

@@ -29,7 +29,7 @@ export const login = (payload) => (dispatch) => {
       // console.log(">>>data");
       // console.log({ data });
 
-      var response = {}
+      let response = {}
       if (data && data.data && data.data.attributes && data.data.attributes.data && data.data.attributes.data.reset_token) {
         Promise.all([
           dispatch({
@@ -81,7 +81,7 @@ export const login = (payload) => (dispatch) => {
       // console.log(">>>error");
       // console.log({ error });
 
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: LOGIN_FAIL_ACTION,
@@ -99,7 +99,7 @@ export const verify = (payload) => (dispatch) => {
     (data) => {
       // console.log(">>>data");
       // console.log({ data });
-      var response = {};
+      let response = {};
       if (data && data.data && data.data.attributes && data.data.attributes.data && data.data.attributes.data.reset_token) {
         Promise.all([
           dispatch({
@@ -135,7 +135,7 @@ export const verify = (payload) => (dispatch) => {
       // console.log(">>>error");
       // console.log({ error });
 
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: VERIFY_FAIL_ACTION,
@@ -151,7 +151,7 @@ export const verify = (payload) => (dispatch) => {
 export const logout = () => (dispatch) => {
   return AuthService.logout().then(
     (data) => {
-      var response = {};
+      let response = {};
       Promise.all([
         dispatch({
           type: LOGOUT_ACTION,
@@ -166,7 +166,7 @@ export const logout = () => (dispatch) => {
       return Promise.resolve(response);
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -179,7 +179,7 @@ export const logout = () => (dispatch) => {
 export const signup = (payload) => (dispatch) => {
   return AuthService.signup(payload).then(
     (data) => {
-      var messages = [{ title: "Check your email to confirm your account." }];
+      let messages = [{ title: "Check your email to confirm your account." }];
       Promise.all([
         dispatch({
           type: SIGNUP_SUCCESS_ACTION,
@@ -191,7 +191,7 @@ export const signup = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: SIGNUP_FAIL_ACTION,
@@ -207,7 +207,7 @@ export const signup = (payload) => (dispatch) => {
 export const forgot = (payload) => (dispatch) => {
   return AuthService.forgot(payload).then(
     (data) => {
-      var messages = [{ title: "Password reset email has been sent." }];
+      let messages = [{ title: "Password reset email has been sent." }];
       Promise.all([
         dispatch({
           type: FORGOT_PASSWORD_SUCCESS_ACTION,
@@ -219,7 +219,7 @@ export const forgot = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: FORGOT_PASSWORD_FAIL_ACTION,
@@ -236,7 +236,7 @@ export const reset = (payload) => (dispatch) => {
   // clearMessage(dispatch);
   return AuthService.reset(payload).then(
     (data) => {
-      var response = {};
+      let response = {};
       Promise.all([
         dispatch({
           type: RESET_PASSWORD_SUCCESS_ACTION,
@@ -248,7 +248,7 @@ export const reset = (payload) => (dispatch) => {
       return Promise.resolve(response);
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: RESET_PASSWORD_FAIL_ACTION,
@@ -264,7 +264,7 @@ export const reset = (payload) => (dispatch) => {
 export const confirmation = (payload) => (dispatch) => {
   return AuthService.confirmation(payload).then(
     (data) => {
-      var response = {};
+      let response = {};
       Promise.all([
         dispatch({
           type: CONFIRMATION_SUCCESS_ACTION,
@@ -278,7 +278,7 @@ export const confirmation = (payload) => (dispatch) => {
     },
     (error) => {
       // TODO: Maybe we don't need this error message
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: CONFIRMATION_FAIL_ACTION,
@@ -297,7 +297,7 @@ export const updatePassword = (payload) => (dispatch) => {
       // dispatch({
       //   type: UPDATE_PASSWORD_SUCCESS_ACTION,
       // });
-      var messages = [{ title: "Successfully, changed your password." }];
+      let messages = [{ title: "Successfully, changed your password." }];
       Promise.all([
         setMessage(dispatch, "success", messages),
       ]);
@@ -305,7 +305,7 @@ export const updatePassword = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);

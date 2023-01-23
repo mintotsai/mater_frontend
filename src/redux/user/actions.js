@@ -22,7 +22,7 @@ export const getUser = (userId) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -35,7 +35,7 @@ export const getUser = (userId) => (dispatch) => {
 export const updateUser = (userId, payload) => (dispatch) => {
   return UserService.updateUser(userId, payload).then(
     (data) => {
-      var messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
+      let messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
       if ("png" in payload["user"]) {
         messages = [{ title: "Successfully updated profile image", detail: "Successfully updated profile image" }];
       } else if ("email" in payload["user"]) {
@@ -58,7 +58,7 @@ export const updateUser = (userId, payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: UPDATE_USER_FAIL_ACTION,
@@ -83,7 +83,7 @@ export const enableMFA = () => (dispatch) => {
 
   return UserService.enableMFA().then(
     (data) => {
-      var response = {};
+      let response = {};
       Promise.all([
         dispatch({
           type: UPDATE_USER_SUCCESS_ACTION,
@@ -96,7 +96,7 @@ export const enableMFA = () => (dispatch) => {
       return Promise.resolve(response);
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -117,7 +117,7 @@ export const getQRCodeUri = () => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: GET_QR_CODE_URI_FAIL_ACTION,
@@ -137,8 +137,8 @@ export const confirmMFA = (payload) => (dispatch) => {
   // });
   return UserService.confirmMFA(payload).then(
     (data) => {
-      var response = {};
-      var messages = [{ title: "Successfully, setup MFA." }];
+      let response = {};
+      let messages = [{ title: "Successfully, setup MFA." }];
       Promise.all([
         dispatch({
           type: UPDATE_USER_SUCCESS_ACTION,
@@ -152,7 +152,7 @@ export const confirmMFA = (payload) => (dispatch) => {
       return Promise.resolve(response);
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -169,7 +169,7 @@ export const disableMFA = (userId) => (dispatch) => {
   // });
   return UserService.disableMFA(userId).then(
     (data) => {
-      var messages = [{ title: "Successfully disabled two factor authentication." }];
+      let messages = [{ title: "Successfully disabled two factor authentication." }];
       Promise.all([
         dispatch({
           type: UPDATE_USER_SUCCESS_ACTION,
@@ -181,7 +181,7 @@ export const disableMFA = (userId) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -209,7 +209,7 @@ export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
         });
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       setMessage(dispatch, "error", messages);
 
       return Promise.reject();
@@ -224,7 +224,7 @@ export const directUpload = (directUploadUrl, payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       setMessage(dispatch, "error", messages);
 
       return Promise.reject(messages);
@@ -243,7 +243,7 @@ export const getNotifications = () => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         dispatch({
           type: GET_NOTIFICATIONS_FAIL_ACTION,

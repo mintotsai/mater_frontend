@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { getNotifications } from '../../redux/user/actions';
 
-var options = {
+let options = {
   year: 'numeric', month: 'numeric', day: 'numeric',
   hour: 'numeric', minute: 'numeric', second: 'numeric',
   hour12: true,

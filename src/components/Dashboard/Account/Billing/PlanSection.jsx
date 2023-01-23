@@ -38,7 +38,7 @@ export default function PlanSection() {
         setAnnualBillingEnabled(true);
       }
 
-      var currentPlan = getPlanFromStripePriceId(subscription.plan_id)
+      let currentPlan = getPlanFromStripePriceId(subscription.plan_id)
       setSelectedPlan(plans[currentPlan]);
     }
   }, [subscription])
@@ -184,7 +184,7 @@ export default function PlanSection() {
                 onClick={(e) => {
                   e.preventDefault();
 
-                  var stripePriceId = getStripePriceIdFromPlan(selectedPlan.name, annualBillingEnabled);
+                  let stripePriceId = getStripePriceIdFromPlan(selectedPlan.name, annualBillingEnabled);
 
                   setShowSpinner(true);
                   dispatch(updateSubscription({ stripe_price_id: stripePriceId }))

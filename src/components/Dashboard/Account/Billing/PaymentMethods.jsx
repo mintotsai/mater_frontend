@@ -23,7 +23,7 @@ export default function PaymentMethods() {
     },
   };
 
-  var last4 = "••••";
+  let last4 = "••••";
   if (cardInfo.card) {
     last4 = cardInfo.card.last4;
   }

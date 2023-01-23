@@ -12,7 +12,7 @@ export const SET_SUBSCRIPTION = "SET_SUBSCRIPTION"
 export const createSubscription = (payload) => (dispatch) => {
   return BillingService.createSubscription(payload).then(
     (data) => {
-      var messages = [{ title: "Successfully, subscribed." }];
+      let messages = [{ title: "Successfully, subscribed." }];
       Promise.all([
         dispatch({
           type: SET_GOTO_URL_ACTION,
@@ -24,7 +24,7 @@ export const createSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -45,7 +45,7 @@ export const getCreditCardInfo = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -66,7 +66,7 @@ export const getSetupSecret = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -124,7 +124,7 @@ export const setDefaultPaymentMethod = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -145,7 +145,7 @@ export const getBillingHistory = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -168,7 +168,7 @@ export const getSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -181,7 +181,7 @@ export const getSubscription = (payload) => (dispatch) => {
 export const cancelSubscription = (payload) => (dispatch) => {
   return BillingService.cancelSubscription(payload).then(
     (data) => {
-      var messages = [{ title: "Successfully, cancelled subscrfiption." }];
+      let messages = [{ title: "Successfully, cancelled subscrfiption." }];
       Promise.all([
         dispatch({
           type: SET_SUBSCRIPTION,
@@ -193,7 +193,7 @@ export const cancelSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
@@ -206,7 +206,7 @@ export const cancelSubscription = (payload) => (dispatch) => {
 export const updateSubscription = (payload) => (dispatch) => {
   return BillingService.updateSubscription(payload).then(
     (data) => {
-      var messages = [{ title: "Successfully, updated subscrfiption." }];
+      let messages = [{ title: "Successfully, updated subscrfiption." }];
       Promise.all([
         dispatch({
           type: SET_SUBSCRIPTION,
@@ -218,7 +218,7 @@ export const updateSubscription = (payload) => (dispatch) => {
       return Promise.resolve();
     },
     (error) => {
-      var messages = error.response.data;
+      let messages = error.response.data;
       Promise.all([
         setMessage(dispatch, "error", messages),
       ]);
