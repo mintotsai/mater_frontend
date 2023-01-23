@@ -8,6 +8,9 @@ import { login, logout } from "../../redux/auth/actions";
 import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions"
 import SystemMessage from "../Common/SystemMessage"
 import { clearMessage } from '../../helpers/messages';
+import { useHasRole } from '../../hooks/useHasRole';
+
+import { ROLES } from "../../helpers/roles";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -15,6 +18,7 @@ const Login = () => {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
+  const isAdministrator = useHasRole(ROLES.ADMINISTRATOR);
 
   useEffect(() => {
     dispatch(logout())
@@ -63,7 +67,16 @@ const Login = () => {
 
                 await dispatch(login({ user: { email: values["email"], password: values["password"] } }))
                   .then((response) => {
-                    navigate(response.navigateTo);
+                    let navigateTo = response.navigateTo;
+                    let role = response.role;
+                    if (response.navigateTo == "/home") {
+                      if (role == ROLES.ADMINISTRATOR) {
+                        navigateTo = "/admin";
+                      } else {
+                        navigateTo = "/home";
+                      }
+                    }
+                    navigate(navigateTo);
                   }).catch((error) => {
                     console.log(">>>error");
                     console.log({ error });

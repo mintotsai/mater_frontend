@@ -26,6 +26,18 @@ https://www.truemark.dev/blog/reset-password-in-react-and-rails
   * https://dev.to/akanstein/protected-routes-with-react-router-and-redux-3e62
   * https://blog.logrocket.com/react-router-with-redux-navigation-state/
 
+* Role-Based Authorization
+  * https://www.youtube.com/watch?v=UhrmPH3TLus
+  * https://www.youtube.com/watch?v=oUZjO00NkhY
+  * https://github.com/Permify/react-role
+  * https://www.digitalocean.com/community/tutorials/react-simple-authorization
+  * https://isamatov.com/react-permissions-and-roles/
+  * https://github.com/patelmayankce/react-redux-permission
+  * https://levelup.gitconnected.com/access-control-in-a-react-ui-71f1df60f354
+  * https://blog.kiprosh.com/architect-react-apps-using-hooks/
+  * https://medium.com/geekculture/how-to-conditionally-render-react-ui-based-on-user-permissions-7b9a1c73ffe2
+  * https://github.com/Permify/react-role
+
 * Redux Persist
   * https://github.com/rt2zz/redux-persist
   * https://blog.reactnativecoach.com/the-definitive-guide-to-redux-persist-84738167975

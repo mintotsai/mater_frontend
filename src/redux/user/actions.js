@@ -92,10 +92,8 @@ export const enableMFA = () => (dispatch) => {
         // navigate("/settings/account/2fasetup")
       ]);
 
-      // return Promise.resolve();
       response["navigateTo"] = "/settings/account/2fasetup";
-      Promise.resolve();
-      return response;
+      return Promise.resolve(response);
     },
     (error) => {
       var messages = error.response.data;
@@ -150,10 +148,8 @@ export const confirmMFA = (payload) => (dispatch) => {
         // navigate("/settings/account")
       ]);
 
-      // return Promise.resolve();
       response["navigateTo"] = "/settings/account";
-      Promise.resolve();
-      return response;
+      return Promise.resolve(response);
     },
     (error) => {
       var messages = error.response.data;

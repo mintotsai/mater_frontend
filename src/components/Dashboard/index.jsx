@@ -11,6 +11,8 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions";
 
+import { useHasRole } from '../../hooks/useHasRole';
+import { ROLES } from "../../helpers/roles";
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -43,7 +45,7 @@ import {
 } from '@heroicons/react/outline'
 import { SearchIcon } from '@heroicons/react/solid'
 
-const navigation = [
+let navigation = [
   { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
   { name: 'Team', href: '#', icon: UsersIcon, current: false },
   { name: 'Projects', href: '#', icon: FolderIcon, current: false },
@@ -74,6 +76,7 @@ const Home = () => {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
+  const isAdministrator = useHasRole(ROLES.ADMINISTRATOR);
 
   useEffect(() => {
     if (system.message && system.message != '') {
@@ -99,6 +102,12 @@ const Home = () => {
       })
     }
   }, [system]);
+
+  if (isAdministrator) {
+    navigation = [
+      { name: 'Users', href: '/admin/users', icon: UsersIcon, current: true },
+    ];
+  }
 
   const onClick = e => {
     if (e.target.text === 'Sign out') {

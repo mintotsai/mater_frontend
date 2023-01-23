@@ -43,9 +43,7 @@ export const login = (payload) => (dispatch) => {
         ]);
 
         response["navigateTo"] = "/reset?reset_password_token=" + data.data.attributes.data.reset_token;
-        Promise.resolve();
-        return response;
-        // return Promise.resolve();
+        return Promise.resolve(response);
       }
 
       if (data && data.data && data.data.attributes.otp_required_for_login) {
@@ -74,11 +72,10 @@ export const login = (payload) => (dispatch) => {
           clearMessage(dispatch),
         ]);
         response["navigateTo"] = "/home";
+        response["role"] = data.data.attributes.role.name;
       }
 
-      // return Promise.resolve();
-      Promise.resolve();
-      return response;
+      return Promise.resolve(response);
     },
     (error) => {
       // console.log(">>>error");
@@ -115,10 +112,8 @@ export const verify = (payload) => (dispatch) => {
           })
         ]);
 
-        // return Promise.resolve();
         response["navigateTo"] = "/reset?reset_password_token=" + data.data.attributes.data.reset_token;
-        Promise.resolve();
-        return response;
+        return Promise.resolve(response);
       }
 
       Promise.all([
@@ -132,9 +127,9 @@ export const verify = (payload) => (dispatch) => {
         }),
       ]);
 
-      // return Promise.resolve();
       response["navigateTo"] = "/home";
-      return response;
+      response["role"] = data.data.data.attributes.role.name;
+      return Promise.resolve(response);
     },
     (error) => {
       // console.log(">>>error");
@@ -167,9 +162,8 @@ export const logout = () => (dispatch) => {
         }),
       ]);
 
-      // return Promise.resolve();
       response["navigateTo"] = "/login";
-      return response;
+      return Promise.resolve(response);
     },
     (error) => {
       var messages = error.response.data;
@@ -250,10 +244,8 @@ export const reset = (payload) => (dispatch) => {
         }),
       ]);
 
-      // return Promise.resolve();
-      response["navigateTo"] = "/home";
-      Promise.resolve();
-      return response;
+      response["navigateTo"] = "/login";
+      return Promise.resolve(response);
     },
     (error) => {
       var messages = error.response.data;
@@ -281,10 +273,8 @@ export const confirmation = (payload) => (dispatch) => {
         // navigate("/login")
       ]);
 
-      // return Promise.resolve();
       response["navigateTo"] = "/login";
-      Promise.resolve();
-      return response;
+      return Promise.resolve(response);
     },
     (error) => {
       // TODO: Maybe we don't need this error message
