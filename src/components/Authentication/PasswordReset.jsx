@@ -18,7 +18,7 @@ const PasswordReset = () => {
     // We do this because of async callout
     let mounted = true;
 
-    // clearMessage(dispatch);
+    clearMessage(dispatch);
 
     const resetPasswordToken = searchParams.get("reset_password_token");
     if (!resetPasswordToken) navigate("/login");
