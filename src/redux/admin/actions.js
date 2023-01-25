@@ -6,8 +6,6 @@ export const ADMIN_GET_USERS_SUCCESS_ACTION = "ADMIN_GET_USERS_SUCCESS_ACTION";
 export const getUsers = (userId) => (dispatch) => {
   return AdminUserService.getUsers(userId).then(
     (data) => {
-      console.log(">>>data");
-      console.log({ data });
 
       Promise.all([
         dispatch({
@@ -16,7 +14,7 @@ export const getUsers = (userId) => (dispatch) => {
         }),
       ]);
 
-      return Promise.resolve();
+      return Promise.resolve(data);
     },
     (error) => {
       let messages = error.response.data;
@@ -24,7 +22,29 @@ export const getUsers = (userId) => (dispatch) => {
         setMessage(dispatch, "error", messages),
       ]);
 
-      return Promise.reject();
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const updateUser = (userId, payload) => (dispatch) => {
+  return AdminUserService.updateUser(userId, payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
+
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
     }
   );
 };
