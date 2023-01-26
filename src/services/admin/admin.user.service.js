@@ -16,7 +16,16 @@ const updateUser = async (userId, payload) => {
   );
 };
 
+const lockUser = async (userId) => {
+  return client.patch(
+    `api/v1/admin/users/${userId}/lock`,
+    {},
+    { authorization: true }
+  );
+};
+
 export default {
   getUsers,
-  updateUser
+  updateUser,
+  lockUser
 };

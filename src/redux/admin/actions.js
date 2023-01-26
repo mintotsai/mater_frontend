@@ -48,3 +48,27 @@ export const updateUser = (userId, payload) => (dispatch) => {
     }
   );
 };
+
+export const lockUser = (userId) => (dispatch) => {
+  return AdminUserService.lockUser(userId).then(
+    (data) => {
+      let messages = [{ title: "Successfully locked user", detail: "Successfully locked user" }];
+      if (!data.data.data.attributes.locked)
+        messages = [{ title: "Successfully unlocked user", detail: "Successfully unlocked user" }];
+
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  );
+};
