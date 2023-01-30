@@ -24,8 +24,17 @@ const lockUser = async (userId) => {
   );
 };
 
+const deactivateUser = async (userId) => {
+  return client.patch(
+    `api/v1/admin/users/${userId}/deactivate`,
+    {},
+    { authorization: true }
+  );
+};
+
 export default {
   getUsers,
   updateUser,
-  lockUser
+  lockUser,
+  deactivateUser
 };

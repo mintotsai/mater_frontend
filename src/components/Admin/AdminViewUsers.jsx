@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getUsers, lockUser } from '../../redux/admin/actions';
+import { getUsers, lockUser, deactivateUser } from '../../redux/admin/actions';
 import AdminViewEditUserModal from "./AdminViewEditUserModal";
 
 const people = [
@@ -84,6 +84,9 @@ export default function AdminViewUsers() {
                       <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                         <span className="sr-only">Lock</span>
                       </th>
+                      <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                        <span className="sr-only">Deactivate</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
@@ -105,10 +108,14 @@ export default function AdminViewUsers() {
                             <span className="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800">
                               Locked
                             </span>
-                            :
-                            <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                              Active
-                            </span>
+                            : user.attributes.deactivated ?
+                              <span className="inline-flex rounded-full bg-red-100 px-2 text-xs font-semibold leading-5 text-red-800">
+                                Deactivated
+                              </span>
+                              :
+                              <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                                Active
+                              </span>
                           }
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{user.attributes.role.name || ""}</td>
@@ -134,6 +141,20 @@ export default function AdminViewUsers() {
                                 });
                             }}>
                             {!user.attributes.locked ? "Lock" : "Unlock"}<span className="sr-only">, {user.attributes.first_name}</span>
+                          </a>
+                        </td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                          <a href="#" className="text-red-600 hover:text-red-900"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              dispatch(deactivateUser(user.id))
+                                .then((response) => {
+                                  handleRefresh();
+                                })
+                                .catch((error) => {
+                                });
+                            }}>
+                            {!user.attributes.deactivated ? "Deactivate" : "Activate"}<span className="sr-only">, {user.attributes.first_name}</span>
                           </a>
                         </td>
                       </tr>

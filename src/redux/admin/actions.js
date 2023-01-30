@@ -72,3 +72,27 @@ export const lockUser = (userId) => (dispatch) => {
     }
   );
 };
+
+export const deactivateUser = (userId) => (dispatch) => {
+  return AdminUserService.deactivateUser(userId).then(
+    (data) => {
+      let messages = [{ title: "Successfully deactivated user", detail: "Successfully deactivated user" }];
+      if (!data.data.data.attributes.deactivated)
+        messages = [{ title: "Successfully activated user", detail: "Successfully activated user" }];
+
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  );
+};
