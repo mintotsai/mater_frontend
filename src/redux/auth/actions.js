@@ -22,6 +22,7 @@ export const UPDATE_USER_ACTION = "UPDATE_USER_ACTION"
 export const UPDATE_USER_SUCCESS_ACTION = "UPDATE_USER_SUCCESS_ACTION"
 export const UPDATE_USER_FAIL_ACTION = "UPDATE_USER_FAIL_ACTION"
 export const SHOW_RESET_PASSWORD_ACTION = "SHOW_RESET_PASSWORD_ACTION"
+export const UPDATE_TRUE_USER_ACTION = "UPDATE_TRUE_USER_ACTION"
 
 export const login = (payload) => (dispatch) => {
   return AuthService.login(payload).then(

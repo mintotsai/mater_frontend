@@ -1,5 +1,5 @@
 import { LOGIN_SUCCESS_ACTION, LOGIN_FAIL_ACTION, SHOW_OTP_ACTION, VERIFY_FAIL_ACTION, CONFIRMATION_FAIL_ACTION, SHOW_RESET_PASSWORD_ACTION } from "./actions";
-import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION } from "../auth/actions";
+import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION, UPDATE_TRUE_USER_ACTION } from "../auth/actions";
 import initialState from "./state"
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
@@ -40,6 +40,11 @@ export default function (state = initialState, action) {
         showOTPScreen: payload.showOTPScreen,
         user: payload.user
       };
+    case UPDATE_USER_ACTION:
+      return {
+        ...state,
+        user: payload,
+      };
     case UPDATE_USER_SUCCESS_ACTION:
       return {
         ...state,
@@ -56,6 +61,11 @@ export default function (state = initialState, action) {
         showResetPasswordScreen: payload.showResetPasswordScreen,
         resetToken: payload.resetToken
       }
+    case UPDATE_TRUE_USER_ACTION:
+      return {
+        ...state,
+        trueUser: payload,
+      };
     default:
       return state;
   }

@@ -23,7 +23,7 @@ export const client = createAxiosClient({
     timeout: 300000,
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
   },
   callLogout,
 });
@@ -32,6 +32,7 @@ export function createAxiosClient({
   options,
   callLogout,
 }) {
+  axios.defaults.withCredentials = true;
   const client = axios.create(options);
 
   client.interceptors.request.use(

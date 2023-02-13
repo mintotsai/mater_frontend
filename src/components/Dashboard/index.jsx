@@ -13,6 +13,7 @@ import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/acti
 
 import { useHasRole } from '../../hooks/useHasRole';
 import { ROLES } from "../../helpers/roles";
+import AdminStopImpersonatingBanner from "../Admin/AdminStopImpersonatingBanner";
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -339,6 +340,7 @@ const Home = () => {
           </div>
         </div>
         <div className="md:pl-64 flex flex-col flex-1">
+          {auth.trueUser && auth.user.id != auth.trueUser.id ? <AdminStopImpersonatingBanner /> : <></>}
           <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
             <button
               type="button"

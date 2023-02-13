@@ -1,5 +1,6 @@
 import AdminUserService from "../../services/admin/admin.user.service";
 import { setMessage } from "../../helpers/messages";
+import { UPDATE_USER_ACTION, UPDATE_TRUE_USER_ACTION } from "../auth/actions";
 
 export const ADMIN_GET_USERS_SUCCESS_ACTION = "ADMIN_GET_USERS_SUCCESS_ACTION";
 
@@ -85,6 +86,72 @@ export const deactivateUser = (userId) => (dispatch) => {
       ]);
 
       return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const impersonateUser = (userId) => (dispatch) => {
+  return AdminUserService.impersonateUser(userId).then(
+    (data) => {
+      let messages = [{ title: "Successfully impersonating user", detail: "Successfully impersonating user" }];
+      Promise.all([
+        dispatch({
+          type: UPDATE_USER_ACTION,
+          payload: data.data.data.attributes.data.current_user.data,
+        }),
+        dispatch({
+          type: UPDATE_TRUE_USER_ACTION,
+          payload: data.data.data.attributes.data.true_user.data,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      let response = {}
+      response["navigateTo"] = "/home";
+      response["role"] = data.data.data.attributes.data.current_user.data.attributes.role.name;
+
+      return Promise.resolve(response);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const stopImpersonatingUser = () => (dispatch) => {
+  return AdminUserService.stopImpersonatingUser().then(
+    (data) => {
+      let messages = [{ title: "Successfully stopped impersonating user", detail: "Successfully stopped impersonating user" }];
+      Promise.all([
+        dispatch({
+          type: UPDATE_USER_ACTION,
+          payload: data.data.data.attributes.data.current_user.data,
+        }),
+        dispatch({
+          type: UPDATE_TRUE_USER_ACTION,
+          payload: data.data.data.attributes.data.true_user.data,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      let response = {}
+      response["navigateTo"] = "/home";
+      response["role"] = data.data.data.attributes.data.current_user.data.attributes.role.name;
+
+      return Promise.resolve(response);
     },
     (error) => {
       let messages = error.response.data;

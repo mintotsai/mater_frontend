@@ -32,9 +32,28 @@ const deactivateUser = async (userId) => {
   );
 };
 
+const impersonateUser = async (userId) => {
+  return client.post(
+    `api/v1/admin/users/${userId}/impersonate`,
+    {},
+    { authorization: true }
+  );
+};
+
+const stopImpersonatingUser = async () => {
+  return client.post(
+    `api/v1/admin/users/stop-impersonating`,
+    {},
+    { authorization: true }
+  );
+};
+
+
 export default {
   getUsers,
   updateUser,
   lockUser,
-  deactivateUser
+  deactivateUser,
+  impersonateUser,
+  stopImpersonatingUser
 };
