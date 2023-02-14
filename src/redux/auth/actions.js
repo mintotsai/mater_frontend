@@ -23,6 +23,8 @@ export const UPDATE_USER_SUCCESS_ACTION = "UPDATE_USER_SUCCESS_ACTION"
 export const UPDATE_USER_FAIL_ACTION = "UPDATE_USER_FAIL_ACTION"
 export const SHOW_RESET_PASSWORD_ACTION = "SHOW_RESET_PASSWORD_ACTION"
 export const UPDATE_TRUE_USER_ACTION = "UPDATE_TRUE_USER_ACTION"
+export const UNLOCK_SUCCESS_ACTION = "UNLOCK_SUCCESS_ACTION"
+export const UNLOCK_FAIL_ACTION = "UNLOCK_FAIL_ACTION"
 
 export const login = (payload) => (dispatch) => {
   return AuthService.login(payload).then(
@@ -314,6 +316,35 @@ export const updatePassword = (payload) => (dispatch) => {
       // TODO: Whats the right thing to do here?
       // return Promise.reject();
       return Promise.resolve();
+    }
+  );
+};
+
+export const unlock = (payload) => (dispatch) => {
+  return AuthService.unlock(payload).then(
+    (data) => {
+      Promise.all([
+        dispatch({
+          type: UNLOCK_SUCCESS_ACTION,
+          payload: { user: data },
+        }),
+      ]);
+
+      let response = {};
+      response["navigateTo"] = "/login";
+      return Promise.resolve(response);
+    },
+    (error) => {
+      // TODO: Maybe we don't need this error message
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: UNLOCK_FAIL_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
     }
   );
 };

@@ -73,6 +73,14 @@ const updatePassword = async (payload) => {
   );
 }
 
+const unlock = async (payload) => {
+  return client.get(
+    `api/v1/unlock`,
+    payload,
+    { authorization: false }
+  );
+}
+
 export default {
   login,
   logout,
@@ -80,5 +88,6 @@ export default {
   forgot,
   reset,
   confirmation,
-  updatePassword
+  updatePassword,
+  unlock
 };

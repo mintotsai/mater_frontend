@@ -11,6 +11,7 @@ import store from './redux/store'
 
 import Signup from './components/Authentication/Signup';
 import Confirmation from './components/Authentication/Confirmation';
+import Unlock from "./components/Authentication/Unlock";
 import PasswordForgot from './components/Authentication/PasswordForgot'
 import PasswordReset from './components/Authentication/PasswordReset'
 import Login from './components/Authentication/Login';
@@ -37,6 +38,7 @@ function App() {
       <Routes>
         <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/confirmation" element={<Confirmation />} />
+        <Route exact path="/unlock" element={<Unlock />} />
         <Route exact path="/forgot" element={<PasswordForgot />} />
         <Route exact path="/reset" element={<PasswordReset />} />
         <Route path="/404" element={<PageNotFound404 />} />
