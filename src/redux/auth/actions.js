@@ -236,18 +236,21 @@ export const forgot = (payload) => (dispatch) => {
 };
 
 export const reset = (payload) => (dispatch) => {
-  // clearMessage(dispatch);
   return AuthService.reset(payload).then(
     (data) => {
-      let response = {};
+
+      let messages = [{ title: "Successfully, changed your password." }];
       Promise.all([
         dispatch({
           type: RESET_PASSWORD_SUCCESS_ACTION,
           payload: { user: data },
         }),
+        setMessage(dispatch, "success", messages),
       ]);
 
+      let response = {};
       response["navigateTo"] = "/login";
+
       return Promise.resolve(response);
     },
     (error) => {

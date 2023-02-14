@@ -48,6 +48,14 @@ const stopImpersonatingUser = async () => {
   );
 };
 
+const resetUserPassword = async (userId) => {
+  return client.patch(
+    `api/v1/admin/users/${userId}/reset`,
+    {},
+    { authorization: true }
+  );
+};
+
 
 export default {
   getUsers,
@@ -55,5 +63,6 @@ export default {
   lockUser,
   deactivateUser,
   impersonateUser,
-  stopImpersonatingUser
+  stopImpersonatingUser,
+  resetUserPassword
 };

@@ -163,3 +163,24 @@ export const stopImpersonatingUser = () => (dispatch) => {
     }
   );
 };
+
+export const resetUserPassword = (userId) => (dispatch) => {
+  return AdminUserService.resetUserPassword(userId).then(
+    (data) => {
+      let messages = [{ title: "Successfully reset user password", detail: "Successfully reset user password" }];
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  );
+};
