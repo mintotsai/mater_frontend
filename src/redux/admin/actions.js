@@ -184,3 +184,24 @@ export const resetUserPassword = (userId) => (dispatch) => {
     }
   );
 };
+
+export const disableMFA = (userId) => (dispatch) => {
+  return AdminUserService.disableMFA(userId).then(
+    (data) => {
+      let messages = [{ title: "Successfully, disabled user MFA", detail: "Successfully, disabled user MFA" }];
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  );
+};

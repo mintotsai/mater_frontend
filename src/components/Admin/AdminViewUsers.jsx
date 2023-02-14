@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { getUsers, lockUser, deactivateUser, impersonateUser, resetUserPassword } from '../../redux/admin/actions';
+import { getUsers, lockUser, deactivateUser, impersonateUser, resetUserPassword, disableMFA } from '../../redux/admin/actions';
 import AdminViewEditUserModal from "./AdminViewEditUserModal";
 import { ROLES } from "../../helpers/roles";
 
@@ -96,6 +96,9 @@ export default function AdminViewUsers() {
                       </th>
                       <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                         <span className="sr-only">Reset Password</span>
+                      </th>
+                      <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                        <span className="sr-only">Disable MFA</span>
                       </th>
                     </tr>
                   </thead>
@@ -206,6 +209,21 @@ export default function AdminViewUsers() {
                                 });
                             }}>
                             Reset Password<span className="sr-only">, {user.attributes.first_name}</span>
+                          </a>
+                        </td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                          <a href="#" className="text-red-600 hover:text-red-900"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              dispatch(disableMFA(user.id))
+                                .then((response) => {
+                                })
+                                .catch((error) => {
+                                  console.log(">>>error");
+                                  console.log(error);
+                                });
+                            }}>
+                            Disable MFA<span className="sr-only">, {user.attributes.first_name}</span>
                           </a>
                         </td>
                       </tr>

@@ -56,6 +56,13 @@ const resetUserPassword = async (userId) => {
   );
 };
 
+const disableMFA = async (userId) => {
+  return client.patch(
+    `api/v1/admin/users/${userId}/disable-mfa`,
+    {},
+    { authorization: true }
+  );
+};
 
 export default {
   getUsers,
@@ -64,5 +71,6 @@ export default {
   deactivateUser,
   impersonateUser,
   stopImpersonatingUser,
-  resetUserPassword
+  resetUserPassword,
+  disableMFA,
 };
