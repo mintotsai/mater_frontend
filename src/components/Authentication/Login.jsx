@@ -21,12 +21,14 @@ const Login = () => {
   const isAdministrator = useHasRole(ROLES.ADMINISTRATOR);
 
   useEffect(() => {
-    dispatch(logout())
-      .then(() => {
-        navigate("/login");
-      })
-      .catch(() => {
-      });
+    // if (auth.isLoggedIn) {
+    //   dispatch(logout())
+    //     .then(() => {
+    //       navigate("/login");
+    //     })
+    //     .catch(() => {
+    //     });
+    // }
   }, []);
 
   return (

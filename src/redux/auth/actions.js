@@ -323,11 +323,13 @@ export const updatePassword = (payload) => (dispatch) => {
 export const unlock = (payload) => (dispatch) => {
   return AuthService.unlock(payload).then(
     (data) => {
+      let messages = [{ title: "Successfully, unlocked account." }];
       Promise.all([
         dispatch({
           type: UNLOCK_SUCCESS_ACTION,
           payload: { user: data },
         }),
+        setMessage(dispatch, "success", messages),
       ]);
 
       let response = {};
