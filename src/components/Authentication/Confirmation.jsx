@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { confirmation } from "../../redux/auth/actions";
 
-const Confirmation = () => {
+export default function Confirmation() {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -24,7 +24,7 @@ const Confirmation = () => {
 
     const fetchData = async () => {
       // get the data from the api
-      dispatch(confirmation(navigate, { params: { confirmation_token: confirmationToken } }))
+      dispatch(confirmation({ params: { confirmation_token: confirmationToken } }))
         .then((response) => {
           navigate(response.navigateTo);
         })
@@ -78,5 +78,3 @@ const Confirmation = () => {
     </>
   )
 }
-
-export default Confirmation;

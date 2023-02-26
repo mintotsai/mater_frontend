@@ -270,15 +270,16 @@ export const reset = (payload) => (dispatch) => {
 export const confirmation = (payload) => (dispatch) => {
   return AuthService.confirmation(payload).then(
     (data) => {
-      let response = {};
+
+      let messages = [{ title: "Successfully, confirmed your account." }];
       Promise.all([
         dispatch({
           type: CONFIRMATION_SUCCESS_ACTION,
           payload: { user: data },
         }),
-        // navigate("/login")
+        setMessage(dispatch, "success", messages),
       ]);
-
+      let response = {};
       response["navigateTo"] = "/login";
       return Promise.resolve(response);
     },

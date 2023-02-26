@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS_ACTION, LOGIN_FAIL_ACTION, SHOW_OTP_ACTION, VERIFY_FAIL_ACTION, CONFIRMATION_FAIL_ACTION, SHOW_RESET_PASSWORD_ACTION, UNLOCK_FAIL_ACTION } from "./actions";
+import { LOGIN_SUCCESS_ACTION, LOGIN_FAIL_ACTION, SHOW_OTP_ACTION, VERIFY_FAIL_ACTION, CONFIRMATION_SUCCESS_ACTION, CONFIRMATION_FAIL_ACTION, SHOW_RESET_PASSWORD_ACTION, UNLOCK_FAIL_ACTION } from "./actions";
 import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION, UPDATE_TRUE_USER_ACTION } from "../auth/actions";
 import initialState from "./state"
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
@@ -50,6 +50,11 @@ export default function (state = initialState, action) {
         ...state,
         user: payload,
       };
+    case CONFIRMATION_SUCCESS_ACTION:
+      return {
+        ...state,
+        emailConfirmed: true
+      }
     case CONFIRMATION_FAIL_ACTION:
       return {
         ...state,
