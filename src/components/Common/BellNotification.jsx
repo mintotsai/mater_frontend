@@ -54,7 +54,7 @@ export default function BellNotification() {
     // CableApp.user.send({ message: "hello?" });
 
     return function cleanup() {
-      console.log("cleanup");
+      console.log("useChannel - INFO: Cleanup");
       CableApp.user.unsubscribe();
     };
   }, []);
