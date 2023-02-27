@@ -16,6 +16,15 @@ const updateUser = async (userId, payload) => {
   );
 };
 
+// TODO: Is using userId the best for security?
+const discardUser = async (userId) => {
+  return client.delete(
+    `api/v1/admin/users/${userId}/discard`,
+    {},
+    { authorization: true }
+  );
+};
+
 const lockUser = async (userId) => {
   return client.patch(
     `api/v1/admin/users/${userId}/lock`,
@@ -67,6 +76,7 @@ const disableMFA = async (userId) => {
 export default {
   getUsers,
   updateUser,
+  discardUser,
   lockUser,
   deactivateUser,
   impersonateUser,

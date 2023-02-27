@@ -50,6 +50,30 @@ export const updateUser = (userId, payload) => (dispatch) => {
   );
 };
 
+export const discardUser = (userId) => (dispatch) => {
+  return AdminUserService.discardUser(userId).then(
+    (data) => {
+      let messages = [{ title: "Successfully discarded user", detail: "Successfully discarded user" }];
+      if (!data.data.data.attributes.discarded)
+        messages = [{ title: "Successfully undiscarded user", detail: "Successfully undiscarded user" }];
+
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  );
+};
+
 export const lockUser = (userId) => (dispatch) => {
   return AdminUserService.lockUser(userId).then(
     (data) => {
