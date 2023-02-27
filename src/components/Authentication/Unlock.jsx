@@ -11,14 +11,12 @@ export default function Unlock() {
   let navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
 
-  let unlockToken;
-  let userUnlocked;
+  let unlockToken = searchParams.get("unlock_token");
+  const [userUnlocked, setUserUnlocked] = useState(true);
 
   useEffect(() => {
     console.log("useEffect: mount");
     document.documentElement.classList.remove("bg-gray-50");
-
-    unlockToken = searchParams.get("unlock_token");
 
     const fetchData = async () => {
       dispatch(unlock({ params: { unlock_token: unlockToken } }))
@@ -28,12 +26,16 @@ export default function Unlock() {
         .catch((error) => {
           console.log(">>>error");
           console.log({ error });
+          document.documentElement.classList.add("bg-gray-50");
+          unlockToken = null;
+          setUserUnlocked(false);
         });
 
       return () => {
         console.log("useEffect: unmount");
         document.documentElement.classList.add("bg-gray-50");
-        userUnlocked = auth.userUnlocked;
+        unlockToken = null;
+        setUserUnlocked(auth.userUnlocked);
       }
     }
 
@@ -42,7 +44,7 @@ export default function Unlock() {
 
   return (
     <>
-      {(!unlockToken || !userUnlocked) && (
+      {(unlockToken == null || unlockToken == "" || !userUnlocked) ? (
         <div className="flex flex-wrap h-screen bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
           <div className="max-w-max mx-auto">
             <main className="sm:flex">
@@ -70,7 +72,7 @@ export default function Unlock() {
             </main>
           </div>
         </div>
-      )}
+      ) : <></>}
     </>
   )
 }

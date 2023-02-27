@@ -11,16 +11,14 @@ export default function Confirmation() {
   let navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
 
-  let confirmationToken;
-  let emailConfirmed;
+  let confirmationToken = searchParams.get("confirmation_token");
+  const [emailConfirmed, setEmailConfirmed] = useState(true);
 
   // Might be an issue calling asyc in useEffect
   // https://dev.to/elijahtrillionz/cleaning-up-async-functions-in-reacts-useeffect-hook-unsubscribing-3dkk
   useEffect(() => {
     console.log("useEffect: mount");
     document.documentElement.classList.remove("bg-gray-50");
-
-    confirmationToken = searchParams.get("confirmation_token");
 
     const fetchData = async () => {
       // get the data from the api
@@ -31,12 +29,13 @@ export default function Confirmation() {
         .catch((error) => {
           console.log(">>>error");
           console.log({ error });
+          setEmailConfirmed(false);
         });
 
       return () => {
         console.log("useEffect: unmount");
         document.documentElement.classList.add("bg-gray-50");
-        emailConfirmed = auth.emailConfirmed;
+        setEmailConfirmed(auth.emailConfirmed);
       }
     }
 
@@ -46,7 +45,7 @@ export default function Confirmation() {
 
   return (
     <>
-      {(!confirmationToken || !emailConfirmed) && (
+      {(confirmationToken == null || confirmationToken == "" || !emailConfirmed) ? (
         <div className="flex flex-wrap h-screen bg-white min-h-full px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
           <div className="max-w-max mx-auto">
             <main className="sm:flex">
@@ -74,7 +73,7 @@ export default function Confirmation() {
             </main>
           </div>
         </div>
-      )}
+      ) : <></>}
     </>
   )
 }
