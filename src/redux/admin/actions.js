@@ -140,7 +140,7 @@ export const impersonateUser = (userId) => (dispatch) => {
 
       let response = {}
       response["navigateTo"] = "/home";
-      response["role"] = data.data.data.attributes.data.current_user.data.attributes.role.name;
+      response["roles"] = data.data.data.attributes.data.current_user.data.attributes.roles;
 
       return Promise.resolve(response);
     },
@@ -173,7 +173,7 @@ export const stopImpersonatingUser = () => (dispatch) => {
 
       let response = {}
       response["navigateTo"] = "/home";
-      response["role"] = data.data.data.attributes.data.current_user.data.attributes.role.name;
+      response["roles"] = data.data.data.attributes.data.current_user.data.attributes.roles;
 
       return Promise.resolve(response);
     },

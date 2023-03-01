@@ -38,12 +38,12 @@ export default function PermissionsGate({
   // scopes = []
 }) {
   const auth = useSelector((state) => state.auth);
-  const userRole = auth.user.attributes.role.name;
+  const userRoles = auth.user.attributes.roles;
   const location = useLocation();
 
-  if (!auth || !auth.user || !auth.user.attributes || !auth.user.attributes.role) return <Navigate to="/login" state={{ from: location }} replace />;
+  if (!auth || !auth.user || !auth.user.attributes || !auth.user.attributes.roles) return <Navigate to="/login" state={{ from: location }} replace />;
 
-  if (!allowedRoles.includes(userRole)) {
+  if (!allowedRoles.some(item => userRoles.hasOwnProperty(item))) {
     if (pageNotFound)
       return <Navigate to="/404" replace />;
     if (!errorProps)

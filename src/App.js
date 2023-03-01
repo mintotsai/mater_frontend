@@ -55,7 +55,7 @@ function App() {
             <Route path="notifications" element={<NotificationList />} />
 
             {/* Admin Routes */}
-            <Route path="admin" element={<PermissionsGate allowedRoles={[ROLES.ADMINISTRATOR]}
+            <Route path="admin" element={<PermissionsGate allowedRoles={[ROLES.admin]}
               pageNotFound={true}
             />} >
               <Route path="users" element={<AdminViewUsers />} />

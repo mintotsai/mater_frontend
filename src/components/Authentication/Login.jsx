@@ -18,7 +18,7 @@ const Login = () => {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
-  const isAdministrator = useHasRole(ROLES.ADMINISTRATOR);
+  const isAdministrator = useHasRole(ROLES.admin);
 
   useEffect(() => {
     // if (auth.isLoggedIn) {
@@ -70,9 +70,9 @@ const Login = () => {
                 await dispatch(login({ user: { email: values["email"], password: values["password"] } }))
                   .then((response) => {
                     let navigateTo = response.navigateTo;
-                    let role = response.role;
+                    let roles = response.roles;
                     if (response.navigateTo == "/home") {
-                      if (role == ROLES.ADMINISTRATOR) {
+                      if (ROLES.admin in roles && roles.admin) {
                         navigateTo = "/admin";
                       } else {
                         navigateTo = "/home";

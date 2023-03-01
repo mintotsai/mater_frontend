@@ -5,17 +5,18 @@ import { useSelector, useDispatch } from "react-redux";
 export const useHasRole = (roleNames) => {
   const auth = useSelector((state) => state.auth);
 
-  if (!auth || !auth.user || !auth.user.attributes || !auth.user.attributes.role) return false;
+  if (!auth || !auth.user || !auth.user.attributes || !auth.user.attributes.roles) return false;
 
-  const userRole = auth.user.attributes.role.name;
+  const userRoles = auth.user.attributes.roles;
 
-  if (!userRole) {
+  if (!userRoles) {
     return false;
   }
+
   if (typeof roleNames === "string") {
-    return userRole === roleNames;
+    return userRoles.hasOwnProperty(roleNames) && userRoles[roleNames];
   } else if (Array.isArray(roleNames)) {
-    return roleNames.some((role) => role === userRole);
+    return roleNames.some((role) => role === userRoles);
   } else {
     return false;
   }

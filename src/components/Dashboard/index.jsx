@@ -77,7 +77,7 @@ const Home = () => {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
-  const isAdministrator = useHasRole(ROLES.ADMINISTRATOR);
+  const isAdministrator = useHasRole(ROLES.admin);
 
   useEffect(() => {
     if (system.message && system.message != '') {

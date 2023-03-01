@@ -4,19 +4,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUsers, lockUser, deactivateUser, impersonateUser, resetUserPassword, disableMFA, discardUser } from '../../redux/admin/actions';
 import AdminViewEditUserModal from "./AdminViewEditUserModal";
 import { ROLES } from "../../helpers/roles";
+import { capitalizeFirst } from "../../helpers/strings.helper"
 
-const people = [
-  {
-    name: 'Lindsay Walton',
-    title: 'Front-end Developer',
-    department: 'Optimization',
-    email: 'lindsay.walton@example.com',
-    role: 'Member',
-    image:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  // More people...
-]
+// const people = [
+//   {
+//     name: 'Lindsay Walton',
+//     title: 'Front-end Developer',
+//     department: 'Optimization',
+//     email: 'lindsay.walton@example.com',
+//     role: 'Member',
+//     image:
+//       'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+//   },
+//   // More people...
+// ]
 
 export default function AdminViewUsers() {
   const dispatch = useDispatch();
@@ -151,7 +152,9 @@ export default function AdminViewUsers() {
                             })()
                           }
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{user.attributes.role.name || ""}</td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{Object.keys(user.attributes.roles).map(function (roleName, roleIndex) {
+                          if (user.attributes.roles[roleName]) return (<p>{capitalizeFirst(roleName)}</p>)
+                        })}</td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <a href="#" className="text-indigo-600 hover:text-indigo-900"
                             onClick={(e) => {
@@ -197,9 +200,9 @@ export default function AdminViewUsers() {
                               dispatch(impersonateUser(user.id))
                                 .then((response) => {
                                   let navigateTo = response.navigateTo;
-                                  let role = response.role;
+                                  let roles = response.roles;
                                   if (response.navigateTo == "/home") {
-                                    if (role == ROLES.ADMINISTRATOR) {
+                                    if (ROLES.admin in roles && roles.admin) {
                                       navigateTo = "/admin";
                                     } else {
                                       navigateTo = "/home";

@@ -75,7 +75,7 @@ export const login = (payload) => (dispatch) => {
           clearMessage(dispatch),
         ]);
         response["navigateTo"] = "/home";
-        response["role"] = data.data.attributes.role.name;
+        response["roles"] = data.data.attributes.roles;
       }
 
       return Promise.resolve(response);
@@ -131,7 +131,7 @@ export const verify = (payload) => (dispatch) => {
       ]);
 
       response["navigateTo"] = "/home";
-      response["role"] = data.data.data.attributes.role.name;
+      response["roles"] = data.data.data.attributes.roles;
       return Promise.resolve(response);
     },
     (error) => {

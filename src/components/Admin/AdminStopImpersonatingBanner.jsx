@@ -27,9 +27,9 @@ export default function AdminStopImpersonatingBanner() {
             dispatch(stopImpersonatingUser())
               .then((response) => {
                 let navigateTo = response.navigateTo;
-                let role = response.role;
+                let roles = response.roles;
                 if (response.navigateTo == "/home") {
-                  if (role == ROLES.ADMINISTRATOR) {
+                  if (ROLES.admin in roles && roles.admin) {
                     navigateTo = "/admin";
                   } else {
                     navigateTo = "/home";
