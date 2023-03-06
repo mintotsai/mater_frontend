@@ -3,10 +3,21 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../../redux/admin/actions";
+import { ROLES } from "../../helpers/roles";
+import { capitalizeFirst } from "../../helpers/strings.helper";
 
 export default function AdminViewEditUserModal({ open, handleClose, selectedUser }) {
   const dispatch = useDispatch();
   const cancelButtonRef = useRef(null);
+
+  let selectedRoles = [];
+  if (selectedUser && selectedUser.attributes && selectedUser.attributes.roles) {
+    Object.keys(selectedUser.attributes.roles).map((role) => {
+      if (selectedUser.attributes.roles[role] == true) {
+        selectedRoles.push(role);
+      }
+    });
+  }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -29,11 +40,26 @@ export default function AdminViewEditUserModal({ open, handleClose, selectedUser
               initialValues={{
                 first_name: (selectedUser && selectedUser.attributes && selectedUser.attributes.first_name) ? selectedUser.attributes.first_name : "",
                 last_name: (selectedUser && selectedUser.attributes && selectedUser.attributes.last_name) ? selectedUser.attributes.last_name : "",
-                email: (selectedUser && selectedUser.attributes && selectedUser.attributes.email) ? selectedUser.attributes.email : ""
+                email: (selectedUser && selectedUser.attributes && selectedUser.attributes.email) ? selectedUser.attributes.email : "",
+                roles: selectedRoles
               }}
               // validationSchema={{}}
               onSubmit={async (values, { setStatus, resetForm }) => {
-                dispatch(updateUser(selectedUser.id, { user: values }))
+                // console.log(">>>" + JSON.stringify(values, null, 2));
+
+                let params = {};
+                params["first_name"] = values["first_name"];
+                params["last_name"] = values["last_name"];
+                params["email"] = values["email"];
+                Object.keys(ROLES).map((role, index) => {
+                  if (values["roles"].indexOf(role) > -1) {
+                    params[role] = true;
+                  } else {
+                    params[role] = false;
+                  }
+                });
+
+                dispatch(updateUser(selectedUser.id, { user: params }))
                   .then((response) => {
                     // console.log("response");
                     // console.log(response);
@@ -98,6 +124,29 @@ export default function AdminViewEditUserModal({ open, handleClose, selectedUser
                           />
                         </div>
                       </div>
+                      <div className="mt-5 grid grid-cols-6 gap-6">
+                        <div className="col-span-6 sm:col-span-3">
+                          <legend className="block text-sm font-medium text-gray-700">Roles</legend>
+                          <div className="mt-4 divide-y divide-gray-200 border-t border-b border-gray-200">
+                            {Object.keys(ROLES).map((role, index) => {
+                              return (
+                                <div key={index} className="relative flex items-start py-4">
+                                  <div className="min-w-0 flex-1 text-sm leading-6">
+                                    <label htmlFor={`role-${index}`} className="select-none sm:text-sm ">
+                                      {capitalizeFirst(role)}
+                                    </label>
+                                  </div>
+                                  <div className="ml-3 flex h-6 items-center">
+                                    <Field id={`role-${index}`}
+                                      name="roles" type="checkbox" value={role} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      </div>
+
                       <div className="grid grid-cols-6 gap-6 mt-5">
                         <div className="col-span-6 sm:col-span-3">
                         </div>
