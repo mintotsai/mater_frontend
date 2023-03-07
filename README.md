@@ -1,17 +1,17 @@
-https://dev.to/m_ahmad/create-production-ready-react-rails-applications-43bp
-bezkoder
+* https://dev.to/m_ahmad/create-production-ready-react-rails-applications-43bp
+* bezkoder
   * https://github.com/bezkoder/react-redux-hooks-jwt-auth
   * https://github.com/bezkoder/react-redux-jwt-auth
   * https://github.com/bezkoder/react-redux-login-example
-https://betterprogramming.pub/build-a-react-redux-app-with-javascript-web-tokens-9f2b73768e18
+* https://betterprogramming.pub/build-a-react-redux-app-with-javascript-web-tokens-9f2b73768e18
   * https://github.com/reireynoso/jwt-react-redux-template
   * https://github.com/reireynoso/jwt-rails-api-template
-https://jasonwatmore.com/post/2017/12/07/react-redux-jwt-authentication-tutorial-example
-https://jasonwatmore.com/post/2020/03/02/react-hooks-redux-user-registration-and-login-tutorial-example
-https://github.com/gothinkster/react-redux-realworld-example-app
-https://soshace.com/react-user-login-authentication-using-usecontext-and-usereducer/
-https://sharkham.github.io/forgot_reset_password_functionality_with_rails_and_react_and_redux
-https://www.truemark.dev/blog/reset-password-in-react-and-rails
+* https://jasonwatmore.com/post/2017/12/07/react-redux-jwt-authentication-tutorial-example
+* https://jasonwatmore.com/post/2020/03/02/react-hooks-redux-user-registration-and-login-tutorial-example
+* https://github.com/gothinkster/react-redux-realworld-example-app
+* https://soshace.com/react-user-login-authentication-using-usecontext-and-usereducer/
+* https://sharkham.github.io/forgot_reset_password_functionality_with_rails_and_react_and_redux
+* https://www.truemark.dev/blog/reset-password-in-react-and-rails
 
 * Form Validation
   * https://rhf.thcl.dev
@@ -37,6 +37,7 @@ https://www.truemark.dev/blog/reset-password-in-react-and-rails
   * https://blog.kiprosh.com/architect-react-apps-using-hooks/
   * https://medium.com/geekculture/how-to-conditionally-render-react-ui-based-on-user-permissions-7b9a1c73ffe2
   * https://github.com/Permify/react-role
+  * https://blog.openreplay.com/role-based-access-in-react/
 
 * Redux Persist
   * https://github.com/rt2zz/redux-persist
@@ -59,3 +60,10 @@ https://www.truemark.dev/blog/reset-password-in-react-and-rails
   * https://dev.to/mihaiandrei97/jwt-authentication-using-axios-interceptors-55be
   * https://blog.logrocket.com/understanding-axios-create/
   * https://stackoverflow.com/questions/47216452/how-to-handle-401-authentication-error-in-axios-and-react
+
+* useEffect
+  * https://maxrozen.com/fetching-data-react-with-useeffect
+  * https://www.robinwieruch.de/react-hooks-fetch-data/
+  * Cleanup function
+    * https://hackernoon.com/cleanup-functions-in-reacts-useeffect-hook-explained
+    * https://dev.to/antdp425/react-fetch-data-from-api-with-useeffect-27le#comment-21pj3
