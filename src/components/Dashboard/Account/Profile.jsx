@@ -1,26 +1,20 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { Navigate, Route, Routes, BrowserRouter, useNavigate, useLocation, useSearchParams, UNSAFE_NavigationContext } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { getUser, updateUser } from "../../../redux/user/actions";
-import { setDefaultPaymentMethod, getSetupSecret } from "../../../redux/billing/actions";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { getCreditCardInfo, getSetupSecret, getSubscription, setDefaultPaymentMethod } from "../../../redux/billing/actions";
 
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
-import ProfilePictureChange from './ProfilePictureChange'
-import NameChange from './NameChange'
-import EmailChange from './EmailChange'
-import PasswordChange from './PasswordChange'
-import TwoFactorEnable from './TwoFactorEnable'
-import Plans from './Billing/Plans'
-import PaymentMethods from './Billing/PaymentMethods'
-import BillingHistory from './Billing/BillingHistory'
-import Checkout from './Billing/Checkout';
-import { CreditCardIcon, OfficeBuildingIcon, UserIcon, UsersIcon, ShieldCheckIcon } from '@heroicons/react/solid'
-import SubscribedPlan from './Billing/SubscribedPlan';
+import { CreditCardIcon, ShieldCheckIcon, UserIcon } from '@heroicons/react/solid';
+import BillingHistory from './Billing/BillingHistory';
+import PaymentMethods from './Billing/PaymentMethods';
 import PlanSection from './Billing/PlanSection';
+import EmailChange from './EmailChange';
+import NameChange from './NameChange';
+import PasswordChange from './PasswordChange';
+import ProfilePictureChange from './ProfilePictureChange';
+import TwoFactorEnable from './TwoFactorEnable';
 
 const tabs = [
   { name: 'My Account', href: '#', icon: UserIcon, current: true },
@@ -35,6 +29,7 @@ function classNames(...classes) {
 export default function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const system = useSelector((state) => state.system);
@@ -46,6 +41,9 @@ export default function Profile() {
   useEffect(() => {
     if (!setupSecret)
       dispatch(getSetupSecret());
+    dispatch(getCreditCardInfo());
+    dispatch(getSubscription());
+    setIsLoading(false);
     // console.log(">>>1searchParams=" + searchParams);
     // console.log(">>>1success=" + searchParams.get("success"));
     // navigate("#");
@@ -217,7 +215,7 @@ export default function Profile() {
                   <PasswordChange />
                   <TwoFactorEnable />
                 </>}
-              {activeTab == "#billing" &&
+              {activeTab == "#billing" && !isLoading &&
                 <>
                   <PlanSection />
                   <PaymentMethods />

@@ -1,18 +1,14 @@
-import { Fragment, useRef, useState, useEffect } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-// import { CheckIcon } from '@heroicons/react/24/outline'
-import { CheckIcon } from '@heroicons/react/outline'
+import { Dialog, Transition } from '@headlessui/react';
+import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, PaymentElement, CardElement, CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { useSelector, useDispatch } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
+import { Form, Formik } from 'formik';
+import { Fragment, useRef } from 'react';
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUB_KEY}`);
 
 export default function PaymentMethodModal({ open, handleClose }) {
-  // const [open, setOpen] = useState(false)
-  // console.log(">>>open=" + open);
   const dispatch = useDispatch();
   const cancelButtonRef = useRef(null)
   const stripe = useStripe();
@@ -56,13 +52,6 @@ export default function PaymentMethodModal({ open, handleClose }) {
                 if (!stripe || !elements) {
                   return;
                 }
-
-                // const cardElement = elements.getElement(CardElement);
-
-                // const { error, paymentMethod } = await stripe.createPaymentMethod({
-                //   type: 'card',
-                //   card: cardElement,
-                // });
 
                 // TODO: is window.location.origin the best?
                 // TODO: How to get country?
@@ -110,124 +99,21 @@ export default function PaymentMethodModal({ open, handleClose }) {
                   >
                     <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6">
                       <div>
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">Edit Payment Information</h3>
+                        <h3 className="text-lg font-medium leading-6 text-gray-900">Payment Information</h3>
                         {/* <p className="mt-1 text-sm text-gray-500">Use a permanent address where you can recieve mail.</p> */}
                       </div>
                       <div className="grid grid-cols-6 gap-6 mt-5">
                         <div className="col-span-6 sm:col-span-6">
-                          {/* <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                            Credit or debit card
-                          </label> */}
-                          {/* <input
-                      type="text"
-                      name="first-name"
-                      id="first-name"
-                      autoComplete="given-name"
-                      className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                    /> */}
-                          {/* <CardElement className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" options={options} /> */}
                           <PaymentElement options={options} />
                         </div>
                       </div>
-                      {/* <div className="grid grid-cols-6 gap-6">
-                        <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                            Name on Invoice
-                          </label>
-                          <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div> */}
-                      {/* <div className="grid grid-cols-6 gap-6">
-                        <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                            Address 1
-                          </label>
-                          <input
-                            type="text"
-                            name="first-name"
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                        <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                            Address 2
-                          </label>
-                          <input
-                            type="text"
-                            name="first-name"
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div> */}
-                      {/* <div className="grid grid-cols-6 gap-6">
-                         <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                            City
-                          </label>
-                          <input
-                            type="text"
-                            name="first-name"
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                        <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                            State
-                          </label>
-                          <input
-                            type="text"
-                            name="first-name"
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div> */}
-                      {/* <div className="grid grid-cols-6 gap-6">
-                        <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                            Zip Code
-                          </label>
-                          <input
-                            type="text"
-                            name="first-name"
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div> */}
-                      {/* <div className="grid grid-cols-6 gap-6">
-                        <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                            Country
-                          </label>
-                          <input
-                            type="text"
-                            name="first-name"
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                          />
-                        </div>
-                      </div> */}
                       <div className="grid grid-cols-6 gap-6 mt-5">
                         <div className="col-span-6 sm:col-span-3">
                         </div>
                         <div className="col-span-6 sm:col-span-3">
                           <div className="grid grid-cols-6 gap-1">
+                            <div className="col-span-2">
+                            </div>
                             <div className="col-span-2">
                               <button
                                 type="button"
@@ -238,14 +124,12 @@ export default function PaymentMethodModal({ open, handleClose }) {
                                 Cancel
                               </button>
                             </div>
-                            <div className="col-span-4">
+                            <div className="col-span-2">
                               <button
                                 type="submit"
                                 className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:text-sm"
-                              // disabled={!stripe}
-                              // onClick={() => setOpen(false)}
                               >
-                                Update Information
+                                Save
                               </button>
                             </div>
                           </div>

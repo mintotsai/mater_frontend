@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { Navigate, Route, Routes, BrowserRouter, useNavigate, useLocation, useSearchParams, UNSAFE_NavigationContext } from 'react-router-dom';
-import { Disclosure, Menu, RadioGroup, Switch, Transition } from '@headlessui/react'
+import { RadioGroup, Switch } from '@headlessui/react';
+import { loadStripe } from "@stripe/stripe-js";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { getPlanFromStripePriceId, getStripePriceIdFromPlan, plans } from '../../../../helpers/billings.helper';
+import { cancelSubscription, updateSubscription } from '../../../../redux/billing/actions';
 
-import { cancelSubscription, getSubscription, updateSubscription } from '../../../../redux/billing/actions';
-import { plans, getPlanFromStripePriceId, getStripePriceIdFromPlan } from '../../../../helpers/billings.helper';
+const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUB_KEY}`);
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -13,22 +14,12 @@ function classNames(...classes) {
 export default function PlanSection() {
   const dispatch = useDispatch();
   const [showSpinner, setShowSpinner] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(plans[1])
-  const [annualBillingEnabled, setAnnualBillingEnabled] = useState(true)
+  const [selectedPlan, setSelectedPlan] = useState();
+  const [annualBillingEnabled, setAnnualBillingEnabled] = useState(true);
   const [enableSaveButton, setEnableSaveButton] = useState(false);
   const subscription = useSelector((state) => state.billing.subscription);
-
-  useEffect(() => {
-    // We do this because of async callout
-    let mounted = true;
-
-    dispatch(getSubscription())
-      .then(() => {
-
-      });
-
-    return () => (mounted = false);
-  }, []);
+  const cardInfo = useSelector((state) => state.billing.cardInfo);
+  const setupSecret = useSelector((state) => state.billing.setupSecret);
 
   useEffect(() => {
     if (subscription) {
@@ -40,8 +31,17 @@ export default function PlanSection() {
 
       let currentPlan = getPlanFromStripePriceId(subscription.plan_id)
       setSelectedPlan(plans[currentPlan]);
+    } else {
+      // no subscription yet
+      setAnnualBillingEnabled(false);
+      setEnableSaveButton(true);
     }
-  }, [subscription])
+  }, [subscription]);
+
+  useEffect(() => {
+    if (!cardInfo.card)
+      setEnableSaveButton(true);
+  }, [cardInfo]);
 
   return (
     <>
@@ -73,9 +73,11 @@ export default function PlanSection() {
                 setSelectedPlan(e);
                 setEnableSaveButton(true);
               }}
+                disabled={!cardInfo.card ? true : ""}
               >
                 <RadioGroup.Label className="sr-only"> Pricing plans </RadioGroup.Label>
                 <div className="relative -space-y-px rounded-md bg-white">
+                  {!cardInfo.card && <div className="text-center text-gray-500">Add a Payment Method below to choose a Plan</div>}
                   {plans.map((plan, planIdx) => (
                     <RadioGroup.Option
                       key={plan.name}
@@ -85,7 +87,8 @@ export default function PlanSection() {
                           planIdx === 0 ? 'rounded-tl-md rounded-tr-md' : '',
                           planIdx === plans.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
                           checked ? 'bg-indigo-50 border-indigo-200 z-10' : 'border-gray-200',
-                          'relative border p-4 flex flex-col cursor-pointer md:pl-4 md:pr-6 md:grid md:grid-cols-3 focus:outline-none'
+                          'relative border p-4 flex flex-col cursor-pointer md:pl-4 md:pr-6 md:grid md:grid-cols-3 focus:outline-none',
+                          !cardInfo.card ? 'blur-sm' : ''
                         )
                       }
                     >
@@ -96,7 +99,7 @@ export default function PlanSection() {
                               className={classNames(
                                 checked ? 'bg-indigo-500 border-transparent' : 'bg-white border-gray-300',
                                 active ? 'ring-2 ring-offset-2 ring-gray-900' : '',
-                                'h-4 w-4 rounded-full border flex items-center justify-center'
+                                'h-4 w-4 rounded-full border flex items-center justify-center',
                               )}
                               aria-hidden="true"
                             >
@@ -136,9 +139,13 @@ export default function PlanSection() {
                     </RadioGroup.Option>
                   ))}
                 </div>
+
               </RadioGroup>
 
-              <Switch.Group as="div" className="flex items-center">
+              <Switch.Group as="div" className={classNames(
+                !cardInfo.card ? 'blur-sm' : '',
+                "flex items-center"
+              )}>
                 <Switch
                   checked={annualBillingEnabled}
                   onChange={(e) => {
@@ -147,8 +154,10 @@ export default function PlanSection() {
                   }}
                   className={classNames(
                     annualBillingEnabled ? 'bg-indigo-500' : 'bg-gray-200',
-                    'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2'
+                    'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2',
+
                   )}
+                  disabled={!cardInfo.card ? true : ""}
                 >
                   <span
                     aria-hidden="true"
@@ -164,7 +173,10 @@ export default function PlanSection() {
                 </Switch.Label>
               </Switch.Group>
             </div>
-            <div className="flex justify-end bg-gray-50 px-4 py-3 text-right sm:px-6">
+            <div className={classNames(
+              !cardInfo.card ? 'blur-sm' : '',
+              "flex justify-end bg-gray-50 px-4 py-3 text-right sm:px-6"
+            )}>
               {subscription && !subscription.cancel_at_period_end &&
                 <button
                   type="submit"
@@ -189,13 +201,14 @@ export default function PlanSection() {
                   setShowSpinner(true);
                   dispatch(updateSubscription({ stripe_price_id: stripePriceId }))
                     .then((response) => {
+                      setEnableSaveButton(false);
                       setShowSpinner(false);
                     })
                     .catch((error) => {
                       setShowSpinner(false);
                     });
                 }}
-                disabled={!enableSaveButton}
+                disabled={!enableSaveButton || !cardInfo.card}
               >
                 {showSpinner && <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

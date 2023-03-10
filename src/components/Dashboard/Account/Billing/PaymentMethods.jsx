@@ -1,9 +1,8 @@
-import { Fragment, useState, useEffect } from 'react'
-import { useSelector, useDispatch } from "react-redux";
-import PaymentMethodModal from './PaymentMethodModal'
+import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, CardNumberElement, CardExpiryElement, CardCvcElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { getCreditCardInfo, getSetupSecret } from "../../../../redux/billing/actions";
+import { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import PaymentMethodModal from './PaymentMethodModal';
 
 const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUB_KEY}`);
 
@@ -19,7 +18,6 @@ export default function PaymentMethods() {
     // Fully customizable with appearance API.
     appearance: {
       theme: "stripe",
-
     },
   };
 
@@ -31,23 +29,6 @@ export default function PaymentMethods() {
   const handleClose = () => {
     setPaymentMethodModalOpen(false);
   };
-
-  useEffect(() => {
-    console.log("useEffect: mount");
-
-    const fetchData = async () => {
-      // get the data from the api
-      dispatch(getCreditCardInfo());
-      // dispatch(getSetupSecret());
-
-      return () => {
-        console.log("useEffect: unmount");
-      }
-    }
-
-    fetchData();
-
-  }, []);
 
   return (
     <>
@@ -90,7 +71,7 @@ export default function PaymentMethods() {
                 setPaymentMethodModalOpen(true);
               }}
             >
-              Edit
+              {!cardInfo.card ? "Add Card" : "Edit Card"}
             </button>
           </div>
         </div>

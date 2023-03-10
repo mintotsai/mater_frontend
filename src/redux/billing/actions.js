@@ -1,7 +1,6 @@
-import BillingService from "../../services/billing.service";
-import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../system/actions";
-import { logout } from "../../redux/auth/actions";
 import { setMessage } from "../../helpers/messages";
+import BillingService from "../../services/billing.service";
+import { SET_GOTO_URL_ACTION } from "../system/actions";
 
 export const CREATE_CHECKOUT_SESSION = "CREATE_CHECKOUT_SESSION"
 export const SET_CARD_INFO_ACTION = "SET_CARD_INFO_ACTION"
@@ -120,6 +119,12 @@ export const getSetupSecret = (payload) => (dispatch) => {
 export const setDefaultPaymentMethod = (payload) => (dispatch) => {
   return BillingService.setDefaultPaymentMethod(payload).then(
     (data) => {
+      Promise.all([
+        dispatch({
+          type: SET_CARD_INFO_ACTION,
+          payload: data.data.data.attributes.data,
+        })
+      ]);
 
       return Promise.resolve();
     },
@@ -158,14 +163,18 @@ export const getBillingHistory = (payload) => (dispatch) => {
 export const getSubscription = (payload) => (dispatch) => {
   return BillingService.getSubscription(payload).then(
     (data) => {
-      Promise.all([
-        dispatch({
-          type: SET_SUBSCRIPTION,
-          payload: data.data.data.attributes,
-        }),
-      ]);
+      let response = {};
+      if (data && data.data && data.data.data && data.data.data.attributes) {
+        Promise.all([
+          dispatch({
+            type: SET_SUBSCRIPTION,
+            payload: data.data.data.attributes,
+          }),
+        ]);
+        response["subscription"] = data.data.data.attributes;
+      }
 
-      return Promise.resolve();
+      return Promise.resolve(response);
     },
     (error) => {
       let messages = error.response.data;
