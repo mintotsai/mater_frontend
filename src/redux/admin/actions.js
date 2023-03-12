@@ -1,6 +1,6 @@
-import AdminUserService from "../../services/admin/admin.user.service";
 import { setMessage } from "../../helpers/messages";
-import { UPDATE_USER_ACTION, UPDATE_TRUE_USER_ACTION } from "../auth/actions";
+import AdminUserService from "../../services/admin/admin.user.service";
+import { UPDATE_TRUE_USER_ACTION, UPDATE_USER_ACTION } from "../auth/actions";
 
 export const ADMIN_GET_USERS_SUCCESS_ACTION = "ADMIN_GET_USERS_SUCCESS_ACTION";
 
