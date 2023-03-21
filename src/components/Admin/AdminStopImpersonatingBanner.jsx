@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useDispatch } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from "react-redux";
-import { getUsers, stopImpersonatingUser } from '../../redux/admin/actions';
 import { ROLES } from "../../helpers/roles";
+import { useHasRole } from '../../hooks/useHasRole';
+import { getUsers, stopImpersonatingUser } from '../../redux/admin/actions';
 
 export default function AdminStopImpersonatingBanner() {
   const dispatch = useDispatch();
   let navigate = useNavigate();
+  const isAdministrator = useHasRole(ROLES.admin);
 
   const handleRefresh = () => {
-    dispatch(getUsers())
-      .then((response) => {
-      })
-      .catch((error) => {
-        console.log(">>>error");
-        console.log(error);
-      });
+    if (isAdministrator) {
+      dispatch(getUsers())
+        .then((response) => {
+        })
+        .catch((error) => {
+          console.log(">>>error");
+          console.log(error);
+        });
+    }
   }
 
   return (

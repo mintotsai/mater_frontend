@@ -1,8 +1,6 @@
-import UserService from "../../services/user.service";
-import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../system/actions";
-import { UPDATE_USER_ACTION, UPDATE_USER_SUCCESS_ACTION, UPDATE_USER_FAIL_ACTION } from "../auth/actions";
 import { setMessage } from "../../helpers/messages";
-import { logout } from "../../redux/auth/actions";
+import UserService from "../../services/user.service";
+import { UPDATE_USER_FAIL_ACTION, UPDATE_USER_SUCCESS_ACTION } from "../auth/actions";
 
 export const GET_USER_ACTION = "GET_USER_ACTION"
 export const GET_QR_CODE_URI_SUCCESS_ACTION = "GET_QR_CODE_URI_SUCCESS_ACTION"

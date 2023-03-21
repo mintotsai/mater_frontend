@@ -1,5 +1,5 @@
 const initialState = {
-  isLoading: false,
+  loadingActions: [],
   message: [],
   messageStatus: "",
   gotoUrl: ""

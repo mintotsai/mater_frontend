@@ -1,5 +1,3 @@
-import axios from "axios";
-import { authHeader } from "../helpers/auth.header";
 import { client } from "./axiosClient";
 
 const BASE_URL = `${process.env.REACT_APP_BACKEND_API_URL}`
@@ -15,7 +13,6 @@ const login = async (payload) => {
       if (response.headers.authorization && response.headers.authorization.split(' ')[0] === 'Bearer') {
         authToken = response.headers.authorization.split(' ')[1];
       }
-      // localStorage.setItem('authToken', JSON.stringify(authToken));
       localStorage.setItem('authToken', authToken);
       localStorage.setItem("user", JSON.stringify(response.data.data));
     }

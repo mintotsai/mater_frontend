@@ -1,5 +1,5 @@
-import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "./actions";
-import initialState from "./state"
+import { SET_GOTO_URL_ACTION, SET_LOADING_ACTION, SET_MESSAGE_ACTION } from "./actions";
+import initialState from "./state";
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
@@ -17,6 +17,23 @@ export default function (state = initialState, action) {
         ...state,
         gotoUrl: payload
       };
+    // https://blog.adedaniel.com/an-easier-way-to-handle-loading-error-and-success-states-in-redux
+    case SET_LOADING_ACTION:
+      if (action.isLoading === true) {
+        return {
+          ...state,
+          // If isLoading is true, add the loading type  to the array
+          loadingActions: [...state.loadingActions, action.loadingType],
+        };
+      } else {
+        return {
+          ...state,
+          // If isLoading is false, remove the loading type from the array
+          loadingActions: state.loadingActions.filter(
+            (eachAction) => eachAction !== action.loadingType
+          ),
+        };
+      }
     default:
       return state;
   }

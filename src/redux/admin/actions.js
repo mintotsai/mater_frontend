@@ -1,8 +1,11 @@
 import { setMessage } from "../../helpers/messages";
 import AdminUserService from "../../services/admin/admin.user.service";
 import { UPDATE_TRUE_USER_ACTION, UPDATE_USER_ACTION } from "../auth/actions";
+import { SET_LOADING_ACTION } from "../system/actions";
 
 export const ADMIN_GET_USERS_SUCCESS_ACTION = "ADMIN_GET_USERS_SUCCESS_ACTION";
+export const ADMIN_IMPERSONATING_USER_ACTION = "ADMIN_IMPERSONATING_USER_ACTION";
+export const ADMIN_STOP_IMPERSONATING_USER_ACTION = "ADMIN_STOP_IMPERSONATING_USER_ACTION";
 
 export const getUsers = (userId) => (dispatch) => {
   return AdminUserService.getUsers(userId).then(
@@ -123,30 +126,45 @@ export const deactivateUser = (userId) => (dispatch) => {
 };
 
 export const impersonateUser = (userId) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: ADMIN_IMPERSONATING_USER_ACTION,
+  });
   return AdminUserService.impersonateUser(userId).then(
     (data) => {
       let messages = [{ title: "Successfully impersonating user", detail: "Successfully impersonating user" }];
       Promise.all([
         dispatch({
           type: UPDATE_USER_ACTION,
-          payload: data.data.data.attributes.data.current_user.data,
+          payload: data.data.attributes.data.current_user_data.current_user.data,
         }),
         dispatch({
           type: UPDATE_TRUE_USER_ACTION,
-          payload: data.data.data.attributes.data.true_user.data,
+          payload: data.data.attributes.data.true_user_data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: ADMIN_IMPERSONATING_USER_ACTION,
         }),
         setMessage(dispatch, "success", messages)
       ]);
 
       let response = {}
       response["navigateTo"] = "/home";
-      response["roles"] = data.data.data.attributes.data.current_user.data.attributes.roles;
+      response["roles"] = data.data.attributes.data.current_user_data.current_user.data.attributes.roles;
 
       return Promise.resolve(response);
     },
     (error) => {
       let messages = error.response.data;
       Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: ADMIN_IMPERSONATING_USER_ACTION,
+        }),
         setMessage(dispatch, "error", messages),
       ]);
 
@@ -155,31 +173,49 @@ export const impersonateUser = (userId) => (dispatch) => {
   );
 };
 
-export const stopImpersonatingUser = () => (dispatch) => {
+export const stopImpersonatingUser = () => (dispatch, getState) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: ADMIN_STOP_IMPERSONATING_USER_ACTION,
+  });
   return AdminUserService.stopImpersonatingUser().then(
     (data) => {
+      const authToken = getState().auth.trueUser.true_user_jwt;
+      localStorage.setItem('authToken', authToken);
+
       let messages = [{ title: "Successfully stopped impersonating user", detail: "Successfully stopped impersonating user" }];
       Promise.all([
         dispatch({
           type: UPDATE_USER_ACTION,
-          payload: data.data.data.attributes.data.current_user.data,
+          payload: getState().auth.trueUser.true_user.data,
         }),
         dispatch({
           type: UPDATE_TRUE_USER_ACTION,
-          payload: data.data.data.attributes.data.true_user.data,
+          payload: null,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: ADMIN_STOP_IMPERSONATING_USER_ACTION,
         }),
         setMessage(dispatch, "success", messages)
       ]);
 
       let response = {}
       response["navigateTo"] = "/home";
-      response["roles"] = data.data.data.attributes.data.current_user.data.attributes.roles;
+      response["roles"] = getState().auth.user.attributes.roles;
 
       return Promise.resolve(response);
     },
     (error) => {
       let messages = error.response.data;
       Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: ADMIN_STOP_IMPERSONATING_USER_ACTION,
+        }),
         setMessage(dispatch, "error", messages),
       ]);
 

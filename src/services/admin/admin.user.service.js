@@ -46,7 +46,17 @@ const impersonateUser = async (userId) => {
     `api/v1/admin/users/${userId}/impersonate`,
     {},
     { authorization: true }
-  );
+  ).then((response) => {
+    if (response.headers.authorization) {
+      let authToken;
+      if (response.headers.authorization && response.headers.authorization.split(' ')[0] === 'Bearer') {
+        authToken = response.headers.authorization.split(' ')[1];
+      }
+      localStorage.setItem('authToken', authToken);
+      localStorage.setItem("user", JSON.stringify(response.data.data.attributes.data.current_user));
+    }
+    return response.data;
+  });
 };
 
 const stopImpersonatingUser = async () => {

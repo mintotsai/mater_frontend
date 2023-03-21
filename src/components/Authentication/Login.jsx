@@ -1,16 +1,15 @@
-import React, { useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 
-import { login, logout } from "../../redux/auth/actions";
-import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions"
-import SystemMessage from "../Common/SystemMessage"
-import { clearMessage } from '../../helpers/messages';
-import { useHasRole } from '../../hooks/useHasRole';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
 import { ROLES } from "../../helpers/roles";
+
+import SystemMessage from "../Common/SystemMessage";
+
+import { login } from "../../redux/auth/actions";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -18,7 +17,6 @@ const Login = () => {
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
   let navigate = useNavigate();
-  const isAdministrator = useHasRole(ROLES.admin);
 
   useEffect(() => {
     // if (auth.isLoggedIn) {

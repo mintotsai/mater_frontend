@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import { useNavigate, Navigate, Route, Routes, BrowserRouter, Outlet } from 'react-router-dom';
 import { useIdleTimer } from 'react-idle-timer';
-import IdleTimeOutModal from '../Common/IdleTimeOutModal'
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Outlet, useNavigate } from 'react-router-dom';
 import { logout } from "../../redux/auth/actions";
+import IdleTimeOutModal from '../Common/IdleTimeOutModal';
 
+import toast from "react-hot-toast";
+import BellNotification from "../Common/BellNotification";
 import ToastNotifications from "../Common/ToastNotifications";
-import BellNotification from "../Common/BellNotification"
-import toast, { Toaster } from "react-hot-toast";
 
-import { SET_MESSAGE_ACTION, SET_GOTO_URL_ACTION } from "../../redux/system/actions";
+import { SET_MESSAGE_ACTION } from "../../redux/system/actions";
 
-import { useHasRole } from '../../hooks/useHasRole';
 import { ROLES } from "../../helpers/roles";
+import { useHasRole } from '../../hooks/useHasRole';
 import AdminStopImpersonatingBanner from "../Admin/AdminStopImpersonatingBanner";
 
 /*
@@ -31,10 +31,8 @@ import AdminStopImpersonatingBanner from "../Admin/AdminStopImpersonatingBanner"
   }
   ```
 */
-import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
-  BellIcon,
   CalendarIcon,
   ChartBarIcon,
   FolderIcon,
@@ -42,18 +40,9 @@ import {
   InboxIcon,
   MenuAlt2Icon,
   UsersIcon,
-  XIcon,
-} from '@heroicons/react/outline'
-import { SearchIcon } from '@heroicons/react/solid'
-
-let navigation = [
-  { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: InboxIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
-]
+  XIcon
+} from '@heroicons/react/outline';
+import { Fragment, useState } from 'react';
 
 const userNavigation = [
   { name: 'Account & Preferences', href: '/settings/account' },
@@ -103,6 +92,15 @@ const Home = () => {
       })
     }
   }, [system]);
+
+  let navigation = [
+    { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
+    { name: 'Team', href: '#', icon: UsersIcon, current: false },
+    { name: 'Projects', href: '#', icon: FolderIcon, current: false },
+    { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
+    { name: 'Documents', href: '#', icon: InboxIcon, current: false },
+    { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+  ];
 
   if (isAdministrator) {
     navigation = [

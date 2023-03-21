@@ -1,23 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from "react-redux";
-import { getUsers, lockUser, deactivateUser, impersonateUser, resetUserPassword, disableMFA, discardUser } from '../../redux/admin/actions';
-import AdminViewEditUserModal from "./AdminViewEditUserModal";
 import { ROLES } from "../../helpers/roles";
-import { capitalizeFirst } from "../../helpers/strings.helper"
-
-// const people = [
-//   {
-//     name: 'Lindsay Walton',
-//     title: 'Front-end Developer',
-//     department: 'Optimization',
-//     email: 'lindsay.walton@example.com',
-//     role: 'Member',
-//     image:
-//       'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-//   },
-//   // More people...
-// ]
+import { capitalizeFirst } from "../../helpers/strings.helper";
+import { useHasRole } from '../../hooks/useHasRole';
+import { deactivateUser, disableMFA, discardUser, getUsers, impersonateUser, lockUser, resetUserPassword } from '../../redux/admin/actions';
+import AdminViewEditUserModal from "./AdminViewEditUserModal";
 
 export default function AdminViewUsers() {
   const dispatch = useDispatch();
@@ -26,21 +14,26 @@ export default function AdminViewUsers() {
   const adminUser = useSelector((state) => state.adminUser);
   const [adminViewEditUserModalOpen, setAdminViewEditUserModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const isAdministrator = useHasRole(ROLES.admin);
 
   useEffect(() => {
-    dispatch(getUsers())
-      .then((response) => {
-      })
-      .catch((error) => {
-      });
+    if (isAdministrator) {
+      dispatch(getUsers())
+        .then((response) => {
+        })
+        .catch((error) => {
+        });
+    }
   }, []);
 
   const handleRefresh = () => {
-    dispatch(getUsers())
-      .then((response) => {
-      })
-      .catch((error) => {
-      });
+    if (isAdministrator) {
+      dispatch(getUsers())
+        .then((response) => {
+        })
+        .catch((error) => {
+        });
+    }
   }
 
   const handleClose = () => {
@@ -203,13 +196,13 @@ export default function AdminViewUsers() {
                                   let roles = response.roles;
                                   if (response.navigateTo == "/home") {
                                     if (ROLES.admin in roles && roles.admin) {
+                                      handleRefresh();
                                       navigateTo = "/admin";
                                     } else {
                                       navigateTo = "/home";
                                     }
                                   }
                                   navigate(navigateTo);
-                                  handleRefresh();
                                 })
                                 .catch((error) => {
                                   console.log(">>>error");

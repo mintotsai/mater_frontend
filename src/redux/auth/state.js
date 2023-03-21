@@ -1,3 +1,4 @@
+// > localStorage.clear()
 const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
 
 const initialState = user
