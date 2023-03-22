@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
-import systemReducer from './system/reducer'
-import authReducer from './auth/reducer'
-import userReducer from './user/reducer'
-import billingReducer from './billing/reducer'
-import adminUserReducer from "./admin/reducer"
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import adminUserReducer from "./admin/reducer";
 import { LOGOUT_ACTION } from "./auth/actions";
+import authReducer from './auth/reducer';
+import billingReducer from './billing/reducer';
+import providerReducer from "./provider/reducer";
+import systemReducer from './system/reducer';
+import userReducer from './user/reducer';
 
 const appReducer = combineReducers({
   system: systemReducer,
@@ -13,6 +14,7 @@ const appReducer = combineReducers({
   user: userReducer,
   billing: billingReducer,
   adminUser: adminUserReducer,
+  providerUser: providerReducer,
 });
 
 const rootReducer = (state, action) => {

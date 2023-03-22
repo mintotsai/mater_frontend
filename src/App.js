@@ -20,6 +20,7 @@ import TwoFactorSetup from "./components/Dashboard/Account/TwoFactorSetup";
 import Home from './components/Dashboard/index';
 import MainSection from './components/Dashboard/MainSection';
 import NotificationList from "./components/Dashboard/NotificationList";
+import ProviderPatients from "./components/Provider/ProviderPatients";
 import { ROLES } from "./helpers/roles";
 
 function App() {
@@ -46,6 +47,16 @@ function App() {
               <Route path="settings/account/2fasetup" element={<TwoFactorSetup />} />
               <Route path="settings/account/checkout" element={<Checkout />} />
               <Route path="notifications" element={<NotificationList />} />
+
+              {/* Provider Routes */}
+              <Route path="provider" element={<PermissionsGate allowedRoles={[ROLES.provider]}
+                pageNotFound={true}
+              />} >
+                <Route path="patients" element={<ProviderPatients />} />
+
+                {/* https://stackoverflow.com/a/72713882/1391412 */}
+                <Route index element={<Navigate to='patients' />} />
+              </Route>
 
               {/* Admin Routes */}
               <Route path="admin" element={<PermissionsGate allowedRoles={[ROLES.admin]}

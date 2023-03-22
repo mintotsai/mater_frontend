@@ -95,6 +95,7 @@ const Home = () => {
 
   let navigation = [
     { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
+    { name: 'Patients', href: '/provider/patients', icon: UsersIcon, current: false },
     { name: 'Team', href: '#', icon: UsersIcon, current: false },
     { name: 'Projects', href: '#', icon: FolderIcon, current: false },
     { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
