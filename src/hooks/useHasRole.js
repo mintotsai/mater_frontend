@@ -1,5 +1,5 @@
 // https://blog.kiprosh.com/architect-react-apps-using-hooks/
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 // import useCurrentUser from "./useCurrentUser";
 
 export const useHasRole = (roleNames) => {
@@ -16,7 +16,8 @@ export const useHasRole = (roleNames) => {
   if (typeof roleNames === "string") {
     return userRoles.hasOwnProperty(roleNames) && userRoles[roleNames];
   } else if (Array.isArray(roleNames)) {
-    return roleNames.some((role) => role === userRoles);
+    // return roleNames.some((role) => role === userRoles); // TODO: This is wrong
+    throw new Error("Not Implemented")
   } else {
     return false;
   }
