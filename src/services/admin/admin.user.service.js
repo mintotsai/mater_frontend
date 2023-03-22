@@ -53,7 +53,7 @@ const impersonateUser = async (userId) => {
         authToken = response.headers.authorization.split(' ')[1];
       }
       localStorage.setItem('authToken', authToken);
-      localStorage.setItem("user", JSON.stringify(response.data.data.attributes.data.current_user));
+      localStorage.setItem("user", JSON.stringify(response.data.data.attributes.data.current_user_data.current_user));
     }
     return response.data;
   });
