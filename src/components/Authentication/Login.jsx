@@ -16,7 +16,7 @@ const Login = () => {
 
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // if (auth.isLoggedIn) {
