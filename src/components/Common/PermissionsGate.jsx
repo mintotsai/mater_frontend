@@ -1,5 +1,5 @@
-import { useSelector, useDispatch } from "react-redux";
-import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 // https://isamatov.com/react-permissions-and-roles/
 {/* <PermissionsGate allowedRoles={["Administrator"]} >
@@ -43,7 +43,17 @@ export default function PermissionsGate({
 
   if (!auth || !auth.user || !auth.user.attributes || !auth.user.attributes.roles) return <Navigate to="/login" state={{ from: location }} replace />;
 
-  if (!allowedRoles.some(item => userRoles.hasOwnProperty(item))) {
+  let allowView = true;
+  if (allowedRoles.some(item => userRoles.hasOwnProperty(item))) {
+    for (const role in allowedRoles) {
+      if (!userRoles[allowedRoles[role]]) {
+        allowView = false;
+        break;
+      }
+    }
+  }
+
+  if (!allowView) {
     if (pageNotFound)
       return <Navigate to="/404" replace />;
     if (!errorProps)
