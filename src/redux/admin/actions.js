@@ -7,8 +7,8 @@ export const ADMIN_GET_USERS_SUCCESS_ACTION = "ADMIN_GET_USERS_SUCCESS_ACTION";
 export const ADMIN_IMPERSONATING_USER_ACTION = "ADMIN_IMPERSONATING_USER_ACTION";
 export const ADMIN_STOP_IMPERSONATING_USER_ACTION = "ADMIN_STOP_IMPERSONATING_USER_ACTION";
 
-export const getUsers = (userId) => (dispatch) => {
-  return AdminUserService.getUsers(userId).then(
+export const getUsers = () => (dispatch) => {
+  return AdminUserService.getUsers().then(
     (data) => {
 
       Promise.all([
