@@ -1,16 +1,20 @@
 // https://github.com/jimmybutton/react-tailwind-table
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable
+  flexRender, getCoreRowModel, getSortedRowModel, useReactTable
 } from '@tanstack/react-table';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Table({ columns, data, }) {
+  const [sorting, setSorting] = useState([]);
   const table = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -23,16 +27,34 @@ export default function Table({ columns, data, }) {
                 <thead className="bg-gray-50">
                   {table.getHeaderGroups().map(headerGroup => (
                     <tr key={headerGroup.id}>
-                      {headerGroup.headers.map(header => (
-                        <th key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
+                      {headerGroup.headers.map(header => {
+                        return (
+                          <th key={header.id} colSpan={header.colSpan}>
+                            {header.isPlaceholder ? null : (
+                              <div
+                                {...{
+                                  className: header.column.getCanSort()
+                                    ? 'cursor-pointer select-none flex items-center justify-between'
+                                    : '',
+                                  onClick: header.column.getToggleSortingHandler(),
+                                }}
+                              >
+                                {flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                                <span>
+                                  {(header.column.getCanSort() && !header.column.getIsSorted()) ? <svg className="w-4 h-4 text-gray-400" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 320 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"></path></svg> : null}
+                                  {{
+                                    asc: <svg className="w-4 h-4 text-gray-400" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 320 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M279 224H41c-21.4 0-32.1-25.9-17-41L143 64c9.4-9.4 24.6-9.4 33.9 0l119 119c15.2 15.1 4.5 41-16.9 41z"></path></svg>,
+                                    desc: <svg className="w-4 h-4 text-gray-400" stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 320 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41z"></path></svg>,
+                                  }[header.column.getIsSorted()] ?? null}
+                                </span>
+                              </div>
                             )}
-                        </th>
-                      ))}
+                          </th>
+                        )
+                      })}
                     </tr>
                   ))}
                 </thead>

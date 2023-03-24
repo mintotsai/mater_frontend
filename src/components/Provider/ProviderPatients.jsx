@@ -16,6 +16,8 @@ export default function AdminViewUsers() {
   const columns = React.useMemo(() => [
     {
       id: "name",
+      // Sorting needs accessorKey
+      accessorKey: "attributes.first_name",
       header: ({ table }) => (
         <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</div>
       ),
@@ -35,6 +37,20 @@ export default function AdminViewUsers() {
         )
       },
     },
+    // Sorting needs accessorKey
+    // {
+    //   accessorKey: "attributes.first_name",
+    //   header: ({ table }) => (
+    //     <div className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">First Name</div>
+    //   ),
+    //   cell: (info) => {
+    //     return (
+    //       <div className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+    //         {info.getValue()}<span className="sr-only">, {info.row.original.attributes.first_name}</span>
+    //       </div>
+    //     )
+    //   }
+    // },
     // {
     //   id: "email",
     //   header: ({ table }) => (
