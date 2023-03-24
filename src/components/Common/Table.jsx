@@ -1,7 +1,8 @@
 // https://github.com/jimmybutton/react-tailwind-table
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import {
-  flexRender, getCoreRowModel, getSortedRowModel, useReactTable
+  flexRender, getCoreRowModel, getFilteredRowModel,
+  getPaginationRowModel, getSortedRowModel, useReactTable
 } from '@tanstack/react-table';
 import React, { useState } from 'react';
 
@@ -16,6 +17,8 @@ export default function Table({ columns, data, }) {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
