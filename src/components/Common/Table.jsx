@@ -1,4 +1,5 @@
 // https://github.com/jimmybutton/react-tailwind-table
+import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import {
   flexRender, getCoreRowModel, getSortedRowModel, useReactTable
 } from '@tanstack/react-table';
@@ -72,6 +73,78 @@ export default function Table({ columns, data, }) {
               </table>
             </div>
           </div>
+        </div>
+      </div>
+      {/* Pagination */}
+      <div className="py-3 flex items-center justify-between">
+        <div className="flex gap-x-2 items-baseline">
+          <span className="text-sm text-gray-700">
+            Page <span className="font-medium">{table.getState().pagination.pageIndex + 1}</span> of <span className="font-medium">{table.getPageCount()}</span>
+          </span>
+          <label>
+            <span className="sr-only">Items Per Page</span>
+            <select
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={table.getState().pagination.pageSize}
+              onChange={e => {
+                table.setPageSize(Number(e.target.value))
+              }}
+            >
+              {[10, 20, 30, 40, 50].map(pageSize => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </select>
+          </label>
+          {/* <span className="flex items-center gap-1">
+            | Go to page:
+            <input
+              type="number"
+              defaultValue={table.getState().pagination.pageIndex + 1}
+              onChange={e => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0
+                table.setPageIndex(page)
+              }}
+              className="border p-1 rounded w-16"
+            />
+          </span> */}
+        </div>
+        <div >
+          <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+            <button
+              className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 rounded-l-md"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <span className="sr-only">First</span>
+              <ChevronDoubleLeftIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            </button>
+            <button
+              className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            </button>
+            <button
+              className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            </button>
+            <button
+              className="relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 rounded-r-md"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <span className="sr-only">Last</span>
+              <ChevronDoubleRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+            </button>
+          </nav>
         </div>
       </div>
     </>
