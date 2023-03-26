@@ -8,6 +8,15 @@ const getPatients = async () => {
   );
 };
 
+const getPatient = async (userId) => {
+  return client.get(
+    `api/v1/provider/patients/${userId}`,
+    {},
+    { authorization: true }
+  );
+};
+
+
 const createPatient = async (payload) => {
   return client.post(
     `api/v1/provider/patients`,
@@ -16,7 +25,17 @@ const createPatient = async (payload) => {
   )
 }
 
+const updatePatient = async (userId, payload) => {
+  return client.put(
+    `api/v1/provider/patients/${userId}`,
+    payload,
+    { authorization: true }
+  )
+}
+
 export default {
   getPatients,
-  createPatient
+  getPatient,
+  createPatient,
+  updatePatient
 };

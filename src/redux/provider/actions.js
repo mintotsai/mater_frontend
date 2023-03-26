@@ -4,8 +4,12 @@ import { SET_LOADING_ACTION } from "../system/actions";
 
 export const PROVIDER_GET_PATIENTS_ACTION = "PROVIDER_GET_PATIENTS_ACTION";
 export const PROVIDER_GET_PATIENTS_SUCCESS_ACTION = "PROVIDER_GET_PATIENTS_SUCCESS_ACTION";
+export const PROVIDER_GET_PATIENT_ACTION = "PROVIDER_GET_PATIENT_ACTION";
+export const PROVIDER_GET_PATIENT_SUCCESS_ACTION = "PROVIDER_GET_PATIENT_SUCCESS_ACTION";
 export const PROVIDER_CREATE_PATIENT_ACTION = "PROVIDER_CREATE_PATIENT_ACTION";
 export const PROVIDER_CREATE_PATIENT_SUCCESS_ACTION = "PROVIDER_CREATE_PATIENT_SUCCESS_ACTION";
+export const PROVIDER_UPDATE_PATIENT_ACTION = "PROVIDER_UPDATE_PATIENT_ACTION";
+export const PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION = "PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION";
 
 export const getPatients = () => (dispatch) => {
   dispatch({
@@ -36,6 +40,44 @@ export const getPatients = () => (dispatch) => {
           type: SET_LOADING_ACTION,
           isLoading: false,
           loadingType: PROVIDER_GET_PATIENTS_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  )
+}
+
+export const getPatient = (patientId) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_GET_PATIENT_ACTION,
+  });
+  return ProviderPatientService.getPatient(patientId).then(
+    (data) => {
+      Promise.all([
+        dispatch({
+          type: PROVIDER_GET_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_GET_PATIENT_ACTION,
+        }),
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_GET_PATIENT_ACTION,
         }),
         setMessage(dispatch, "error", messages),
       ]);
@@ -84,3 +126,44 @@ export const createPatient = (payload) => (dispatch) => {
     }
   )
 }
+
+export const updatePatient = (userId, payload) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_UPDATE_PATIENT_ACTION,
+  });
+  return ProviderPatientService.updatePatient(userId, payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_UPDATE_PATIENT_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_UPDATE_PATIENT_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
