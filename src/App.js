@@ -20,7 +20,10 @@ import TwoFactorSetup from "./components/Dashboard/Account/TwoFactorSetup";
 import Home from './components/Dashboard/index';
 import MainSection from './components/Dashboard/MainSection';
 import NotificationList from "./components/Dashboard/NotificationList";
+import ProviderEditPatient from "./components/Provider/ProviderEditPatient";
+// import ProviderNewPatient from "./components/Provider/ProviderNewPatient";
 import ProviderPatients from "./components/Provider/ProviderPatients";
+// import ProviderViewPatient from "./components/Provider/ProviderViewPatient";
 import { ROLES } from "./helpers/roles";
 
 function App() {
@@ -53,7 +56,9 @@ function App() {
                 pageNotFound={true}
               />} >
                 <Route path="patients" element={<ProviderPatients />} />
-
+                {/* <Route path="patients/new" element={<ProviderNewPatient />} /> */}
+                {/* <Route path="patients/:id/view" element={<ProviderViewPatient />} /> */}
+                <Route path="patients/:id/edit" element={<ProviderEditPatient />} />
                 {/* https://stackoverflow.com/a/72713882/1391412 */}
                 <Route index element={<Navigate to='patients' />} />
               </Route>

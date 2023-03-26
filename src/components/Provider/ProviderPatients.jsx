@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { ROLES } from "../../helpers/roles";
 import { useHasRole } from '../../hooks/useHasRole';
 import { getPatients } from "../../redux/provider/actions";
 import Table from "../Common/Table";
+import AddPatientModal from './Patient/AddPatientModal';
 
 export default function AdminViewUsers() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isProvider = useHasRole(ROLES.provider);
   const providerUser = useSelector((state) => state.providerUser);
+  const [addPatientModalOpen, setAddPatientModalOpen] = useState(false);
 
   // const columns = [
   // accessorKey: ["attributes.first_name", "attributes.last_name"],
@@ -22,7 +26,9 @@ export default function AdminViewUsers() {
         <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</div>
       ),
       cell: (info) => {
+        // const viewUrl = `/provider/patients/${info.row.original.id}/view`;
         return (
+          // <a href={viewUrl}>
           <div className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
             <div className="flex items-center">
               <div className="h-10 w-10 flex-shrink-0">
@@ -34,6 +40,7 @@ export default function AdminViewUsers() {
               </div>
             </div>
           </div>
+          // </a>
         )
       },
     },
@@ -62,25 +69,22 @@ export default function AdminViewUsers() {
     //     )
     //   }
     // },
-    {
-      id: "edit",
-      header: ({ table }) => (
-        <div className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Edit</span></div>
-      ),
-      cell: (info) => {
-        return (
-          <div className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-            <a href="#" className="text-indigo-600 hover:text-indigo-900"
-              onClick={(e) => {
-                e.preventDefault();
-                console.log("onClick");
-              }}>
-              Edit<span className="sr-only">, {info.row.original.attributes.first_name}</span>
-            </a>
-          </div>
-        )
-      }
-    }
+    // {
+    //   id: "edit",
+    //   header: ({ table }) => (
+    //     <div className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Edit</span></div>
+    //   ),
+    //   cell: (info) => {
+    //     const editUrl = `/provider/patients/${info.row.original.id}/edit`;
+    //     return (
+    //       <div className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+    //         <a href={editUrl} className="text-indigo-600 hover:text-indigo-900">
+    //           Edit<span className="sr-only">, {info.row.original.attributes.first_name}</span>
+    //         </a>
+    //       </div>
+    //     )
+    //   }
+    // }
   ]);
 
   useEffect(() => {
@@ -93,25 +97,40 @@ export default function AdminViewUsers() {
     }
   }, []);
 
+  const handleRefresh = () => {
+    navigate("/provider/patients");
+  }
+
+  const handleClose = () => {
+    handleRefresh();
+    setAddPatientModalOpen(false);
+  };
+
   return (
-    <div className="py-6 px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">Patients</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all the patients in your account including their name, title, email and role.
-          </p>
+    <>
+      <div className="py-6 px-4 sm:px-6 lg:px-8">
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto">
+            <h1 className="text-base font-semibold leading-6 text-gray-900">Patients</h1>
+            <p className="mt-2 text-sm text-gray-700">
+              A list of all the patients in your account including their name, title, email and role.
+            </p>
+          </div>
+          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <button
+              type="button"
+              className="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={() => {
+                setAddPatientModalOpen(true);
+              }}
+            >
+              Add Patient
+            </button>
+          </div>
         </div>
-        {/* <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            className="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Add user
-          </button>
-        </div> */}
+        <Table columns={columns} data={providerUser.providerAllPatients} />
       </div>
-      <Table columns={columns} data={providerUser.providerAllPatients} />
-    </div>
+      <AddPatientModal open={addPatientModalOpen} handleClose={() => handleClose()} />
+    </>
   )
 }
