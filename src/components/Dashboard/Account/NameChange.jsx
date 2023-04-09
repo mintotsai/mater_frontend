@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { getUser, updateUser } from "../../../redux/user/actions";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from 'yup';
+import { updateUser } from "../../../redux/user/actions";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -13,8 +13,8 @@ export default function Profile() {
     <>
       <Formik
         initialValues={{
-          firstName: auth.user.attributes.first_name ? auth.user.attributes.first_name : "",
-          lastName: auth.user.attributes.last_name ? auth.user.attributes.last_name : "",
+          firstName: auth.user.attributes.user_profile_first_name ? auth.user.attributes.user_profile_first_name : "",
+          lastName: auth.user.attributes.user_profile_last_name ? auth.user.attributes.user_profile_last_name : "",
         }}
         validationSchema={Yup.object().shape({
           firstName: Yup.string(),
@@ -23,7 +23,7 @@ export default function Profile() {
           const firstName = values["firstName"];
           const lastName = values["lastName"];
 
-          dispatch(updateUser(auth.user.id, { user: { first_name: firstName, last_name: lastName } }));
+          dispatch(updateUser(auth.user.id, { user: { user_profile_first_name: firstName, user_profile_last_name: lastName } }));
         }}
       >
         {({ values, errors, touched, isSubmitting, status, resetForm }) => (

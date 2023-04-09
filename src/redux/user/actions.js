@@ -38,7 +38,7 @@ export const updateUser = (userId, payload) => (dispatch) => {
         messages = [{ title: "Successfully updated profile image", detail: "Successfully updated profile image" }];
       } else if ("email" in payload["user"]) {
         messages = [{ title: "Check email to confirm email change", detail: "Check email to confirm email change" }];
-      } else if ("first_name" in payload["user"]) {
+      } else if ("user_profile_first_name" in payload["user"]) {
         messages = [{ title: "Successfully changed your name", detail: "Successfully changed your name" }];
       }
 

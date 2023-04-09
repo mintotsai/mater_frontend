@@ -63,7 +63,7 @@ export default function PaymentMethodModal({ open, handleClose }) {
                     return_url: window.location.origin + "/settings/account#billing",
                     payment_method_data: {
                       billing_details: {
-                        name: auth.user.attributes.first_name + " " + auth.user.attributes.last_name,
+                        name: auth.user.attributes.user_profile_first_name + " " + auth.user.attributes.user_profile_last_name,
                         email: auth.user.attributes.email,
                         phone: "",
                         address: {

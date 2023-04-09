@@ -1,10 +1,10 @@
-import { Fragment, useRef, useState, useEffect } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../../redux/admin/actions";
+import { Dialog, Transition } from '@headlessui/react';
+import { Field, Form, Formik } from 'formik';
+import { Fragment, useRef } from 'react';
+import { useDispatch } from "react-redux";
 import { ROLES } from "../../helpers/roles";
 import { capitalizeFirst } from "../../helpers/strings.helper";
+import { updateUser } from "../../redux/admin/actions";
 
 export default function AdminViewEditUserModal({ open, handleClose, selectedUser }) {
   const dispatch = useDispatch();
@@ -38,8 +38,8 @@ export default function AdminViewEditUserModal({ open, handleClose, selectedUser
             <Formik
               // Must have initialValue or the onSubmit doesn't work
               initialValues={{
-                first_name: (selectedUser && selectedUser.attributes && selectedUser.attributes.first_name) ? selectedUser.attributes.first_name : "",
-                last_name: (selectedUser && selectedUser.attributes && selectedUser.attributes.last_name) ? selectedUser.attributes.last_name : "",
+                first_name: (selectedUser && selectedUser.attributes && selectedUser.attributes.user_profile_first_name) ? selectedUser.attributes.user_profile_first_name : "",
+                last_name: (selectedUser && selectedUser.attributes && selectedUser.attributes.user_profile_last_name) ? selectedUser.attributes.user_profile_last_name : "",
                 email: (selectedUser && selectedUser.attributes && selectedUser.attributes.email) ? selectedUser.attributes.email : "",
                 roles: selectedRoles
               }}
@@ -48,8 +48,8 @@ export default function AdminViewEditUserModal({ open, handleClose, selectedUser
                 // console.log(">>>" + JSON.stringify(values, null, 2));
 
                 let params = {};
-                params["first_name"] = values["first_name"];
-                params["last_name"] = values["last_name"];
+                params["user_profile_first_name"] = values["first_name"];
+                params["user_profile_last_name"] = values["last_name"];
                 params["email"] = values["email"];
                 Object.keys(ROLES).map((role, index) => {
                   if (values["roles"].indexOf(role) > -1) {

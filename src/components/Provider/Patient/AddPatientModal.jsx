@@ -45,8 +45,8 @@ export default function AddPatientModal({ open, handleClose }) {
                   // console.log(">>>" + JSON.stringify(values, null, 2));
 
                   let params = {};
-                  params["first_name"] = values["firstName"];
-                  params["last_name"] = values["lastName"];
+                  params["user_profile_first_name"] = values["firstName"];
+                  params["user_profile_last_name"] = values["lastName"];
                   params["email"] = values["email"];
 
                   dispatch(createPatient({ user: params }))

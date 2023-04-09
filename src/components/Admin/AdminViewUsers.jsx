@@ -108,7 +108,7 @@ export default function AdminViewUsers() {
                               <img className="h-10 w-10 rounded-full" src={user.attributes.profile_image_url.includes("active_storage") ? `${process.env.REACT_APP_BACKEND_API_URL}${user.attributes.profile_image_url}` : `${user.attributes.profile_image_url}`} alt="" />
                             </div>
                             <div className="ml-4">
-                              <div className="font-medium text-gray-900">{user.attributes.first_name || ""}</div>
+                              <div className="font-medium text-gray-900">{user.attributes.user_profile_first_name || ""} {user.attributes.user_profile_last_name || ""}</div>
                               <div className="text-gray-500">{user.attributes.email || ""}</div>
                             </div>
                           </div>
@@ -155,7 +155,7 @@ export default function AdminViewUsers() {
                               setSelectedUser(user);
                               setAdminViewEditUserModalOpen(true);
                             }}>
-                            Edit<span className="sr-only">, {user.attributes.first_name}</span>
+                            Edit<span className="sr-only">, {user.attributes.user_profile_first_name}</span>
                           </a>
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -169,7 +169,7 @@ export default function AdminViewUsers() {
                                 .catch((error) => {
                                 });
                             }}>
-                            {!user.attributes.locked ? "Lock" : "Unlock"}<span className="sr-only">, {user.attributes.first_name}</span>
+                            {!user.attributes.locked ? "Lock" : "Unlock"}<span className="sr-only">, {user.attributes.user_profile_first_name}</span>
                           </a>
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -183,7 +183,7 @@ export default function AdminViewUsers() {
                                 .catch((error) => {
                                 });
                             }}>
-                            {!user.attributes.deactivated ? "Deactivate" : "Activate"}<span className="sr-only">, {user.attributes.first_name}</span>
+                            {!user.attributes.deactivated ? "Deactivate" : "Activate"}<span className="sr-only">, {user.attributes.user_profile_first_name}</span>
                           </a>
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -209,7 +209,7 @@ export default function AdminViewUsers() {
                                   console.log(error);
                                 });
                             }}>
-                            {!auth.trueUser || auth.user.id == auth.trueUser.id ? "Impersonate" : ""}<span className="sr-only">, {user.attributes.first_name}</span>
+                            {!auth.trueUser || auth.user.id == auth.trueUser.id ? "Impersonate" : ""}<span className="sr-only">, {user.attributes.user_profile_first_name}</span>
                           </a>
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -224,7 +224,7 @@ export default function AdminViewUsers() {
                                   console.log(error);
                                 });
                             }}>
-                            Reset Password<span className="sr-only">, {user.attributes.first_name}</span>
+                            Reset Password<span className="sr-only">, {user.attributes.user_profile_first_name}</span>
                           </a>
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -239,7 +239,7 @@ export default function AdminViewUsers() {
                                   console.log(error);
                                 });
                             }}>
-                            Disable MFA<span className="sr-only">, {user.attributes.first_name}</span>
+                            Disable MFA<span className="sr-only">, {user.attributes.user_profile_first_name}</span>
                           </a>
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -255,7 +255,7 @@ export default function AdminViewUsers() {
                                   console.log(error);
                                 });
                             }}>
-                            {!user.attributes.discarded ? "Discard" : "Undiscard"}<span className="sr-only">, {user.attributes.first_name}</span>
+                            {!user.attributes.discarded ? "Discard" : "Undiscard"}<span className="sr-only">, {user.attributes.user_profile_first_name}</span>
                           </a>
                         </td>
                       </tr>

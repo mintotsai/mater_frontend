@@ -21,7 +21,7 @@ export default function AdminViewUsers() {
     {
       id: "name",
       // Sorting needs accessorKey
-      accessorKey: "attributes.first_name",
+      accessorKey: "attributes.user_profile_first_name",
       header: ({ table }) => (
         <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Name</div>
       ),
@@ -35,7 +35,7 @@ export default function AdminViewUsers() {
                   <img className="h-10 w-10 rounded-full" src={info.row.original.attributes.profile_image_url.includes("active_storage") ? `${process.env.REACT_APP_BACKEND_API_URL}${info.row.original.attributes.profile_image_url}` : `${info.row.original.attributes.profile_image_url}`} alt="" />
                 </div>
                 <div className="ml-4">
-                  <div className="font-medium text-gray-900">{info.row.original.attributes.first_name || ""} {info.row.original.attributes.last_name || ""}</div>
+                  <div className="font-medium text-gray-900">{info.row.original.attributes.user_profile_first_name || ""} {info.row.original.attributes.user_profile_last_name || ""}</div>
                   <div className="text-gray-500">{info.row.original.attributes.email || ""}</div>
                 </div>
               </div>
