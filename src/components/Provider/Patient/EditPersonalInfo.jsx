@@ -153,6 +153,7 @@ export default function EditPersonalInfo() {
                           onChange={(date) => setFieldValue('birthdate', { startDate: date.startDate, endDate: date.endDate })}
                           displayFormat={"MM/DD/YYYY"}
                           placeholder={"Select your birthdate"}
+                          maxDate={new Date()}
                         />
                         <ErrorMessage component="p" name="birthdate" className="mt-2 text-sm text-red-600" />
                       </div>
