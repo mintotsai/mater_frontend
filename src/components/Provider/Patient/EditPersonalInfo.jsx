@@ -1,10 +1,9 @@
 import { parse } from 'date-fns';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useEffect } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from 'react-router-dom';
+import Datepicker from "react-tailwindcss-datepicker";
 import * as Yup from 'yup';
 import { updatePatient } from '../../../redux/provider/actions';
 
@@ -27,14 +26,14 @@ export default function EditPersonalInfo() {
           lastName: (selectedPatient && selectedPatient.attributes && selectedPatient.attributes.user_profile_last_name) ? selectedPatient.attributes.user_profile_last_name : "",
           email: (selectedPatient && selectedPatient.attributes && selectedPatient.attributes.email) ? selectedPatient.attributes.email : "",
           sex: (selectedPatient && selectedPatient.attributes && selectedPatient.attributes.user_profile_sex) ? selectedPatient.attributes.user_profile_sex : "",
-          birthdate: (selectedPatient && selectedPatient.attributes && selectedPatient.attributes.user_profile_dob) ? parse(selectedPatient.attributes.user_profile_dob, 'yyyy-MM-dd', new Date()) : null,
+          birthdate: (selectedPatient && selectedPatient.attributes && selectedPatient.attributes.user_profile_dob) ? { startDate: parse(selectedPatient.attributes.user_profile_dob, 'yyyy-MM-dd', new Date()), endDate: parse(selectedPatient.attributes.user_profile_dob, 'yyyy-MM-dd', new Date()) } : { startDate: null, endDate: null },
         }}
         validationSchema={Yup.object().shape({
           firstName: Yup.string().required('Required'),
           lastName: Yup.string().required('Required'),
           email: Yup.string().email('Invalid email').required('Required'),
           sex: Yup.string(),
-          birthdate: Yup.date().nullable().default(undefined),
+          birthdate: Yup.object(),
         })}
         onSubmit={async (values, { setStatus, resetForm, setSubmitting }) => {
           const firstName = values["firstName"];
@@ -43,7 +42,19 @@ export default function EditPersonalInfo() {
           const sex = values["sex"];
           const dob = values["birthdate"];
 
-          dispatch(updatePatient(id, { user: { user_profile_first_name: firstName, user_profile_last_name: lastName, email: email, user_profile_sex: sex, user_profile_dob: dob.toISOString() } }))
+          let userParams = {
+            user: {
+              user_profile_first_name: firstName, user_profile_last_name: lastName, email: email
+            }
+          }
+          if (sex) {
+            userParams["user"]["user_profile_sex"] = sex;
+          }
+          if (dob) {
+            userParams["user"]["user_profile_dob"] = (new Date(dob.startDate)).toISOString();
+          }
+
+          dispatch(updatePatient(id, userParams))
             .then((response) => {
             })
             .catch((error) => {
@@ -55,7 +66,7 @@ export default function EditPersonalInfo() {
         {({ formik, values, errors, touched, isSubmitting, status, resetForm, setFieldValue }) => (
           <section aria-labelledby="billing-history-heading" className="mt-5">
             <Form className="">
-              <div className="shadow sm:overflow-hidden sm:rounded-md">
+              <div className="shadow sm:rounded-md">
                 <div className="bg-white py-6 px-4 sm:p-6">
                   <div>
                     <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
@@ -134,16 +145,14 @@ export default function EditPersonalInfo() {
                           Birthdate
                         </label>
 
-                        <DatePicker
-                          name="birthdate"
-                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                          selected={values.birthdate}
-                          onChange={(date) => setFieldValue('birthdate', date)}
-                          dateFormat="MM/dd/yyyy"
-                          showYearDropdown
-                          scrollableYearDropdown
-                          yearDropdownItemNumber={100}
-                          placeholderText="Select your birthdate"
+                        <Datepicker
+                          inputClassName="w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          useRange={false}
+                          asSingle={true}
+                          value={values.birthdate}
+                          onChange={(date) => setFieldValue('birthdate', { startDate: date.startDate, endDate: date.endDate })}
+                          displayFormat={"MM/DD/YYYY"}
+                          placeholder={"Select your birthdate"}
                         />
                         <ErrorMessage component="p" name="birthdate" className="mt-2 text-sm text-red-600" />
                       </div>
