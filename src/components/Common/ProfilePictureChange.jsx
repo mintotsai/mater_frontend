@@ -1,15 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useSelector, useDispatch, batch } from "react-redux";
+import CryptoJS from 'crypto-js';
+import { Form, Formik, useFormikContext } from 'formik';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPresignedUrl } from "../../../redux/user/actions";
-import { Formik, useFormikContext, Form, Field, ErrorMessage } from 'formik';
-import CryptoJS from 'crypto-js'
 
-export default function ProfilePictureChange() {
-  const dispatch = useDispatch();
-  const system = useSelector((state) => state.system);
-  const auth = useSelector((state) => state.auth);
-  const user = useSelector((state) => state.user);
+export default function ProfilePictureChange({ selectedUser, callDispatch }) {
   let navigate = useNavigate();
 
   const inputFile = useRef(null);
@@ -73,7 +67,7 @@ export default function ProfilePictureChange() {
               }
             };
 
-            dispatch(createPresignedUrl(file, payload, navigate));
+            callDispatch(file, payload, navigate);
           }
         }}
       >
@@ -87,12 +81,12 @@ export default function ProfilePictureChange() {
                   </div>
                   <div className="mt-6 grid grid-cols-1 gap-6">
                     <div className="mt-1 flex items-center">
-                      {auth.user.attributes.profile_image_url != '' && (
+                      {selectedUser?.attributes?.profile_image_url !== "" && (
                         <span className="h-24 w-24 rounded-full overflow-hidden bg-gray-100">
-                          <img alt='user' src={auth.user.attributes.profile_image_url.includes("active_storage") ? `${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}` : `${auth.user.attributes.profile_image_url}`} />
+                          <img alt='user' src={selectedUser?.attributes?.profile_image_url?.includes("active_storage") ? `${process.env.REACT_APP_BACKEND_API_URL}${selectedUser?.attributes?.profile_image_url}` : `${selectedUser?.attributes?.profile_image_url}`} />
                         </span>
                       )}
-                      {auth.user.attributes.profile_image_url == '' && (
+                      {selectedUser.attributes.profile_image_url == '' && (
                         <span className="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
                           <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />

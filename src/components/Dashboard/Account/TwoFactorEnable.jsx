@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { getUser, updateUser } from "../../../redux/user/actions";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
 
-import { enableMFA, disableMFA } from "../../../redux/user/actions";
+import { disableMFA, enableMFA } from "../../../redux/user/actions";
 
 export default function TwoFactorEnable() {
   const dispatch = useDispatch();

@@ -7,13 +7,14 @@ import { getCreditCardInfo, getSetupSecret, getSubscription, setDefaultPaymentMe
 import toast from "react-hot-toast";
 
 import { CreditCardIcon, ShieldCheckIcon, UserIcon } from '@heroicons/react/solid';
+import { createPresignedUrl } from "../../../redux/user/actions";
+import ProfilePictureChange from '../../Common/ProfilePictureChange';
 import BillingHistory from './Billing/BillingHistory';
 import PaymentMethods from './Billing/PaymentMethods';
 import PlanSection from './Billing/PlanSection';
 import EmailChange from './EmailChange';
 import NameChange from './NameChange';
 import PasswordChange from './PasswordChange';
-import ProfilePictureChange from './ProfilePictureChange';
 import TwoFactorEnable from './TwoFactorEnable';
 
 const tabs = [
@@ -206,7 +207,14 @@ export default function Profile() {
             <div>
               {activeTab == "#" &&
                 <>
-                  <ProfilePictureChange />
+                  {Object.keys(auth.user).length !== 0 && (
+                    <ProfilePictureChange
+                      selectedUser={auth.user}
+                      callDispatch={(file, payload, navigate) => {
+                        dispatch(createPresignedUrl(file, payload, navigate));
+                      }
+                      } />
+                  )}
                   <NameChange />
                   <EmailChange />
                 </>}

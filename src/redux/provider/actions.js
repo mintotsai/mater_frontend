@@ -1,5 +1,6 @@
 import { setMessage } from "../../helpers/messages";
 import ProviderPatientService from "../../services/provider/provider.patient.service";
+import UserService from "../../services/user.service";
 import { SET_LOADING_ACTION } from "../system/actions";
 
 export const PROVIDER_GET_PATIENTS_ACTION = "PROVIDER_GET_PATIENTS_ACTION";
@@ -10,6 +11,7 @@ export const PROVIDER_CREATE_PATIENT_ACTION = "PROVIDER_CREATE_PATIENT_ACTION";
 export const PROVIDER_CREATE_PATIENT_SUCCESS_ACTION = "PROVIDER_CREATE_PATIENT_SUCCESS_ACTION";
 export const PROVIDER_UPDATE_PATIENT_ACTION = "PROVIDER_UPDATE_PATIENT_ACTION";
 export const PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION = "PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION";
+export const PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION = "PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION"
 
 export const getPatients = () => (dispatch) => {
   dispatch({
@@ -164,6 +166,47 @@ export const updatePatient = (userId, payload) => (dispatch) => {
       ]);
 
       return Promise.reject();
+    }
+  );
+};
+
+export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
+  return UserService.createPresignedUrl(payload).then(
+    (data) => {
+      dispatch({
+        type: PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION,
+        payload: data.data.data.attributes.data,
+      });
+
+      const { providerUser } = getState();
+
+      return Promise.resolve(dispatch(directUpload(providerUser.providerSelectedPatient.directUploadUrl, file)))
+        .then(
+          () => dispatch(updatePatient(providerUser.providerSelectedPatient.id, { user: { png: providerUser.providerSelectedPatient.blobSignedId } }))
+        ).catch((error) => {
+          setMessage(dispatch, "error", error);
+        });
+    },
+    (error) => {
+      let messages = error.response.data;
+      setMessage(dispatch, "error", messages);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const directUpload = (directUploadUrl, payload) => (dispatch) => {
+  return UserService.directUpload(directUploadUrl, payload).then(
+    (data) => {
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      setMessage(dispatch, "error", messages);
+
+      return Promise.reject(messages);
     }
   );
 };

@@ -5,6 +5,7 @@ import { ROLES } from "../../helpers/roles";
 import { useHasRole } from '../../hooks/useHasRole';
 import { getPatient } from '../../redux/provider/actions';
 import EditPersonalInfo from "./Patient/EditPersonalInfo";
+import PatientProfilePictureChange from './Patient/PatientProfilePictureChange';
 
 export default function ProviderEditPatient() {
   const dispatch = useDispatch();
@@ -29,7 +30,10 @@ export default function ProviderEditPatient() {
         <div className="py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             {loadingActions.includes("PROVIDER_GET_PATIENT_ACTION") ? <></> :
-              <EditPersonalInfo />
+              <>
+                <PatientProfilePictureChange />
+                <EditPersonalInfo />
+              </>
             }
           </div>
         </div>
