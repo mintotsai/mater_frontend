@@ -5,7 +5,8 @@ import { ROLES } from "../../helpers/roles";
 import { useHasRole } from '../../hooks/useHasRole';
 import { getPatient } from '../../redux/provider/actions';
 import EditPersonalInfo from "./Patient/EditPersonalInfo";
-import PatientProfilePictureChange from './Patient/PatientProfilePictureChange';
+import PatientBloodPressureTable from "./Patient/PatientBloodPressureTable";
+import PatientProfilePictureChange from "./Patient/PatientProfilePictureChange";
 
 export default function ProviderEditPatient() {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ export default function ProviderEditPatient() {
               <>
                 <PatientProfilePictureChange />
                 <EditPersonalInfo />
+                <PatientBloodPressureTable />
               </>
             }
           </div>
