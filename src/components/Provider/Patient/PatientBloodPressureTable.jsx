@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import Datepicker from "react-tailwindcss-datepicker";
 import { deleteHealthMeasurement } from '../../../redux/provider/actions';
 import Table from "../../Common/Table";
 import AddPatientBloodPressureModal from "./AddPatientBloodPressureModal";
@@ -12,6 +13,8 @@ export default function PatientBloodPressureTable() {
   const [addPatientBloodPressureModalOpen, setAddPatientBloodPressureModalOpen] = useState(false);
   const [editPatientBloodPressureModalOpen, setEditPatientBloodPressureModalOpen] = useState(false);
   const [selectedBloodPressure, setSelectedBloodPressure] = useState(null);
+  const [dateRangeFilter, setDateRangeFilter] = useState({ startDate: null, endDate: null });
+  const [bloodPressureMeasurements, setBloodPressureMeasurements] = useState(selectedPatient?.attributes?.blood_pressure_measurements);
 
   useEffect(() => {
   }, [selectedPatient]);
@@ -156,7 +159,40 @@ export default function PatientBloodPressureTable() {
                 </button>
               </div>
             </div>
-            <Table columns={columns} data={selectedPatient?.attributes?.blood_pressure_measurements} />
+            <div className="sm:flex sm:items-center">
+              <div className="sm:flex-auto"></div>
+              <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                <Datepicker
+                  inputClassName="w-full mt-2 rounded-md border-0 py-1.5 w-60 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  toggleClassName="absolute right-0 h-full mt-1 px-3 text-gray-400 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"
+                  // useRange={false}
+                  // asSingle={true}
+                  showShortcuts={true}
+                  displayFormat={"M/D/YYYY"}
+                  placeholder={"Select your daterange"}
+                  maxDate={new Date()}
+                  value={dateRangeFilter}
+                  onChange={(dateRange) => {
+                    // console.log(">>>dateRange=" + JSON.stringify(dateRange));
+
+                    // https://reactjsguru.com/how-to-make-date-range-filter-in-react-js/
+                    let filtered = selectedPatient?.attributes?.blood_pressure_measurements;
+                    if (dateRange.startDate != null && dateRange.endDate != null) {
+                      filtered = selectedPatient?.attributes?.blood_pressure_measurements.filter((bp) => {
+                        let takenAt = new Date(bp["taken_at"]);
+                        return (takenAt >= new Date(dateRange.startDate) &&
+                          takenAt <= new Date(dateRange.endDate));
+                      });
+                    }
+
+                    setDateRangeFilter(dateRange);
+                    setBloodPressureMeasurements(filtered);
+                  }}
+                />
+              </div>
+            </div>
+
+            <Table columns={columns} data={bloodPressureMeasurements} />
           </div>
           <AddPatientBloodPressureModal open={addPatientBloodPressureModalOpen} handleClose={() => setAddPatientBloodPressureModalOpen(false)} />
           <EditPatientBloodPressureModal open={editPatientBloodPressureModalOpen} selectedBloodPressure={selectedBloodPressure} handleClose={() => setEditPatientBloodPressureModalOpen(false)} />
