@@ -1,4 +1,5 @@
 import { setMessage } from "../../helpers/messages";
+import ProviderHealthMeasurementService from "../../services/provider/provider.health.measurement.service";
 import ProviderPatientService from "../../services/provider/provider.patient.service";
 import UserService from "../../services/user.service";
 import { SET_LOADING_ACTION } from "../system/actions";
@@ -12,6 +13,7 @@ export const PROVIDER_CREATE_PATIENT_SUCCESS_ACTION = "PROVIDER_CREATE_PATIENT_S
 export const PROVIDER_UPDATE_PATIENT_ACTION = "PROVIDER_UPDATE_PATIENT_ACTION";
 export const PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION = "PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION";
 export const PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION = "PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION"
+export const PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION = "PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION"
 
 export const getPatients = () => (dispatch) => {
   dispatch({
@@ -207,6 +209,47 @@ export const directUpload = (directUploadUrl, payload) => (dispatch) => {
       setMessage(dispatch, "error", messages);
 
       return Promise.reject(messages);
+    }
+  );
+};
+
+export const deleteHealthMeasurement = (id) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION,
+  });
+  return ProviderHealthMeasurementService.deleteHealthMeasurement(id).then(
+    (data) => {
+      let messages = [{ title: "Successfully deleted", detail: "Successfully deleted" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
     }
   );
 };

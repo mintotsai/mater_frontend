@@ -1,10 +1,12 @@
 import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteHealthMeasurement } from '../../../redux/provider/actions';
 import Table from "../../Common/Table";
 import AddPatientBloodPressureModal from "./AddPatientBloodPressureModal";
 
 export default function PatientBloodPressureTable() {
+  const dispatch = useDispatch();
   const selectedPatient = useSelector((state) => state.providerUser.providerSelectedPatient);
   const [addPatientBloodPressureModalOpen, setAddPatientBloodPressureModalOpen] = useState(false);
 
@@ -83,6 +85,29 @@ export default function PatientBloodPressureTable() {
           </div>
         )
       },
+    },
+    {
+      id: "delete",
+      header: ({ table }) => (
+        <div className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Delete</span></div>
+      ),
+      cell: (info) => {
+        return (
+          <a href="#" className="text-red-600 hover:text-red-900"
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(deleteHealthMeasurement(info.row.original.id))
+                .then((response) => {
+                })
+                .catch((error) => {
+                  console.log(">>>error");
+                  console.log(error);
+                });
+            }}>
+            Delete
+          </a>
+        )
+      }
     }
   ]);
 
