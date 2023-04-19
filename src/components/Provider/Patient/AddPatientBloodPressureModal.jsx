@@ -145,7 +145,7 @@ export default function AddPatientModal({ open, handleClose }) {
                               useRange={false}
                               asSingle={true}
                               displayFormat={"MM/DD/YYYY"}
-                              placeholder={"Select your birthdate"}
+                              placeholder={"Select measurement date"}
                               maxDate={new Date()}
                               value={values.takenAtDate}
                               onChange={(date) => setFieldValue('takenAtDate', { startDate: date.startDate, endDate: date.endDate })}
