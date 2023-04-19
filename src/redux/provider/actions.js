@@ -13,6 +13,7 @@ export const PROVIDER_CREATE_PATIENT_SUCCESS_ACTION = "PROVIDER_CREATE_PATIENT_S
 export const PROVIDER_UPDATE_PATIENT_ACTION = "PROVIDER_UPDATE_PATIENT_ACTION";
 export const PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION = "PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION";
 export const PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION = "PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION"
+export const PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION = "PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION"
 export const PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION = "PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION"
 
 export const getPatients = () => (dispatch) => {
@@ -209,6 +210,47 @@ export const directUpload = (directUploadUrl, payload) => (dispatch) => {
       setMessage(dispatch, "error", messages);
 
       return Promise.reject(messages);
+    }
+  );
+};
+
+export const updateHealthMeasurement = (id, payload) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION,
+  });
+  return ProviderHealthMeasurementService.updateHealthMeasurement(id, payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
     }
   );
 };

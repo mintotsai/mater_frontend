@@ -4,11 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteHealthMeasurement } from '../../../redux/provider/actions';
 import Table from "../../Common/Table";
 import AddPatientBloodPressureModal from "./AddPatientBloodPressureModal";
+import EditPatientBloodPressureModal from "./EditPatientBloodPressureModal";
 
 export default function PatientBloodPressureTable() {
   const dispatch = useDispatch();
   const selectedPatient = useSelector((state) => state.providerUser.providerSelectedPatient);
   const [addPatientBloodPressureModalOpen, setAddPatientBloodPressureModalOpen] = useState(false);
+  const [editPatientBloodPressureModalOpen, setEditPatientBloodPressureModalOpen] = useState(false);
+  const [selectedBloodPressure, setSelectedBloodPressure] = useState(null);
 
   useEffect(() => {
   }, [selectedPatient]);
@@ -87,6 +90,24 @@ export default function PatientBloodPressureTable() {
       },
     },
     {
+      id: "edit",
+      header: ({ table }) => (
+        <div className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Edit</span></div>
+      ),
+      cell: (info) => {
+        return (
+          <a href="#" className="text-indigo-600 hover:text-indigo-900"
+            onClick={(e) => {
+              e.preventDefault();
+              setSelectedBloodPressure(info.row.original);
+              setEditPatientBloodPressureModalOpen(true);
+            }}>
+            Edit
+          </a>
+        )
+      }
+    },
+    {
       id: "delete",
       header: ({ table }) => (
         <div className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Delete</span></div>
@@ -110,10 +131,6 @@ export default function PatientBloodPressureTable() {
       }
     }
   ]);
-
-  const handleClose = () => {
-    setAddPatientBloodPressureModalOpen(false);
-  };
 
   return (
     <>
@@ -141,7 +158,8 @@ export default function PatientBloodPressureTable() {
             </div>
             <Table columns={columns} data={selectedPatient?.attributes?.blood_pressure_measurements} />
           </div>
-          <AddPatientBloodPressureModal open={addPatientBloodPressureModalOpen} handleClose={() => handleClose()} />
+          <AddPatientBloodPressureModal open={addPatientBloodPressureModalOpen} handleClose={() => setAddPatientBloodPressureModalOpen(false)} />
+          <EditPatientBloodPressureModal open={editPatientBloodPressureModalOpen} selectedBloodPressure={selectedBloodPressure} handleClose={() => setEditPatientBloodPressureModalOpen(false)} />
         </>)}
     </>
   );
