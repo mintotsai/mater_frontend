@@ -13,7 +13,7 @@ import { changedFields, changedValues } from "../../../helpers/utils";
 import { updateHealthMeasurement } from '../../../redux/provider/actions';
 import TimeInput from "../../Common/TimeInput";
 
-export default function AddPatientModal({ selectedBloodPressure, open, handleClose }) {
+export default function EditPatientBloodPressureModal({ selectedBloodPressure, open, handleClose }) {
   const dispatch = useDispatch();
   const cancelButtonRef = useRef(null);
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function AddPatientModal({ selectedBloodPressure, open, handleClo
     diastolic: selectedBloodPressure?.measurement?.diastolic,
     pulse: selectedBloodPressure?.measurement?.pulse,
     takenAtDate: { startDate: format(new Date(selectedBloodPressure?.taken_at), 'yyyy-MM-dd'), endDate: format(new Date(selectedBloodPressure?.taken_at), 'yyyy-MM-dd') },
-    takenAtTime: format(new Date(selectedBloodPressure?.taken_at), 'H:mm')
+    takenAtTime: format(new Date(selectedBloodPressure?.taken_at), 'HH:mm')
   }
 
   return (

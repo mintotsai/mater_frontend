@@ -12,7 +12,7 @@ import * as Yup from 'yup';
 import { updatePatient } from '../../../redux/provider/actions';
 import TimeInput from "../../Common/TimeInput";
 
-export default function AddPatientModal({ open, handleClose }) {
+export default function AddPatientBloodPressureModal({ open, handleClose }) {
   const dispatch = useDispatch();
   const cancelButtonRef = useRef(null);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export default function AddPatientModal({ open, handleClose }) {
                   diastolic: "",
                   pulse: "",
                   takenAtDate: { startDate: format(new Date(), 'yyyy-MM-dd'), endDate: format(new Date(), 'yyyy-MM-dd') },
-                  takenAtTime: format(new Date(), 'H:mm')
+                  takenAtTime: format(new Date(), 'HH:mm')
                 }}
                 validationSchema={Yup.object().shape({
                   systolic: Yup.number().required('Required'),
@@ -73,6 +73,7 @@ export default function AddPatientModal({ open, handleClose }) {
 
                   dispatch(updatePatient(id, userParams))
                     .then((response) => {
+                      handleClose();
                     })
                     .catch((error) => {
                       console.log(">>>error");
