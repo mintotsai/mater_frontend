@@ -32,8 +32,8 @@ export default function AddPatientModal({ open, handleClose }) {
               <Formik
                 // Must have initialValue or the onSubmit doesn't work
                 initialValues={{
-                  first_name: "",
-                  last_name: "",
+                  firstName: "",
+                  lastName: "",
                   email: "",
                 }}
                 validationSchema={Yup.object().shape({
