@@ -97,12 +97,7 @@ export default function AdminViewUsers() {
     }
   }, []);
 
-  const handleRefresh = () => {
-    navigate("/provider/patients");
-  }
-
   const handleClose = () => {
-    handleRefresh();
     setAddPatientModalOpen(false);
   };
 
