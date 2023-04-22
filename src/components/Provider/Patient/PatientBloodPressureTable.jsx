@@ -17,6 +17,7 @@ export default function PatientBloodPressureTable() {
   const [bloodPressureMeasurements, setBloodPressureMeasurements] = useState(selectedPatient?.attributes?.blood_pressure_measurements);
 
   useEffect(() => {
+    setBloodPressureMeasurements(selectedPatient?.attributes?.blood_pressure_measurements);
   }, [selectedPatient]);
 
   const columns = React.useMemo(() => [
@@ -187,6 +188,12 @@ export default function PatientBloodPressureTable() {
                     // https://reactjsguru.com/how-to-make-date-range-filter-in-react-js/
                     let filtered = selectedPatient?.attributes?.blood_pressure_measurements;
                     if (dateRange.startDate != null && dateRange.endDate != null) {
+                      // https://www.toptal.com/software/definitive-guide-to-datetime-manipulation
+                      const startDateParts = dateRange.startDate.split("-");
+                      const startDate = new Date(startDateParts[0], startDateParts[1] - 1, startDateParts[2], 0, 0);
+                      const endDateParts = dateRange.endDate.split("-");
+                      const endDate = new Date(endDateParts[0], endDateParts[1] - 1, endDateParts[2], 23, 59);
+
                       filtered = selectedPatient?.attributes?.blood_pressure_measurements.filter((bp) => {
                         let takenAt = new Date(bp["taken_at"]);
                         return (takenAt >= new Date(dateRange.startDate) &&
