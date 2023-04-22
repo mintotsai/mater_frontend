@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Datepicker from "react-tailwindcss-datepicker";
-import { deleteHealthMeasurement } from '../../../redux/provider/actions';
+import { PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION, deleteHealthMeasurement } from '../../../redux/provider/actions';
 import Table from "../../Common/Table";
 import AddPatientBloodPressureModal from "./AddPatientBloodPressureModal";
 import EditPatientBloodPressureModal from "./EditPatientBloodPressureModal";
@@ -20,6 +20,24 @@ export default function PatientBloodPressureTable() {
   }, [selectedPatient]);
 
   const columns = React.useMemo(() => [
+    {
+      id: "taken",
+      accessorKey: "taken_at",
+      header: ({ table }) => (
+        <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Taken At</div>
+      ),
+      cell: (info) => {
+        return (
+          <div className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            <div className="flex items-center">
+              <div className="ml-4">
+                <div className="font-medium text-gray-900">{info.row.original.taken_at ? format(new Date(info.row.original.taken_at), 'M/d/yyyy h:mm a') : ""}</div>
+              </div>
+            </div>
+          </div>
+        )
+      },
+    },
     {
       id: "systolic",
       accessorKey: "measurement.systolic",
@@ -75,31 +93,13 @@ export default function PatientBloodPressureTable() {
       },
     },
     {
-      id: "taken",
-      accessorKey: "taken_at",
-      header: ({ table }) => (
-        <div className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Taken At</div>
-      ),
-      cell: (info) => {
-        return (
-          <div className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-            <div className="flex items-center">
-              <div className="ml-4">
-                <div className="font-medium text-gray-900">{info.row.original.taken_at ? format(new Date(info.row.original.taken_at), 'M/d/yyyy h:mm a') : ""}</div>
-              </div>
-            </div>
-          </div>
-        )
-      },
-    },
-    {
       id: "edit",
       header: ({ table }) => (
         <div className="relative py-3.5 pl-3 pr-4 sm:pr-6"><span className="sr-only">Edit</span></div>
       ),
       cell: (info) => {
         return (
-          <a href="#" className="text-indigo-600 hover:text-indigo-900"
+          <a href="#" className="text-indigo-600 hover:text-indigo-900 print:hidden"
             onClick={(e) => {
               e.preventDefault();
               setSelectedBloodPressure(info.row.original);
@@ -117,7 +117,7 @@ export default function PatientBloodPressureTable() {
       ),
       cell: (info) => {
         return (
-          <a href="#" className="text-red-600 hover:text-red-900"
+          <a href="#" className="text-red-600 hover:text-red-900 print:hidden"
             onClick={(e) => {
               e.preventDefault();
               dispatch(deleteHealthMeasurement(info.row.original.id))
@@ -147,7 +147,16 @@ export default function PatientBloodPressureTable() {
                   A list of all the patients blood pressure readings.
                 </p>
               </div>
-              <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+              <a href="/provider/patients/blood-pressure/print" target="_blank" className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={() => {
+                  dispatch({
+                    type: PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION,
+                    bloodPressureMeasurementsToPrint: bloodPressureMeasurements
+                  });
+                }}>
+                Print
+              </a>
+              <div className="mt-4 sm:mt-0 sm:ml-3 sm:flex-none">
                 <button
                   type="button"
                   className="block rounded-md bg-indigo-600 py-2 px-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -191,7 +200,6 @@ export default function PatientBloodPressureTable() {
                 />
               </div>
             </div>
-
             <Table columns={columns} data={bloodPressureMeasurements} />
           </div>
           <AddPatientBloodPressureModal open={addPatientBloodPressureModalOpen} handleClose={() => setAddPatientBloodPressureModalOpen(false)} />

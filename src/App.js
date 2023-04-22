@@ -17,9 +17,10 @@ import PrivateRoute from './components/Common/PrivateRoute';
 import Checkout from './components/Dashboard/Account/Billing/Checkout';
 import Profile from './components/Dashboard/Account/Profile';
 import TwoFactorSetup from "./components/Dashboard/Account/TwoFactorSetup";
-import Home from './components/Dashboard/index';
 import MainSection from './components/Dashboard/MainSection';
 import NotificationList from "./components/Dashboard/NotificationList";
+import Home from './components/Dashboard/index';
+import PrintBloodPressure from "./components/Provider/Patient/PrintBloodPressure";
 import ProviderEditPatient from "./components/Provider/ProviderEditPatient";
 import ProviderPatients from "./components/Provider/ProviderPatients";
 import { ROLES } from "./helpers/roles";
@@ -41,6 +42,7 @@ function App() {
           <Route exact path="/login" element={<Login />} />
           {/* TODO: Back button from Verify page */}
           {auth.showOTPScreen && <Route exact path="/verify" element={<Verify />} />}
+          <Route path="/provider/patients/blood-pressure/print" element={<PrintBloodPressure />} />
           <Route exact path="/" element={<PrivateRoute path="/" redirectRoute="/login" condition={auth.isLoggedIn} element={<Home />} />} >
             <Route path="/" element={<Home />}>
               <Route path="home" element={<MainSection />} />
@@ -55,6 +57,7 @@ function App() {
               />} >
                 <Route path="patients" element={<ProviderPatients />} />
                 <Route path="patients/:id/edit" element={<ProviderEditPatient />} />
+
                 {/* https://stackoverflow.com/a/72713882/1391412 */}
                 <Route index element={<Navigate to='patients' />} />
               </Route>

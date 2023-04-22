@@ -1,0 +1,18 @@
+/* https://chat.openai.com/c/ce4ce1cc-4cc6-4f2f-bd51-3509c0914ee1 */
+@media print {
+
+  /* Hide the URL and timestamp from the printed page */
+  @page {
+    margin: 0;
+  }
+
+  /* https://stackoverflow.com/a/48115459 */
+  html,
+  body {
+    height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    -webkit-print-color-adjust: exact;
+  }
+}

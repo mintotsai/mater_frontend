@@ -1,4 +1,11 @@
-import { PROVIDER_CREATE_PATIENT_SUCCESS_ACTION, PROVIDER_GET_PATIENTS_SUCCESS_ACTION, PROVIDER_GET_PATIENT_SUCCESS_ACTION, PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION, PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION } from './actions';
+import {
+  PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION,
+  PROVIDER_CREATE_PATIENT_SUCCESS_ACTION,
+  PROVIDER_GET_PATIENTS_SUCCESS_ACTION,
+  PROVIDER_GET_PATIENT_SUCCESS_ACTION,
+  PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION,
+  PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION
+} from './actions';
 import initialState from './state';
 
 const providerReducer = (state = initialState, action) => {
@@ -33,6 +40,11 @@ const providerReducer = (state = initialState, action) => {
         ...state,
         providerSelectedPatient: providerSelectedPatient
       };
+    case PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION:
+      return {
+        ...state,
+        bloodPressureMeasurementsToPrint: action.bloodPressureMeasurementsToPrint
+      }
     default:
       return state
   }
