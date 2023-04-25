@@ -14,7 +14,6 @@ import Verify from './components/Authentication/Verify';
 import PageNotFound404 from "./components/Common/PageNotFound404";
 import PermissionsGate from "./components/Common/PermissionsGate";
 import PrivateRoute from './components/Common/PrivateRoute';
-import Checkout from './components/Dashboard/Account/Billing/Checkout';
 import Profile from './components/Dashboard/Account/Profile';
 import TwoFactorSetup from "./components/Dashboard/Account/TwoFactorSetup";
 import MainSection from './components/Dashboard/MainSection';
@@ -48,7 +47,6 @@ function App() {
               <Route path="home" element={<MainSection />} />
               <Route path="settings/account" element={<Profile />} />
               <Route path="settings/account/2fasetup" element={<TwoFactorSetup />} />
-              <Route path="settings/account/checkout" element={<Checkout />} />
               <Route path="notifications" element={<NotificationList />} />
 
               {/* Provider Routes */}

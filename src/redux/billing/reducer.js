@@ -1,28 +1,18 @@
-import { SET_CARD_INFO_ACTION, SET_SETUP_SECRET, SET_BILLING_HISTORY, SET_SUBSCRIPTION } from "./actions";
-import initialState from "./state"
+import { SET_CHECKOUT_SESSION_URL_ACTION, SET_PORTAL_SESSION_URL_ACTION } from "./actions";
+import initialState from "./state";
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
-    case SET_CARD_INFO_ACTION:
+    case SET_CHECKOUT_SESSION_URL_ACTION:
       return {
         ...state,
-        cardInfo: payload
-      };
-    case SET_SETUP_SECRET:
+        checkoutSessionURL: payload
+      }
+    case SET_PORTAL_SESSION_URL_ACTION:
       return {
         ...state,
-        setupSecret: payload
-      };
-    case SET_BILLING_HISTORY:
-      return {
-        ...state,
-        billingHistory: payload
-      };
-    case SET_SUBSCRIPTION:
-      return {
-        ...state,
-        subscription: payload
+        portalSessionURL: payload
       }
     default:
       return state;

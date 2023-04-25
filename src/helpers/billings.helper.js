@@ -35,7 +35,7 @@ export function getPlanFromStripePriceId(stripePriceId) {
     interval = "year";
   }
 
-  return plans.findIndex(plan => plan.name === name);
+  return { planIndex: plans.findIndex(plan => plan.name === name), name: name, interval: interval };
 }
 
 export function getStripePriceIdFromPlan(selectedPlan, annualBillingEnabled) {

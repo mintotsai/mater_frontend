@@ -12,10 +12,12 @@ export const GET_NOTIFICATIONS_FAIL_ACTION = "GET_NOTIFICATIONS_FAIL_ACTION"
 export const getUser = (userId) => (dispatch) => {
   return UserService.getUser(userId).then(
     (data) => {
-      // dispatch({
-      //   type: LOGIN_SUCCESS_ACTION,
-      //   payload: data,
-      // });
+      Promise.all([
+        dispatch({
+          type: UPDATE_USER_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+      ]);
 
       return Promise.resolve();
     },

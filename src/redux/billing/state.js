@@ -1,6 +1,6 @@
 const initialState = {
-  cardInfo: {},
-  billingHistory: { data: [] }
+  checkoutSessionURL: "",
+  portalSessionURL: "",
 }
 
 export default initialState;

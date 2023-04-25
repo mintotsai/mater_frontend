@@ -1,25 +1,18 @@
 import { setMessage } from "../../helpers/messages";
 import BillingService from "../../services/billing.service";
-import { SET_GOTO_URL_ACTION } from "../system/actions";
 
-export const CREATE_CHECKOUT_SESSION = "CREATE_CHECKOUT_SESSION"
-export const SET_CARD_INFO_ACTION = "SET_CARD_INFO_ACTION"
-export const SET_SETUP_SECRET = "SET_SETUP_SECRET"
-export const SET_BILLING_HISTORY = "SET_BILLING_HISTORY"
-export const SET_SUBSCRIPTION = "SET_SUBSCRIPTION"
+export const SET_CHECKOUT_SESSION_URL_ACTION = "SET_CHECKOUT_SESSION_URL_ACTION";
+export const SET_PORTAL_SESSION_URL_ACTION = "SET_PORTAL_SESSION_URL_ACTION";
 
-export const createSubscription = (payload) => (dispatch) => {
-  return BillingService.createSubscription(payload).then(
+export const createCheckoutSession = (payload) => (dispatch) => {
+  return BillingService.createCheckoutSession(payload).then(
     (data) => {
-      let messages = [{ title: "Successfully, subscribed." }];
       Promise.all([
         dispatch({
-          type: SET_GOTO_URL_ACTION,
-          payload: "/settings/account#billing",
+          type: SET_CHECKOUT_SESSION_URL_ACTION,
+          payload: data.data.data.attributes.data.url,
         }),
-        setMessage(dispatch, "success", messages)
       ]);
-
       return Promise.resolve();
     },
     (error) => {
@@ -30,175 +23,20 @@ export const createSubscription = (payload) => (dispatch) => {
 
       return Promise.reject();
     }
-  );
-};
+  )
+}
 
-export const getCreditCardInfo = (payload) => (dispatch) => {
-  return BillingService.getCreditCardInfo(payload).then(
+export const createPortalSession = (payload) => (dispatch) => {
+  return BillingService.createPortalSession(payload).then(
     (data) => {
-      dispatch({
-        type: SET_CARD_INFO_ACTION,
-        payload: data.data.data.attributes.data,
-      })
-
-      return Promise.resolve();
-    },
-    (error) => {
-      let messages = error.response.data;
-      Promise.all([
-        setMessage(dispatch, "error", messages),
-      ]);
-
-      return Promise.resolve();
-    }
-  );
-};
-
-export const getSetupSecret = (payload) => (dispatch) => {
-  return BillingService.getSetupSecret(payload).then(
-    (data) => {
-      dispatch({
-        type: SET_SETUP_SECRET,
-        payload: data.data.data.attributes.data.client_secret,
-      });
-
-      return Promise.resolve();
-    },
-    (error) => {
-      let messages = error.response.data;
-      Promise.all([
-        setMessage(dispatch, "error", messages),
-      ]);
-
-      return Promise.reject();
-    }
-  );
-};
-
-// export const updateCreditCardInfo = (payload) => (dispatch) => {
-//   return BillingService.updateCreditCardInfo(payload).then(
-
-//     (data) => {
-//       // console.log(data);
-
-//       // dispatch({
-//       //   type: SET_GOTO_URL_ACTION,
-//       //   payload: "/settings/account#billing",
-//       // });
-
-//       // dispatch({
-//       //   type: SET_MESSAGE_ACTION,
-//       //   payload: { message: [{ title: "Successfully, subscribed." }], messageStatus: "success" },
-//       // });
-
-//       return Promise.resolve();
-//     },
-//     (error) => {
-//       const message =
-//         (error.response &&
-//           error.response.data &&
-//           error.response.data.message) ||
-//         error.message ||
-//         error.toString();
-
-//       // TODO: Fix this?
-//       dispatch({
-//         type: SET_MESSAGE_ACTION,
-//         payload: message,
-//       });
-//       // dispatch({
-//       //   type: SET_MESSAGE_ACTION,
-//       //   payload: error.response.data.errors ? { message: error.response.data.errors, messageStatus: "error" } : { message: [{ title: error.response.data.error }], messageStatus: "error" },
-//       // });
-
-//       return Promise.reject();
-//     }
-//   );
-// };
-
-export const setDefaultPaymentMethod = (payload) => (dispatch) => {
-  return BillingService.setDefaultPaymentMethod(payload).then(
-    (data) => {
+      console.log(">>>" + JSON.stringify(data));
+      console.log(data);
       Promise.all([
         dispatch({
-          type: SET_CARD_INFO_ACTION,
-          payload: data.data.data.attributes.data,
-        })
-      ]);
-
-      return Promise.resolve();
-    },
-    (error) => {
-      let messages = error.response.data;
-      Promise.all([
-        setMessage(dispatch, "error", messages),
-      ]);
-
-      return Promise.reject();
-    }
-  );
-};
-
-export const getBillingHistory = (payload) => (dispatch) => {
-  return BillingService.getBillingHistory(payload).then(
-    (data) => {
-      dispatch({
-        type: SET_BILLING_HISTORY,
-        payload: data.data.data.attributes.data,
-      })
-
-      return Promise.resolve();
-    },
-    (error) => {
-      let messages = error.response.data;
-      Promise.all([
-        setMessage(dispatch, "error", messages),
-      ]);
-
-      return Promise.reject();
-    }
-  );
-};
-
-export const getSubscription = (payload) => (dispatch) => {
-  return BillingService.getSubscription(payload).then(
-    (data) => {
-      let response = {};
-      if (data && data.data && data.data.data && data.data.data.attributes) {
-        Promise.all([
-          dispatch({
-            type: SET_SUBSCRIPTION,
-            payload: data.data.data.attributes,
-          }),
-        ]);
-        response["subscription"] = data.data.data.attributes;
-      }
-
-      return Promise.resolve(response);
-    },
-    (error) => {
-      let messages = error.response.data;
-      Promise.all([
-        setMessage(dispatch, "error", messages),
-      ]);
-
-      return Promise.reject();
-    }
-  );
-};
-
-export const cancelSubscription = (payload) => (dispatch) => {
-  return BillingService.cancelSubscription(payload).then(
-    (data) => {
-      let messages = [{ title: "Successfully, cancelled subscrfiption." }];
-      Promise.all([
-        dispatch({
-          type: SET_SUBSCRIPTION,
-          payload: data.data.data.attributes,
+          type: SET_PORTAL_SESSION_URL_ACTION,
+          payload: data.data.data.attributes.data.url,
         }),
-        setMessage(dispatch, "success", messages)
       ]);
-
       return Promise.resolve();
     },
     (error) => {
@@ -209,30 +47,5 @@ export const cancelSubscription = (payload) => (dispatch) => {
 
       return Promise.reject();
     }
-  );
-};
-
-export const updateSubscription = (payload) => (dispatch) => {
-  return BillingService.updateSubscription(payload).then(
-    (data) => {
-      let messages = [{ title: "Successfully, updated subscrfiption." }];
-      Promise.all([
-        dispatch({
-          type: SET_SUBSCRIPTION,
-          payload: data.data.data.attributes,
-        }),
-        setMessage(dispatch, "success", messages)
-      ]);
-
-      return Promise.resolve();
-    },
-    (error) => {
-      let messages = error.response.data;
-      Promise.all([
-        setMessage(dispatch, "error", messages),
-      ]);
-
-      return Promise.reject();
-    }
-  );
-};
+  )
+}

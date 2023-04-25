@@ -1,11 +1,10 @@
 import { RadioGroup, Switch } from '@headlessui/react';
-import { loadStripe } from "@stripe/stripe-js";
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import { getPlanFromStripePriceId, getStripePriceIdFromPlan, plans } from '../../../../helpers/billings.helper';
-import { cancelSubscription, updateSubscription } from '../../../../redux/billing/actions';
-
-const stripePromise = loadStripe(`${process.env.REACT_APP_STRIPE_PUB_KEY}`);
+import { createCheckoutSession, createPortalSession } from '../../../../redux/billing/actions';
+import { getUser } from "../../../../redux/user/actions";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -13,35 +12,46 @@ function classNames(...classes) {
 
 export default function PlanSection() {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [showSpinner, setShowSpinner] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState();
   const [annualBillingEnabled, setAnnualBillingEnabled] = useState(true);
-  const [enableSaveButton, setEnableSaveButton] = useState(false);
-  const subscription = useSelector((state) => state.billing.subscription);
-  const cardInfo = useSelector((state) => state.billing.cardInfo);
-  const setupSecret = useSelector((state) => state.billing.setupSecret);
+  const auth = useSelector((state) => state.auth);
+  const checkoutSessionURL = useSelector((state) => state.billing.checkoutSessionURL);
+  const portalSessionURL = useSelector((state) => state.billing.portalSessionURL);
+
+  const success = searchParams.get("success");
+  useEffect(() => {
+    if (searchParams.get("success")) {
+      dispatch(getUser(auth.user.id));
+    }
+  }, [success]);
 
   useEffect(() => {
-    if (subscription) {
-      if (subscription.interval == "month") {
+    if (checkoutSessionURL)
+      window.open(checkoutSessionURL);
+  }, [checkoutSessionURL]);
+
+  useEffect(() => {
+    if (portalSessionURL)
+      window.open(portalSessionURL);
+  }, [portalSessionURL])
+
+  useEffect(() => {
+    if (auth.user.attributes.subscriptions.active) {
+      let currentPlan = getPlanFromStripePriceId(auth.user.attributes.subscriptions.plan_id);
+      setSelectedPlan(plans[currentPlan.planIndex]);
+      if (currentPlan.interval == "month") {
         setAnnualBillingEnabled(false);
       } else {
         setAnnualBillingEnabled(true);
       }
-
-      let currentPlan = getPlanFromStripePriceId(subscription.plan_id)
-      setSelectedPlan(plans[currentPlan]);
     } else {
       // no subscription yet
-      setAnnualBillingEnabled(false);
-      setEnableSaveButton(true);
+      setSelectedPlan(plans[1]);
+      setAnnualBillingEnabled(true);
     }
-  }, [subscription]);
-
-  useEffect(() => {
-    if (!cardInfo.card)
-      setEnableSaveButton(true);
-  }, [cardInfo]);
+  }, [auth.user.attributes.subscriptions]);
 
   return (
     <>
@@ -54,30 +64,14 @@ export default function PlanSection() {
                 <h2 id="plan-heading" className="inline text-lg font-medium leading-6 text-gray-900">
                   Plan
                 </h2>
-                {subscription && !subscription.cancel_at_period_end && subscription.current_period_end &&
-                  <div className="inline-flex float-right py-2 px-4 shadow-md no-underline rounded-full bg-blue text-white font-sans font-semibold text-sm bg-indigo-600 hover:text-white focus:outline-none active:shadow-none mr-2">
-                    Next Renewal
-                    <div className="ml-2">
-                      {new Intl.DateTimeFormat("en-US", {
-                        year: "numeric",
-                        month: "numeric",
-                        day: "2-digit",
-                        timeZone: "America/Chicago"
-                      }).format(new Date(subscription.current_period_end))}
-                    </div>
-                  </div>
-                }
               </div>
 
               <RadioGroup value={selectedPlan} onChange={(e) => {
                 setSelectedPlan(e);
-                setEnableSaveButton(true);
               }}
-                disabled={!cardInfo.card ? true : ""}
               >
                 <RadioGroup.Label className="sr-only"> Pricing plans </RadioGroup.Label>
                 <div className="relative -space-y-px rounded-md bg-white">
-                  {!cardInfo.card && <div className="text-center text-gray-500">Add a Payment Method below to choose a Plan</div>}
                   {plans.map((plan, planIdx) => (
                     <RadioGroup.Option
                       key={plan.name}
@@ -88,7 +82,6 @@ export default function PlanSection() {
                           planIdx === plans.length - 1 ? 'rounded-bl-md rounded-br-md' : '',
                           checked ? 'bg-indigo-50 border-indigo-200 z-10' : 'border-gray-200',
                           'relative border p-4 flex flex-col cursor-pointer md:pl-4 md:pr-6 md:grid md:grid-cols-3 focus:outline-none',
-                          !cardInfo.card ? 'blur-sm' : ''
                         )
                       }
                     >
@@ -139,25 +132,21 @@ export default function PlanSection() {
                     </RadioGroup.Option>
                   ))}
                 </div>
-
               </RadioGroup>
 
               <Switch.Group as="div" className={classNames(
-                !cardInfo.card ? 'blur-sm' : '',
                 "flex items-center"
               )}>
                 <Switch
                   checked={annualBillingEnabled}
                   onChange={(e) => {
                     setAnnualBillingEnabled(e);
-                    setEnableSaveButton(true);
                   }}
                   className={classNames(
                     annualBillingEnabled ? 'bg-indigo-500' : 'bg-gray-200',
                     'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2',
 
                   )}
-                  disabled={!cardInfo.card ? true : ""}
                 >
                   <span
                     aria-hidden="true"
@@ -174,48 +163,67 @@ export default function PlanSection() {
               </Switch.Group>
             </div>
             <div className={classNames(
-              !cardInfo.card ? 'blur-sm' : '',
               "flex justify-end bg-gray-50 px-4 py-3 text-right sm:px-6"
             )}>
-              {subscription && !subscription.cancel_at_period_end &&
-                <button
-                  type="submit"
-                  className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-red-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    dispatch(cancelSubscription());
-                  }}
-                  disabled={subscription && subscription.cancel_at_period_end}
-                >
-                  I'm sure I want to cancel.
-                </button>
-              }
-              <button
-                type="submit"
-                className="inline-flex ml-3 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={(e) => {
-                  e.preventDefault();
+              {auth.user.attributes.subscriptions.status != "active" ?
+                <>
+                  <button
+                    type="submit"
+                    className="inline-flex ml-3 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={(e) => {
+                      // TODO: turn this into formik
 
-                  let stripePriceId = getStripePriceIdFromPlan(selectedPlan.name, annualBillingEnabled);
+                      e.preventDefault();
 
-                  setShowSpinner(true);
-                  dispatch(updateSubscription({ stripe_price_id: stripePriceId }))
-                    .then((response) => {
-                      setEnableSaveButton(false);
-                      setShowSpinner(false);
-                    })
-                    .catch((error) => {
-                      setShowSpinner(false);
-                    });
-                }}
-                disabled={!enableSaveButton || !cardInfo.card}
-              >
-                {showSpinner && <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>}
-                Save
-              </button>
+                      let stripePriceId = getStripePriceIdFromPlan(selectedPlan.name, annualBillingEnabled);
+                      const quantity = 1;
+
+                      setShowSpinner(true);
+
+                      dispatch(createCheckoutSession({ planId: stripePriceId, quantity: quantity }))
+                        .then((response) => {
+                          setShowSpinner(false);
+                        })
+                        .catch((error) => {
+                          setShowSpinner(false);
+                        });
+                    }}
+                  >
+                    {showSpinner && <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>}
+                    Subscribe
+                  </button>
+                </>
+                :
+                <>
+                  <button
+                    type="submit"
+                    className="inline-flex ml-3 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={(e) => {
+                      // TODO: turn this into formik
+
+                      e.preventDefault();
+
+                      setShowSpinner(true);
+                      dispatch(createPortalSession({}))
+                        .then((response) => {
+                          setShowSpinner(false);
+                        })
+                        .catch((error) => {
+                          setShowSpinner(false);
+                        });
+
+                    }}
+                  >
+                    {showSpinner && <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>}
+                    Manage
+                  </button>
+                </>}
             </div>
           </div>
         </form>
