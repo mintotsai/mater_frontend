@@ -1,19 +1,16 @@
 import React, { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useIdleTimer } from 'react-idle-timer';
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from 'react-router-dom';
-import { logout } from "../../redux/auth/actions";
-import IdleTimeOutModal from '../Common/IdleTimeOutModal';
-
-import toast from "react-hot-toast";
-import BellNotification from "../Common/BellNotification";
-import ToastNotifications from "../Common/ToastNotifications";
-
-import { SET_MESSAGE_ACTION } from "../../redux/system/actions";
-
 import { ROLES } from "../../helpers/roles";
 import { useHasRole } from '../../hooks/useHasRole';
+import { logout } from "../../redux/auth/actions";
+import { SET_CURRENT_NAVIGATION_ITEM_ACTION, SET_MESSAGE_ACTION } from "../../redux/system/actions";
 import AdminStopImpersonatingBanner from "../Admin/AdminStopImpersonatingBanner";
+import BellNotification from "./BellNotification";
+import IdleTimeOutModal from './IdleTimeOutModal';
+import ToastNotifications from "./ToastNotifications";
 
 /*
   This example requires Tailwind CSS v2.0+
@@ -59,13 +56,12 @@ const IDLE_COUNTDOWN = `${process.env.REACT_APP_IDLE_COUNTDOWN}`;
 let countdownInterval;
 let timeout;
 
-const Home = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
+export default function MainLayout() {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const system = useSelector((state) => state.system);
   const auth = useSelector((state) => state.auth);
-  let navigate = useNavigate();
   const isAdministrator = useHasRole(ROLES.admin);
 
   useEffect(() => {
@@ -104,6 +100,7 @@ const Home = () => {
   ];
 
   if (isAdministrator) {
+    dispatch({ type: SET_CURRENT_NAVIGATION_ITEM_ACTION, payload: "User" });
     navigation = [
       { name: 'Users', href: '/admin/users', icon: UsersIcon, current: true },
     ];
@@ -276,15 +273,18 @@ const Home = () => {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current
+                          system.currentNavigationItem == item.name
                             ? 'bg-gray-100 text-gray-900'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                         )}
+                        onClick={(e) => {
+                          dispatch({ type: SET_CURRENT_NAVIGATION_ITEM_ACTION, payload: item.name });
+                        }}
                       >
                         <item.icon
                           className={classNames(
-                            item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                            system.currentNavigationItem == item.name ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
                             'mr-4 flex-shrink-0 h-6 w-6'
                           )}
                           aria-hidden="true"
@@ -320,13 +320,16 @@ const Home = () => {
                     key={item.name}
                     href={item.href}
                     className={classNames(
-                      item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                      system.currentNavigationItem == item.name ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                       'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                     )}
+                    onClick={(e) => {
+                      dispatch({ type: SET_CURRENT_NAVIGATION_ITEM_ACTION, payload: item.name });
+                    }}
                   >
                     <item.icon
                       className={classNames(
-                        item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                        system.currentNavigationItem == item.name ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
                         'mr-3 flex-shrink-0 h-6 w-6'
                       )}
                       aria-hidden="true"
@@ -429,6 +432,4 @@ const Home = () => {
     </>
   )
 }
-
-export default Home;
 

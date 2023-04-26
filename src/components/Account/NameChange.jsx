@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { getUser, updateUser } from "../../../redux/user/actions";
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from 'yup';
-import toast, { Toaster } from "react-hot-toast";
+import { updateUser } from "../../redux/user/actions";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -14,22 +13,17 @@ export default function Profile() {
     <>
       <Formik
         initialValues={{
-          email: auth.user.attributes.email,
+          firstName: auth.user.attributes.user_profile_first_name ? auth.user.attributes.user_profile_first_name : "",
+          lastName: auth.user.attributes.user_profile_last_name ? auth.user.attributes.user_profile_last_name : "",
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Invalid email').required('Required'),
+          firstName: Yup.string(),
         })}
         onSubmit={async (values, { setStatus, resetForm }) => {
-          resetForm();
-          const email = values["email"];
+          const firstName = values["firstName"];
+          const lastName = values["lastName"];
 
-          // TODO: Should we put this in the updateUser dispatch
-          if (email == auth.user.attributes.email) {
-            toast.error("The email is the same.");
-            return;
-          }
-
-          dispatch(updateUser(auth.user.id, { user: { email: email } }));
+          dispatch(updateUser(auth.user.id, { user: { user_profile_first_name: firstName, user_profile_last_name: lastName } }));
         }}
       >
         {({ values, errors, touched, isSubmitting, status, resetForm }) => (
@@ -38,27 +32,45 @@ export default function Profile() {
               <div className="shadow sm:overflow-hidden sm:rounded-md">
                 <div className="bg-white py-6 px-4 sm:p-6">
                   <div>
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">Contact Info</h3>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">Name</h3>
                     <p className="mt-1 text-sm text-gray-500">
-                      Access your account with any email address.
+                      Tell us who you are
                     </p>
                   </div>
                   <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                     <div className="sm:col-span-6">
                       <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                        Email
+                        First name
                       </label>
                       <div className="mt-1">
                         <Field
-                          id="email"
-                          name="email"
-                          type="email"
+                          id="firstName"
+                          name="firstName"
+                          type="text"
                           required
                           className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                          value={values.email}
+                          value={values.firstName}
                         />
                       </div>
-                      <ErrorMessage component="p" name="email" className="mt-2 text-sm text-red-600" />
+                      <ErrorMessage component="p" name="firstName" className="mt-2 text-sm text-red-600" />
+                    </div>
+                  </div>
+                  <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div className="sm:col-span-6">
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        Last name
+                      </label>
+                      <div className="mt-1">
+                        <Field
+                          id="lastName"
+                          name="lastName"
+                          type="text"
+                          required
+                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                          value={values.lastName}
+                        />
+                      </div>
+                      <ErrorMessage component="p" name="lastName" className="mt-2 text-sm text-red-600" />
                     </div>
                   </div>
                 </div>

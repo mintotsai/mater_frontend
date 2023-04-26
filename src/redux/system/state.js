@@ -2,7 +2,8 @@ const initialState = {
   loadingActions: [],
   message: [],
   messageStatus: "",
-  gotoUrl: ""
+  gotoUrl: "",
+  currentNavigationItem: ""
 }
 
 export default initialState;

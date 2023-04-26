@@ -3,6 +3,8 @@ import { Provider, useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import store from './redux/store';
 
+import Profile from './components/Account/Profile';
+import TwoFactorSetup from "./components/Account/TwoFactorSetup";
 import AdminViewUsers from "./components/Admin/AdminViewUsers";
 import Confirmation from './components/Authentication/Confirmation';
 import Login from './components/Authentication/Login';
@@ -11,20 +13,18 @@ import PasswordReset from './components/Authentication/PasswordReset';
 import Signup from './components/Authentication/Signup';
 import Unlock from "./components/Authentication/Unlock";
 import Verify from './components/Authentication/Verify';
+import MainLayout from "./components/Common/MainLayout";
+import NotificationList from "./components/Common/NotificationList";
 import PageNotFound404 from "./components/Common/PageNotFound404";
 import PermissionsGate from "./components/Common/PermissionsGate";
 import PrivateRoute from './components/Common/PrivateRoute';
-import Profile from './components/Dashboard/Account/Profile';
-import TwoFactorSetup from "./components/Dashboard/Account/TwoFactorSetup";
 import MainSection from './components/Dashboard/MainSection';
-import NotificationList from "./components/Dashboard/NotificationList";
-import Home from './components/Dashboard/index';
 import PrintBloodPressure from "./components/Provider/Patient/PrintBloodPressure";
 import ProviderEditPatient from "./components/Provider/ProviderEditPatient";
 import ProviderPatients from "./components/Provider/ProviderPatients";
 import { ROLES } from "./helpers/roles";
 
-function App() {
+export default function App() {
   const auth = useSelector((state) => state.auth);
 
   return (
@@ -32,18 +32,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/login" element={<Login />} />
           <Route exact path="/confirmation" element={<Confirmation />} />
           <Route exact path="/unlock" element={<Unlock />} />
           <Route exact path="/forgot" element={<PasswordForgot />} />
           <Route exact path="/reset" element={<PasswordReset />} />
           <Route path="/404" element={<PageNotFound404 />} />
-          {!auth.isLoggedIn && <Route exact path="/" element={<Login />} />}
-          <Route exact path="/login" element={<Login />} />
+
           {/* TODO: Back button from Verify page */}
           {auth.showOTPScreen && <Route exact path="/verify" element={<Verify />} />}
-          <Route path="/provider/patients/blood-pressure/print" element={<PrintBloodPressure />} />
-          <Route exact path="/" element={<PrivateRoute path="/" redirectRoute="/login" condition={auth.isLoggedIn} element={<Home />} />} >
-            <Route path="/" element={<Home />}>
+
+          <Route exact path="/" element={<PrivateRoute path="/" redirectRoute="/login" condition={auth.isLoggedIn} />} >
+            <Route path="/" element={<MainLayout />}>
               <Route path="home" element={<MainSection />} />
               <Route path="settings/account" element={<Profile />} />
               <Route path="settings/account/2fasetup" element={<TwoFactorSetup />} />
@@ -75,6 +75,8 @@ function App() {
           <Route path="/" element={<Navigate to="/home" />} /> */}
             {/* <Route path="*" element={<PageNotFound404 />} /> */}
 
+            {/* Putting this outside of the MainLayout */}
+            <Route path="/provider/patients/blood-pressure/print" element={<PrintBloodPressure />} />
           </Route>
 
           {/* https://stackoverflow.com/a/73922302/1391412 */}
@@ -84,5 +86,3 @@ function App() {
     </Provider>
   );
 }
-
-export default App;

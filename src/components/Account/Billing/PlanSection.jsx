@@ -2,9 +2,9 @@ import { RadioGroup, Switch } from '@headlessui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { getPlanFromStripePriceId, getStripePriceIdFromPlan, plans } from '../../../../helpers/billings.helper';
-import { createCheckoutSession, createPortalSession } from '../../../../redux/billing/actions';
-import { getUser } from "../../../../redux/user/actions";
+import { getPlanFromStripePriceId, getStripePriceIdFromPlan, plans } from '../../../helpers/billings.helper';
+import { createCheckoutSession, createPortalSession } from '../../../redux/billing/actions';
+import { getUser } from "../../../redux/user/actions";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

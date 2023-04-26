@@ -1,4 +1,4 @@
-import { SET_GOTO_URL_ACTION, SET_LOADING_ACTION, SET_MESSAGE_ACTION } from "./actions";
+import { SET_CURRENT_NAVIGATION_ITEM_ACTION, SET_GOTO_URL_ACTION, SET_LOADING_ACTION, SET_MESSAGE_ACTION } from "./actions";
 import initialState from "./state";
 
 export default function (state = initialState, action) {
@@ -33,6 +33,11 @@ export default function (state = initialState, action) {
             (eachAction) => eachAction !== action.loadingType
           ),
         };
+      }
+    case SET_CURRENT_NAVIGATION_ITEM_ACTION:
+      return {
+        ...state,
+        currentNavigationItem: payload
       }
     default:
       return state;

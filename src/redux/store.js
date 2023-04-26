@@ -1,9 +1,9 @@
 // https://medium.com/@montezsmith/how-to-setup-redux-react-router-571adfde4f23
 // https://github.com/gothinkster/react-redux-realworld-example-app/blob/9186292054dc37567e707602a15a0884d6bdae35/src/store.js
-import { createStore, applyMiddleware } from 'redux'
-import { persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
-import createLogger from 'redux-logger'
+import { applyMiddleware, createStore } from 'redux';
+import createLogger from 'redux-logger';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import thunkMiddleware from 'redux-thunk';
 // import { composeWithDevTools } from 'redux-devtools-extension'
 // import thunk from 'redux-thunk'

@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 
 import { CreditCardIcon, ShieldCheckIcon, UserIcon } from '@heroicons/react/solid';
-import { createPresignedUrl } from "../../../redux/user/actions";
-import ProfilePictureChange from '../../Common/ProfilePictureChange';
+import { createPresignedUrl } from "../../redux/user/actions";
+import ProfilePictureChange from '../Common/ProfilePictureChange';
 import PlanSection from './Billing/PlanSection';
 import EmailChange from './EmailChange';
 import NameChange from './NameChange';

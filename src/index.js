@@ -11,13 +11,14 @@ import store from './redux/store';
 let persistor = persistStore(store);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
+      {/* https://blog.logrocket.com/persist-state-redux-persist-redux-toolkit-react/ */}
+      <PersistGate loading={null} persistor={persistor}>
         <App />
-      </React.StrictMode>
-    </PersistGate>
-  </Provider>
+      </PersistGate>
+    </Provider>
+  </React.StrictMode>
   ,
   document.getElementById('root')
 );

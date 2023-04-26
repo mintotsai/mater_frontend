@@ -1,8 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
-import { disableMFA, enableMFA } from "../../../redux/user/actions";
+import { disableMFA, enableMFA } from "../../redux/user/actions";
 
 export default function TwoFactorEnable() {
   const dispatch = useDispatch();

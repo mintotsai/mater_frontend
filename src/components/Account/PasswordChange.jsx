@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from "react-redux";
-import { getUser, updateUser } from "../../../redux/user/actions";
-import { updatePassword } from "../../../redux/auth/actions"
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from 'yup';
+import { updatePassword } from "../../redux/auth/actions";
 
 export default function Profile() {
   const dispatch = useDispatch();
