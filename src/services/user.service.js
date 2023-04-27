@@ -1,6 +1,3 @@
-import { keyboard } from '@testing-library/user-event/dist/keyboard';
-import axios from 'axios';
-import { authHeader } from "../helpers/auth.header";
 import { client } from "./axiosClient";
 
 const BASE_URL = `${process.env.REACT_APP_BACKEND_API_URL}`
@@ -62,11 +59,11 @@ const createPresignedUrl = async (payload) => {
   );
 };
 
-const directUpload = async (directUploadUrl, payload) => {
+const directUpload = async (headers, directUploadUrl, payload) => {
   return client.put(
     `${directUploadUrl}`,
     payload,
-    { authorization: true, content_type: "image/png" }
+    { authorization: false, content_type: headers["Content-Type"], content_md5: headers["Content-MD5"], content_disposition: headers["Content-Disposition"] }
   );
 };
 

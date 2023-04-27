@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '../redux/store';
 
-import { login, logout } from "../redux/auth/actions";
+import { logout } from "../redux/auth/actions";
 
 const BASE_URL = `${process.env.REACT_APP_BACKEND_API_URL}`
 
@@ -46,6 +46,14 @@ export function createAxiosClient({
 
       if (config.content_type) {
         config.headers["Content-Type"] = config.content_type;
+      }
+
+      if (config.content_md5) {
+        config.headers["Content-MD5"] = config.content_md5;
+      }
+
+      if (config.content_disposition) {
+        config.headers["Content-Disposition"] = config.content_disposition;
       }
 
       return config;
