@@ -184,7 +184,7 @@ export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
 
       const { providerUser } = getState();
 
-      return Promise.resolve(dispatch(directUpload(providerUser.providerSelectedPatient.directUploadUrl, file)))
+      return Promise.resolve(dispatch(directUpload(providerUser.providerSelectedPatient.directUploadHeaders, providerUser.providerSelectedPatient.directUploadUrl, file)))
         .then(
           () => dispatch(updatePatient(providerUser.providerSelectedPatient.id, { user: { png: providerUser.providerSelectedPatient.blobSignedId } }))
         ).catch((error) => {
@@ -200,8 +200,8 @@ export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
   );
 };
 
-export const directUpload = (directUploadUrl, payload) => (dispatch) => {
-  return UserService.directUpload(directUploadUrl, payload).then(
+export const directUpload = (directUploadUrl, payload, directUploadHeaders) => (dispatch) => {
+  return UserService.directUpload(directUploadUrl, payload, directUploadHeaders).then(
     (data) => {
 
       return Promise.resolve();
