@@ -1,4 +1,5 @@
 import { setMessage } from "../../helpers/messages";
+import ProviderEventService from "../../services/provider/provider.event.service";
 import ProviderHealthMeasurementService from "../../services/provider/provider.health.measurement.service";
 import ProviderPatientService from "../../services/provider/provider.patient.service";
 import UserService from "../../services/user.service";
@@ -12,10 +13,14 @@ export const PROVIDER_CREATE_PATIENT_ACTION = "PROVIDER_CREATE_PATIENT_ACTION";
 export const PROVIDER_CREATE_PATIENT_SUCCESS_ACTION = "PROVIDER_CREATE_PATIENT_SUCCESS_ACTION";
 export const PROVIDER_UPDATE_PATIENT_ACTION = "PROVIDER_UPDATE_PATIENT_ACTION";
 export const PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION = "PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION";
-export const PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION = "PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION"
-export const PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION = "PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION"
-export const PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION = "PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION"
-export const PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION = "PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION"
+export const PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION = "PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION";
+export const PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION = "PROVIDER_UPDATE_HEALTH_MEASUREMENT_ACTION";
+export const PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION = "PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION";
+export const PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION = "PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION";
+export const PROVIDER_CREATE_EVENT_ACTION = "PROVIDER_CREATE_EVENT_ACTION";
+export const PROVIDER_GET_EVENTS_SUCCESS_ACTION = "PROVIDER_GET_EVENTS_SUCCESS_ACTION";
+export const PROVIDER_DELETE_EVENT_ACTION = "PROVIDER_DELETE_EVENT_ACTION";
+export const PROVIDER_UPDATE_EVENT_ACTION = "PROVIDER_UPDATE_EVENT_ACTION";
 
 export const getPatients = () => (dispatch) => {
   dispatch({
@@ -288,6 +293,129 @@ export const deleteHealthMeasurement = (id) => (dispatch) => {
           type: SET_LOADING_ACTION,
           isLoading: false,
           loadingType: PROVIDER_DELETE_HEALTH_MEASUREMENT_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const createEvent = (payload) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_CREATE_EVENT_ACTION,
+  });
+  return ProviderEventService.createEvent(payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully created event", detail: "Successfully created event" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_CREATE_EVENT_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_CREATE_EVENT_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const deleteEvent = (id) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_DELETE_EVENT_ACTION,
+  });
+  return ProviderEventService.deleteEvent(id).then(
+    (data) => {
+      let messages = [{ title: "Successfully deleted", detail: "Successfully deleted" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_DELETE_EVENT_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_DELETE_EVENT_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const updateEvent = (id, payload) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_UPDATE_EVENT_ACTION,
+  });
+  return ProviderEventService.updateEvent(id, payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_UPDATE_EVENT_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_UPDATE_EVENT_ACTION,
         }),
         setMessage(dispatch, "error", messages),
       ]);

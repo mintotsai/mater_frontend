@@ -7,10 +7,12 @@ import { useHasRole } from '../../hooks/useHasRole';
 import { getPatient } from '../../redux/provider/actions';
 import EditPersonalInfo from "./Patient/EditPersonalInfo";
 import PatientBloodPressureTable from "./Patient/PatientBloodPressureTable";
+import PatientEvents from './Patient/PatientEvents';
 import PatientProfilePictureChange from "./Patient/PatientProfilePictureChange";
 
 const tabs = [
   { name: 'Blood Pressure', href: '#', icon: HeartIcon, current: true },
+  { name: 'Events', href: '#events', icon: HeartIcon, current: false },
   { name: 'Profile', href: '#profile', icon: UserIcon, current: false },
 ];
 
@@ -35,6 +37,10 @@ export default function ProviderEditPatient() {
         .catch((error) => {
         });
     }
+  }, [isProvider]);
+
+  useEffect(() => {
+
 
     const href = location.hash;
     if (href) {
@@ -170,6 +176,11 @@ export default function ProviderEditPatient() {
                     <>
                       <PatientBloodPressureTable />
                     </>}
+                  {activeTab == "#events" &&
+                    <>
+                      <PatientEvents />
+                    </>
+                  }
                   {activeTab == "#profile" &&
                     <>
                       <PatientProfilePictureChange />
