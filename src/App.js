@@ -19,6 +19,7 @@ import PageNotFound404 from "./components/Common/PageNotFound404";
 import PermissionsGate from "./components/Common/PermissionsGate";
 import PrivateRoute from './components/Common/PrivateRoute';
 import MainSection from './components/Dashboard/MainSection';
+import PrintMedicationList from './components/Provider/Patient/Medication/PrintMedicationList';
 import PrintBloodPressure from "./components/Provider/Patient/PrintBloodPressure";
 import ProviderEditPatient from "./components/Provider/ProviderEditPatient";
 import ProviderPatients from "./components/Provider/ProviderPatients";
@@ -77,6 +78,7 @@ export default function App() {
 
             {/* Putting this outside of the MainLayout */}
             <Route path="/provider/patients/blood-pressure/print" element={<PrintBloodPressure />} />
+            <Route path="/provider/patients/medication-list/print" element={<PrintMedicationList />} />
           </Route>
 
           {/* https://stackoverflow.com/a/73922302/1391412 */}

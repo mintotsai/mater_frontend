@@ -1,4 +1,4 @@
-import { HeartIcon, UserIcon } from '@heroicons/react/solid';
+import { CalendarIcon, ClipboardCheckIcon, HeartIcon, UserIcon } from '@heroicons/react/solid';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -6,13 +6,15 @@ import { ROLES } from "../../helpers/roles";
 import { useHasRole } from '../../hooks/useHasRole';
 import { getPatient } from '../../redux/provider/actions';
 import EditPersonalInfo from "./Patient/EditPersonalInfo";
+import PatientMedicationList from './Patient/Medication/PatientMedicationList';
 import PatientBloodPressureTable from "./Patient/PatientBloodPressureTable";
 import PatientEvents from './Patient/PatientEvents';
 import PatientProfilePictureChange from "./Patient/PatientProfilePictureChange";
 
 const tabs = [
   { name: 'Blood Pressure', href: '#', icon: HeartIcon, current: true },
-  { name: 'Events', href: '#events', icon: HeartIcon, current: false },
+  { name: 'Events', href: '#events', icon: CalendarIcon, current: false },
+  { name: 'Medication', href: '#medication', icon: ClipboardCheckIcon, current: false },
   { name: 'Profile', href: '#profile', icon: UserIcon, current: false },
 ];
 
@@ -40,8 +42,6 @@ export default function ProviderEditPatient() {
   }, [isProvider]);
 
   useEffect(() => {
-
-
     const href = location.hash;
     if (href) {
       tabs.map((tab) => {
@@ -179,6 +179,11 @@ export default function ProviderEditPatient() {
                   {activeTab == "#events" &&
                     <>
                       <PatientEvents />
+                    </>
+                  }
+                  {activeTab == "#medication" &&
+                    <>
+                      <PatientMedicationList />
                     </>
                   }
                   {activeTab == "#profile" &&

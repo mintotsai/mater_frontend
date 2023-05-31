@@ -1,6 +1,7 @@
 import { setMessage } from "../../helpers/messages";
 import ProviderEventService from "../../services/provider/provider.event.service";
 import ProviderHealthMeasurementService from "../../services/provider/provider.health.measurement.service";
+import ProviderMedicationService from "../../services/provider/provider.medication.service";
 import ProviderPatientService from "../../services/provider/provider.patient.service";
 import UserService from "../../services/user.service";
 import { SET_LOADING_ACTION } from "../system/actions";
@@ -21,6 +22,10 @@ export const PROVIDER_CREATE_EVENT_ACTION = "PROVIDER_CREATE_EVENT_ACTION";
 export const PROVIDER_GET_EVENTS_SUCCESS_ACTION = "PROVIDER_GET_EVENTS_SUCCESS_ACTION";
 export const PROVIDER_DELETE_EVENT_ACTION = "PROVIDER_DELETE_EVENT_ACTION";
 export const PROVIDER_UPDATE_EVENT_ACTION = "PROVIDER_UPDATE_EVENT_ACTION";
+export const PROVIDER_CREATE_MEDICATION_LIST_ACTION = "PROVIDER_CREATE_MEDICATION_LIST_ACTION";
+export const PROVIDER_DELETE_MEDICATION_LIST_ACTION = "PROVIDER_DELETE_MEDICATION_LIST_ACTION";
+export const PROVIDER_GET_MEDICATIONS_ACTION = "PROVIDER_GET_MEDICATIONS_ACTION";
+export const PROVIDER_GET_MEDICATIONS_SUCCESS_ACTION = "PROVIDER_GET_MEDICATIONS_SUCCESS_ACTION";
 
 export const getPatients = () => (dispatch) => {
   dispatch({
@@ -424,3 +429,123 @@ export const updateEvent = (id, payload) => (dispatch) => {
     }
   );
 };
+
+export const createMedicationList = (payload) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_CREATE_MEDICATION_LIST_ACTION,
+  });
+  return ProviderMedicationService.createMedicationList(payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully created event", detail: "Successfully created event" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_CREATE_MEDICATION_LIST_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_CREATE_MEDICATION_LIST_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const deleteMedicationList = (id) => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_DELETE_MEDICATION_LIST_ACTION,
+  });
+  return ProviderMedicationService.deleteMedicationList(id).then(
+    (data) => {
+      let messages = [{ title: "Successfully deleted", detail: "Successfully deleted" }];
+
+      Promise.all([
+        dispatch({
+          type: PROVIDER_UPDATE_PATIENT_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_DELETE_MEDICATION_LIST_ACTION,
+        }),
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_DELETE_MEDICATION_LIST_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const getMedications = () => (dispatch) => {
+  dispatch({
+    type: SET_LOADING_ACTION,
+    isLoading: true,
+    loadingType: PROVIDER_GET_MEDICATIONS_ACTION,
+  });
+  return ProviderMedicationService.getMedications().then(
+    (data) => {
+      Promise.all([
+        dispatch({
+          type: PROVIDER_GET_MEDICATIONS_SUCCESS_ACTION,
+          payload: data.data.data,
+        }),
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_GET_MEDICATIONS_ACTION,
+        }),
+      ]);
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        dispatch({
+          type: SET_LOADING_ACTION,
+          isLoading: false,
+          loadingType: PROVIDER_GET_MEDICATIONS_ACTION,
+        }),
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject(error);
+    }
+  )
+}

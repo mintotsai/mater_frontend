@@ -1,7 +1,8 @@
 const initialState = {
   providerAllPatients: [],
   providerSelectedPatient: {},
-  bloodPressureMeasurementsToPrint: []
+  bloodPressureMeasurementsToPrint: [],
+  medications: []
 }
 
 export default initialState;
