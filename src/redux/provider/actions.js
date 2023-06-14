@@ -210,6 +210,53 @@ export const createPresignedUrl = (file, payload) => (dispatch, getState) => {
   );
 };
 
+export const uploadCSV = (file, payload) => (dispatch, getState) => {
+  return UserService.createPresignedUrl(payload).then(
+    (data) => {
+      dispatch({
+        type: PROVIDER_GET_PRESIGNED_URL_SUCCESS_ACTION,
+        payload: data.data.data.attributes.data,
+      });
+
+      const { providerUser } = getState();
+
+      return Promise.resolve(dispatch(directUpload(providerUser.providerSelectedPatient.directUploadHeaders, providerUser.providerSelectedPatient.directUploadUrl, file))).then(
+        () => dispatch(dataImport({ file: providerUser.providerSelectedPatient.blobSignedId, patientId: payload.patientId }))
+      ).catch((error) => {
+        setMessage(dispatch, "error", error);
+      });
+    },
+    (error) => {
+      let messages = error.response.data;
+      setMessage(dispatch, "error", messages);
+
+      return Promise.reject();
+    }
+  );
+};
+
+export const dataImport = (payload) => (dispatch) => {
+  return UserService.dataImport(payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully updated", detail: "Successfully updated" }];
+
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+}
+
 export const directUpload = (directUploadUrl, payload, directUploadHeaders) => (dispatch) => {
   return UserService.directUpload(directUploadUrl, payload, directUploadHeaders).then(
     (data) => {

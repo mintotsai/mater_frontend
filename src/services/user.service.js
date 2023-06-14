@@ -75,6 +75,14 @@ const getNotifications = async () => {
   );
 }
 
+const dataImport = async (payload) => {
+  return client.post(
+    `api/v1/provider/data-import`,
+    payload,
+    { authorization: true }
+  )
+}
+
 export default {
   getUser,
   updateUser,
@@ -84,5 +92,6 @@ export default {
   disableMFA,
   createPresignedUrl,
   directUpload,
-  getNotifications
+  getNotifications,
+  dataImport
 };
