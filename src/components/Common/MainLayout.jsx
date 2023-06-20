@@ -89,6 +89,7 @@ export default function MainLayout() {
     { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
     { name: 'Patients', href: '/provider/patients', icon: UsersIcon, current: false },
     { name: 'Data Import', href: '/provider/data-import', icon: UsersIcon, current: false },
+    { name: 'Data Export', href: '/provider/data-export', icon: UsersIcon, current: false },
     // { name: 'Team', href: '#', icon: UsersIcon, current: false },
     // { name: 'Projects', href: '#', icon: FolderIcon, current: false },
     // { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },

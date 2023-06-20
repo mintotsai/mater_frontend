@@ -21,6 +21,7 @@ import PrivateRoute from './components/Common/PrivateRoute';
 import MainSection from './components/Dashboard/MainSection';
 import PrintMedicationList from './components/Provider/Patient/Medication/PrintMedicationList';
 import PrintBloodPressure from "./components/Provider/Patient/PrintBloodPressure";
+import ProviderDataExport from "./components/Provider/ProviderDataExport";
 import ProviderDataImport from "./components/Provider/ProviderDataImport";
 import ProviderEditPatient from "./components/Provider/ProviderEditPatient";
 import ProviderPatients from "./components/Provider/ProviderPatients";
@@ -58,6 +59,7 @@ export default function App() {
                 <Route path="patients" element={<ProviderPatients />} />
                 <Route path="patients/:id/edit" element={<ProviderEditPatient />} />
                 <Route path="data-import" element={<ProviderDataImport />} />
+                <Route path="data-export" element={<ProviderDataExport />} />
 
                 {/* https://stackoverflow.com/a/72713882/1391412 */}
                 <Route index element={<Navigate to='patients' />} />

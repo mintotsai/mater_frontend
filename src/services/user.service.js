@@ -83,6 +83,22 @@ const dataImport = async (payload) => {
   )
 }
 
+const dataExport = async (payload) => {
+  return client.post(
+    `api/v1/provider/data-export`,
+    payload,
+    { authorization: true }
+  )
+}
+
+const dataExportDownload = async (csvId) => {
+  return client.get(
+    `api/v1/provider/data-export/${csvId}/download`,
+    {},
+    { authorization: true }
+  )
+}
+
 export default {
   getUser,
   updateUser,
@@ -93,5 +109,7 @@ export default {
   createPresignedUrl,
   directUpload,
   getNotifications,
-  dataImport
+  dataImport,
+  dataExport,
+  dataExportDownload
 };

@@ -1,6 +1,7 @@
 import {
   PROVIDER_BLOOD_PRESSURE_MEASUREMENTS_TO_PRINT_ACTION,
   PROVIDER_CREATE_PATIENT_SUCCESS_ACTION,
+  PROVIDER_GET_DATA_EXPORT_DOWNLOAD_URL_SUCCESS_ACTION,
   PROVIDER_GET_MEDICATIONS_SUCCESS_ACTION,
   PROVIDER_GET_PATIENTS_SUCCESS_ACTION,
   PROVIDER_GET_PATIENT_SUCCESS_ACTION,
@@ -50,6 +51,11 @@ const providerReducer = (state = initialState, action) => {
       return {
         ...state,
         medications: payload
+      }
+    case PROVIDER_GET_DATA_EXPORT_DOWNLOAD_URL_SUCCESS_ACTION:
+      return {
+        ...state,
+        dataExportDownloadUrl: payload,
       }
     default:
       return state

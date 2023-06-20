@@ -26,6 +26,7 @@ export const PROVIDER_CREATE_MEDICATION_LIST_ACTION = "PROVIDER_CREATE_MEDICATIO
 export const PROVIDER_DELETE_MEDICATION_LIST_ACTION = "PROVIDER_DELETE_MEDICATION_LIST_ACTION";
 export const PROVIDER_GET_MEDICATIONS_ACTION = "PROVIDER_GET_MEDICATIONS_ACTION";
 export const PROVIDER_GET_MEDICATIONS_SUCCESS_ACTION = "PROVIDER_GET_MEDICATIONS_SUCCESS_ACTION";
+export const PROVIDER_GET_DATA_EXPORT_DOWNLOAD_URL_SUCCESS_ACTION = "PROVIDER_GET_DATA_EXPORT_DOWNLOAD_URL_SUCCESS_ACTION";
 
 export const getPatients = () => (dispatch) => {
   dispatch({
@@ -234,6 +235,45 @@ export const uploadCSV = (file, payload) => (dispatch, getState) => {
     }
   );
 };
+
+export const dataExport = (payload) => (dispatch) => {
+  return UserService.dataExport(payload).then(
+    (data) => {
+      let messages = [{ title: "Successfully submitted export", detail: "Successfully submitted export" }];
+
+      Promise.all([
+        setMessage(dispatch, "success", messages)
+      ]);
+
+      return Promise.resolve();
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+}
+
+export const dataExportDownload = (csvId) => (dispatch) => {
+  return UserService.dataExportDownload(csvId).then(
+    (data) => {
+
+      return Promise.resolve(data);
+    },
+    (error) => {
+      let messages = error.response.data;
+      Promise.all([
+        setMessage(dispatch, "error", messages),
+      ]);
+
+      return Promise.reject();
+    }
+  );
+}
 
 export const dataImport = (payload) => (dispatch) => {
   return UserService.dataImport(payload).then(
