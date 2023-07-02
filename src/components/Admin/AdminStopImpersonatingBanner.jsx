@@ -33,7 +33,7 @@ export default function AdminStopImpersonatingBanner() {
                 let navigateTo = response.navigateTo;
                 let roles = response.roles;
                 if (response.navigateTo == "/home") {
-                  if (ROLES.admin in roles && roles.admin) {
+                  if (roles && ROLES.admin in roles && roles.admin) {
                     navigateTo = "/admin";
                   } else {
                     navigateTo = "/home";
