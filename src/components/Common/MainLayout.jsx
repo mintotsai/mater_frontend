@@ -97,8 +97,13 @@ export default function MainLayout() {
     // { name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
   ];
 
+  useEffect(() => {
+    if (isAdministrator) {
+      dispatch({ type: SET_CURRENT_NAVIGATION_ITEM_ACTION, payload: "User" });
+    }
+  }, []);
+
   if (isAdministrator) {
-    dispatch({ type: SET_CURRENT_NAVIGATION_ITEM_ACTION, payload: "User" });
     navigation = [
       { name: 'Users', href: '/admin/users', icon: UsersIcon, current: true },
     ];
@@ -380,7 +385,7 @@ export default function MainLayout() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={auth.user.attributes.profile_image_url.includes("active_storage") ? `${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}` : `${auth.user.attributes.profile_image_url}`}
+                        src={(auth.user.attributes.profile_image_url && auth.user.attributes.profile_image_url.includes("active_storage")) ? `${process.env.REACT_APP_BACKEND_API_URL}${auth.user.attributes.profile_image_url}` : `${auth.user.attributes.profile_image_url}`}
                         alt=""
                       />
                     </Menu.Button>
